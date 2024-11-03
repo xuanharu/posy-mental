@@ -10,15 +10,15 @@ from routers import (
 app = FastAPI()
 
 @app.get("/")
-async def root():
+def root():
     return {"message": "Hello World"}
 
 @app.get("/items/{item_id}")
-async def read_item(item_id: int, q: Optional[str] = None):
+def read_item(item_id: int, q: Optional[str] = None):
     return {"item_id": item_id, "q": q}
 
 app.include_router(chatbot_endpoints.router, prefix="/chatbot", tags=["chatbot"])
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
