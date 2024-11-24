@@ -3,37 +3,48 @@ from typing import Literal
 from pydantic import BaseModel
 from database import db_mongodb
 from bson.objectid import ObjectId
-from utils import constants
+from utils import (
+    constants,
+    helpers
+)
 import json
 from utils.logger import logger
-
+from datetime import datetime
 from services import (
     llm_services,
     knowledge_base_services)
 
+@helpers.iterable_handler
 def get_list_of_chat_histories_by_user_id(user_id):
     cursor = db_mongodb['chatHistories'].find({"userId": ObjectId(user_id)})
     return list(cursor)
 
+@helpers.iterable_handler
 def get_chat_history_by_id(chat_history_id):
     return db_mongodb['chatHistories'].find_one({"_id": ObjectId(chat_history_id)})
 
 class NewMessage(BaseModel):
     content: str
     role: Literal["user", "assistant"]
+
+@helpers.iterable_handler
 def update_chat_history(chat_history_id, new_message: NewMessage):
     result =  db_mongodb['chatHistories'].update_one(
         {"_id": ObjectId(chat_history_id)},
-        {"$push": {"messages": new_message.model_dump()}}
+        {"$push": {
+            "messages": new_message.model_dump(),
+            "updatedAt": datetime.now()}}
     )
     return result.modified_count
 
+@helpers.iterable_handler
 def create_chat_history(user_id, chat_history_name):
     result = db_mongodb['chatHistories'].insert_one(
         {
             "userId": ObjectId(user_id),
             "name": chat_history_name,
-            "messages":[]
+            "messages":[],
+            "updatedAt": datetime.now()
         }
     )
     return result.inserted_id
@@ -41,6 +52,8 @@ def create_chat_history(user_id, chat_history_name):
 class RoutingResult(BaseModel):
     consult_expert: bool
     share_location: bool
+    
+@helpers.iterable_handler
 def handle_new_message(chat_history_id, new_message: str):
     chat_history = get_chat_history_by_id(chat_history_id)
     if chat_history is None:
