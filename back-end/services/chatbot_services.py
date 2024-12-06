@@ -33,7 +33,11 @@ def update_chat_history(chat_history_id, new_message: NewMessage):
         {"_id": ObjectId(chat_history_id)},
         {"$push": {
             "messages": new_message.model_dump(),
-            "updatedAt": datetime.now()}}
+        },
+        "$set": {
+            "updatedAt": datetime.now()
+        }
+        }
     )
     return result.modified_count
 
