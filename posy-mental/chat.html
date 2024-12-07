@@ -41,43 +41,137 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <script src="/posy-mental/userid.js" defer></script>
-    <script src="/posy-mental/ChatAI.js" defer></script>
+
+    <style>
+        .chat-container {
+            display: flex;
+            height: calc(100vh - 100px);
+            margin: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar {
+            width: 300px;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .new-chat-btn {
+            padding: 15px;
+            margin: 15px;
+            background: #1A76D1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .chat-item {
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .chat-item:hover {
+            background: #f5f5f5;
+        }
+
+        .chat-item.active {
+            background: #e3f2fd;
+        }
+
+        .inbox {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.user {
+            align-items: flex-end;
+        }
+
+        .message.assistant {
+            align-items: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 5px;
+        }
+
+        .user .message-content {
+            background: #1A76D1;
+            color: white;
+        }
+
+        .assistant .message-content {
+            background: #f1f1f1;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .send-btn {
+            padding: 10px 20px;
+            background: #1A76D1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 
 <body>
-
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="loader">
-            <div class="loader-outter"></div>
-            <div class="loader-inner"></div>
-
-            <div class="indicator">
-                <svg width="16px" height="12px">
-                        <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                        <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                    </svg>
-            </div>
-        </div>
-    </div>
-    <!-- End Preloader -->
-
-    <!-- Get Pro Button -->
-    <ul class="pro-features">
-        <a class="get-pro" href="#">Get Pro</a>
-        <li class="big-title">Pro Version Available</li>
-        <li class="title">Pro Version Features</li>
-        <li>100+ chat history</li>
-        <li>10 day free consulting sessions with real psychologist</li>
-        <li>Access more news and tips everday</li>
-        <li>Get no-ads forever</li>
-        <!-- <div class="button">
-            <a href="http://preview.themeforest.net/item/mediplus-medical-and-doctor-html-template/full_screen_preview/26665910?_ga=2.145092285.888558928.1591971968-344530658.1588061879" target="_blank" class="btn">Pro Version Demo</a>
-            <a href="https://themeforest.net/item/mediplus-medical-and-doctor-html-template/26665910" target="_blank" class="btn">Buy Pro Version</a>
-        </div> -->
-    </ul>
-
     <!-- Header Area -->
     <header class="header">
         <!-- Header Inner -->
@@ -132,79 +226,93 @@
     <!-- End Header Area -->
 
     <!-- Start Chat -->
-
-    <div class="chat-ai">
-        <script src="/posy-mental/ChatAI.js"></script>
+    <div class="chat-container">
+        <div class="sidebar">
+            <button class="new-chat-btn" id="newChatBtn">
+                <i class="fa fa-plus"></i> New Conversation
+            </button>
+            <div class="chat-list" id="chatList">
+                <!-- Chat history items will be added here -->
+            </div>
+        </div>
+        <div class="inbox">
+            <div class="messages" id="messages">
+                <!-- Messages will be added here -->
+            </div>
+            <div class="input-area">
+                <input type="text" class="message-input" id="messageInput" placeholder="Type your message...">
+                <button class="send-btn" id="sendBtn">Send</button>
+            </div>
+        </div>
     </div>
     <!--/ End Chat -->
 
     <!-- Footer Area -->
-    <footer id="footer " class="footer ">
+    <footer id="footer" class="footer">
         <!-- Footer Top -->
-        <div class="footer-top ">
-            <div class="container ">
-                <div class="row ">
-                    <div class="col-lg-3 col-md-6 col-12 ">
-                        <div class="single-footer ">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
                             <h2>About Us</h2>
                             <p>Posy is a safe and supportive online space dedicated to promoting mental well-being. Explore our newsfeed, connect with our community, or chat with our AI companion.</p>
                             <!-- Social -->
-                            <ul class="social ">
-                                <li><a href="# "><i class="icofont-facebook "></i></a></li>
-                                <li><a href="# "><i class="icofont-google-plus "></i></a></li>
-                                <li><a href="# "><i class="icofont-twitter "></i></a></li>
-                                <li><a href="# "><i class="icofont-vimeo "></i></a></li>
-                                <li><a href="# "><i class="icofont-pinterest "></i></a></li>
+                            <ul class="social">
+                                <li><a href="#"><i class="icofont-facebook"></i></a></li>
+                                <li><a href="#"><i class="icofont-google-plus"></i></a></li>
+                                <li><a href="#"><i class="icofont-twitter"></i></a></li>
+                                <li><a href="#"><i class="icofont-vimeo"></i></a></li>
+                                <li><a href="#"><i class="icofont-pinterest"></i></a></li>
                             </ul>
                             <!-- End Social -->
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-12 ">
-                        <div class="single-footer f-link ">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer f-link">
                             <h2>Quick Links</h2>
-                            <div class="row ">
-                                <div class="col-lg-6 col-md-6 col-12 ">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-12">
                                     <ul>
-                                        <li><a href="index.html "><i class="fa fa-caret-right " aria-hidden="true "></i>Home</a></li>
-                                        <li><a href="blog-single.html "><i class="fa fa-caret-right " aria-hidden="true "></i>News</a></li>
-                                        <li><a href="chat.html "><i class="fa fa-caret-right " aria-hidden="true "></i>AI chatbot</a></li>
-                                        <li><a href="portfolio-details.html "><i class="fa fa-caret-right " aria-hidden="true "></i>Services</a></li>
-                                        <li><a href="contact.html "><i class="fa fa-caret-right " aria-hidden="true "></i>Contact Us</a></li>
+                                        <li><a href="index.html"><i class="fa fa-caret-right"></i>Home</a></li>
+                                        <li><a href="blog-single.html"><i class="fa fa-caret-right"></i>News</a></li>
+                                        <li><a href="chat.html"><i class="fa fa-caret-right"></i>AI chatbot</a></li>
+                                        <li><a href="portfolio-details.html"><i class="fa fa-caret-right"></i>Services</a></li>
+                                        <li><a href="contact.html"><i class="fa fa-caret-right"></i>Contact Us</a></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-12 ">
-                        <div class="single-footer ">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
                             <h2>Newsletter</h2>
                             <p>Subscribe to our newsletter to get informed news in your inbox & highlight our recent blog post or article on a specific mental health topic</p>
-                            <form action="mail/mail.php " method="get " target="_blank " class="newsletter-inner ">
-                                <input name="email " placeholder="Email Address " class="common-input " onfocus="this.placeholder='' " onblur="this.placeholder='Your email address' " required=" " type="email ">
-                                <button class="button "><i class="icofont icofont-paper-plane "></i></button>
+                            <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
+                                <input name="email" placeholder="Email Address" class="common-input" onfocus="this.placeholder=''" onblur="this.placeholder='Your email address'" required="" type="email">
+                                <button class="button"><i class="icofont icofont-paper-plane"></i></button>
                             </form>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-12 ">
-                        <div class="single-footer ">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
                             <h2>Contact Us</h2>
-                            <ul class="top-contact " style="color: white; ">
-                                <li><i class="fa fa-phone "></i>+89 123 456 789</li>
-                                <li><i class="fa fa-envelope "></i><a href="mailto:support@posy.com "> support@posy.com.vn</a></li>
+                            <ul class="top-contact" style="color: white;">
+                                <li><i class="fa fa-phone"></i>+89 123 456 789</li>
+                                <li><i class="fa fa-envelope"></i><a href="mailto:support@posy.com">support@posy.com.vn</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
         <!--/ End Footer Top -->
         <!-- Copyright -->
-        <div class="copyright ">
-            <div class="container ">
-                <div class="row ">
-                    <div class="col-lg-12 col-md-12 col-12 ">
-                        <div class="copyright-content ">
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-12">
+                        <div class="copyright-content">
                             <p>© Copyright 2024 | All Rights Reserved by Xuan Nguyen</p>
                         </div>
                     </div>
@@ -216,45 +324,48 @@
     <!--/ End Footer Area -->
 
     <!-- jquery Min JS -->
-    <script src="js/jquery.min.js "></script>
+    <script src="js/jquery.min.js"></script>
     <!-- jquery Migrate JS -->
-    <script src="js/jquery-migrate-3.0.0.js "></script>
+    <script src="js/jquery-migrate-3.0.0.js"></script>
     <!-- jquery Ui JS -->
-    <script src="js/jquery-ui.min.js "></script>
+    <script src="js/jquery-ui.min.js"></script>
     <!-- Easing JS -->
-    <script src="js/easing.js "></script>
+    <script src="js/easing.js"></script>
     <!-- Color JS -->
-    <script src="js/colors.js "></script>
+    <script src="js/colors.js"></script>
     <!-- Popper JS -->
-    <script src="js/popper.min.js "></script>
+    <script src="js/popper.min.js"></script>
     <!-- Bootstrap Datepicker JS -->
-    <script src="js/bootstrap-datepicker.js "></script>
+    <script src="js/bootstrap-datepicker.js"></script>
     <!-- Jquery Nav JS -->
-    <script src="js/jquery.nav.js "></script>
+    <script src="js/jquery.nav.js"></script>
     <!-- Slicknav JS -->
-    <script src="js/slicknav.min.js "></script>
+    <script src="js/slicknav.min.js"></script>
     <!-- ScrollUp JS -->
-    <script src="js/jquery.scrollUp.min.js "></script>
+    <script src="js/jquery.scrollUp.min.js"></script>
     <!-- Niceselect JS -->
-    <script src="js/niceselect.js "></script>
+    <script src="js/niceselect.js"></script>
     <!-- Tilt Jquery JS -->
-    <script src="js/tilt.jquery.min.js "></script>
+    <script src="js/tilt.jquery.min.js"></script>
     <!-- Owl Carousel JS -->
-    <script src="js/owl-carousel.js "></script>
+    <script src="js/owl-carousel.js"></script>
     <!-- counterup JS -->
-    <script src="js/jquery.counterup.min.js "></script>
+    <script src="js/jquery.counterup.min.js"></script>
     <!-- Steller JS -->
-    <script src="js/steller.js "></script>
+    <script src="js/steller.js"></script>
     <!-- Wow JS -->
-    <script src="js/wow.min.js "></script>
+    <script src="js/wow.min.js"></script>
     <!-- Magnific Popup JS -->
-    <script src="js/jquery.magnific-popup.min.js "></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
     <!-- Counter Up CDN JS -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js "></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
     <!-- Bootstrap JS -->
-    <script src="js/bootstrap.min.js "></script>
+    <script src="js/bootstrap.min.js"></script>
     <!-- Main JS -->
-    <script src="js/main.js "></script>
+    <script src="js/main.js"></script>
+
+    <script src="/posy-mental/userid.js" defer></script>
+    <script src="/posy-mental/ChatAI.js" defer></script>
 </body>
 
 </html>

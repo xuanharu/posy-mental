@@ -22,25 +22,49 @@ function getUserId() {
 
 const user_id = getUserId()
 
-// CREATE CHAT HISTORY
-async function createChatHistory(user_id, chat_history_name) {
-    const url = `http://localhost:8000/chatbot/create-chat-history?user_id=${encodeURIComponent(user_id)}&chat_history_name=${encodeURIComponent(chat_history_name)}`;
+// Get chat histories by user ID
+async function getChatHistoriesByUserId(userId) {
+    const apiUrl = `http://localhost:8000/chatbot/chat-histories-by-user-id?user_id=${userId}`;
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
+        const response = await fetch(apiUrl, {
+            method: 'GET',
             headers: {
-                'Accept': 'application/json'
-            },
-            body: '' // Empty body, as in the curl command
+                'accept': 'application/json'
+            }
         });
 
-        if (response.status != 200) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json(); // Assuming the API returns JSON
-        console.log('Chat history created successfully:', data);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching chat histories:', error);
+        throw error;
+    }
+}
+
+// Create chat history
+async function createChatHistory(userId, chatHistoryName) {
+    const apiUrl = `http://localhost:8000/chatbot/create-chat-history?user_id=${encodeURIComponent(userId)}&chat_history_name=${encodeURIComponent(chatHistoryName)}`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json'
+            },
+            // The body is empty as per your curl command
+            body: ''
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
         return data;
     } catch (error) {
         console.error('Error creating chat history:', error);
@@ -48,33 +72,31 @@ async function createChatHistory(user_id, chat_history_name) {
     }
 }
 
-const url = 'http://localhost:8000/chatbot/create-chat-history?user_id=e3d923d417caad1df66d0058&chat_history_name=Conversation%201';
+// Get chat history by ID
+async function getChatHistoryById(chatHistoryId) {
+    const apiUrl = `http://localhost:8000/chatbot/chat-history-by-id?chat_history_id=${encodeURIComponent(chatHistoryId)}`;
 
-// CHAT HISTORY BY USER_ID
-function getChatHistory(userId) {
-    const url = `http://localhost:8000/chatbot/chat-histories-by-user-id?user_id=${userId}`;
-
-    fetch(url, {
+    try {
+        const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
-                'accept': 'application/json',
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                'accept': 'application/json'
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Chat History:', data);
-        })
-        .catch(error => {
-            console.error('Error fetching chat history:', error);
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching chat history:', error);
+        throw error;
+    }
 }
 
-// SEND MESSAGE
+// Send chat message
 async function sendChatMessage(chatHistoryId, newMessage) {
     const apiUrl = `http://localhost:8000/chatbot/chat?chat_history_id=${encodeURIComponent(chatHistoryId)}&new_message=${encodeURIComponent(newMessage)}`;
 
