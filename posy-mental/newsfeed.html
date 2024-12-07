@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Feed</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .news-container {
+            max-width: 900px;
+            margin: 50px auto;
+        }
+        
+        .article-card {
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .article-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .article-content {
+            padding: 20px;
+        }
+        
+        .article-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container news-container">
+        <h1 class="text-center mb-5">Latest News</h1>
+        <div id="articlesContainer">
+            <!-- Articles will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        function displayArticles() {
+            const articlesContainer = document.getElementById('articlesContainer');
+            const articles = JSON.parse(localStorage.getItem('newsArticles') || '[]');
+
+            if (articles.length === 0) {
+                articlesContainer.innerHTML = '<p class="text-center">No articles posted yet.</p>';
+                return;
+            }
+
+            articlesContainer.innerHTML = articles.map(article => `
+                <div class="article-card">
+                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}" class="article-image">` : ''}
+                    <div class="article-content">
+                        <h2>${article.title}</h2>
+                        <div class="article-meta">
+                            By ${article.author} | ${article.date}
+                        </div>
+                        <div class="article-text">
+                            ${article.content.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Display articles on page load
+        displayArticles();
+
+        // Refresh articles every 30 seconds
+        setInterval(displayArticles, 30000);
+    </script>
+</body>
+
+</html>

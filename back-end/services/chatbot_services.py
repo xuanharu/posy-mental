@@ -108,5 +108,4 @@ def question_answer_pairs2context(question_answer_pairs):
         context += text
         context += "\n----sample seperator----\n"
     return context
-        
-    
+         
