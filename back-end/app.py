@@ -5,7 +5,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from routers import (
-    chatbot_endpoints
+    chatbot_endpoints,
+    post_endpoints
 )
 
 app = FastAPI()
@@ -27,6 +28,7 @@ def read_item(item_id: int, q: Optional[str] = None):
     return {"item_id": item_id, "q": q}
 
 app.include_router(chatbot_endpoints.router, prefix="/chatbot", tags=["chatbot"])
+app.include_router(post_endpoints.router, prefix="/post", tags=["post on newfeed"])
 
 if __name__ == "__main__":
     import uvicorn
