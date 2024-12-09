@@ -69,7 +69,7 @@ def handle_new_message(chat_history_id, new_message: str):
     messages.append(parsed_new_message.model_dump())
     routing_result = llm_services.run_llm_structure_output(
         system=constants.prompt_chat_routing_system,
-        user_input=json.dumps(messages, indent=4),
+        user_input="\n".join([f"{message['role']}: `{message['content']}`" for message in messages]),
         response_format=RoutingResult
     )
     logger.info(f"Routing result: {routing_result}")
@@ -77,12 +77,15 @@ def handle_new_message(chat_history_id, new_message: str):
     # Route the user's message based on the routing result
     if not routing_result["consult_expert"]:
         # step 1: retrieve on the database to get relevant context (question-answer pairs)
-        question_answer_pairs = knowledge_base_services.retrive_by_question(new_message, 0.7)
+        question_answer_pairs = knowledge_base_services.retrive_by_question(new_message, 0.8)
         
         # step 2: parse the question_answer_pairs into a string.
-        if len(question_answer_pairs) == 0:
+        if len(question_answer_pairs) == 0 and len(messages) < 2:
             logger.info("No relevant question-answer pairs found in the knowledge base")
-            assistant_response = "I'm sorry, I don't have the answer to your question. Would you like to consult an expert?"
+            assistant_response = "Hi! I'm a virtial mental health assistant. I'm here to help you. Could you please provide more details about your situation? I'm here to listen and provide support."
+        elif len(question_answer_pairs) == 0:
+            system_prompt = constants.prompt_normal_chat_system.format(context="No relevant context found")
+            assistant_response = llm_services.run_llm_chat_completion(system_prompt, messages)
         else:
             context = question_answer_pairs2context(question_answer_pairs)
             system_prompt = constants.prompt_normal_chat_system.format(context=context)

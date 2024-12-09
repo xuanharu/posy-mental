@@ -20,8 +20,6 @@ function getUserId() {
     }
 }
 
-const user_id = getUserId()
-
 // Get chat histories by user ID
 async function getChatHistoriesByUserId(userId) {
     const apiUrl = `http://localhost:8000/chatbot/chat-histories-by-user-id?user_id=${userId}`;
