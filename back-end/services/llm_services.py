@@ -4,7 +4,7 @@ load_dotenv()
 import os
 from openai import OpenAI
 
-def run_llm_chat_completion(system, messages):
+def run_llm_chat_completion(system, messages, tools = []):
     client = OpenAI(
         api_key = os.getenv("OPENAI_API_KEY"),
         base_url="https://oai.helicone.ai/v1",
@@ -21,12 +21,12 @@ def run_llm_chat_completion(system, messages):
     ] + messages
     
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4o-2024-11-20",
         messages=all_messages,
-        max_tokens=150
+        tools=tools,
     )
     
-    return response.choices[0].message.content
+    return response.choices[0].message
 
 def run_llm_structure_output(system, user_input, response_format):
     client = OpenAI(
