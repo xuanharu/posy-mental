@@ -23,7 +23,7 @@ def recommend_expert(user_address: str)->str:
     """This function will help to recommend expert to the user.
     Only trigger this function when the user is in need of professional help and share their address in the chat."""
     
-    return "Sang Vo - Clinical Psychologist\nAddress: 123 Nguyen Van Linh, District 7, Ho Chi Minh City\nPhone: 0123456789"
+    return "Xuan Nguyen - Clinical Psychologist\nAddress: 123 Nguyen Van Linh, District 7, Ho Chi Minh City\nPhone: 0123456789"
 
 tools_list = ToolHelpers.infer_from_function_refs(
         [retrieve_sample_answers_by_question, 
