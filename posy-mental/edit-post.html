@@ -161,21 +161,81 @@
             }
         }
 
+        // Load existing post data if editing
+        window.addEventListener('DOMContentLoaded', function() {
+            const editingPost = JSON.parse(localStorage.getItem('editingPost'));
+            if (editingPost) {
+                document.getElementById('title').value = editingPost.title;
+                document.getElementById('author').value = editingPost.author;
+                document.getElementById('content').value = editingPost.content;
+
+                // Show existing image preview
+                const preview = document.getElementById('imagePreview');
+                const img = document.createElement('img');
+                img.src = editingPost.image;
+                preview.appendChild(img);
+
+                // Clear the editing post from storage
+                localStorage.removeItem('editingPost');
+            }
+        });
+
         // Form submission handling
-        document.getElementById('editPostForm').addEventListener('submit', function(e) {
+        document.getElementById('editPostForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             // Create FormData object
             const formData = new FormData(this);
 
-            // Here you would typically send the formData to your backend
-            // For now, we'll just log it
-            console.log('Form submitted:', {
+            // Get file data
+            const imageFile = formData.get('image');
+            let imageUrl = '';
+
+            if (imageFile.size > 0) { // Only process if new file selected
+                // Convert the image file to base64
+                const reader = new FileReader();
+                imageUrl = await new Promise((resolve) => {
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(imageFile);
+                });
+            } else {
+                // If no new image, check for existing image in preview
+                const preview = document.getElementById('imagePreview');
+                const existingImg = preview.querySelector('img');
+                imageUrl = existingImg ? existingImg.src : 'images/chatting_boy.jpeg';
+            }
+
+            // Create post data object
+            const postData = {
                 title: formData.get('title'),
                 author: formData.get('author'),
                 content: formData.get('content'),
-                image: formData.get('image')
-            });
+                image: imageUrl
+            };
+
+            // Get existing posts
+            let posts = JSON.parse(localStorage.getItem('posts') || '[]');
+
+            // Check if we're editing an existing post
+            const editingPost = JSON.parse(localStorage.getItem('editingPost'));
+            if (editingPost) {
+                // Update existing post
+                postData.id = editingPost.id;
+                const index = posts.findIndex(p => p.id === editingPost.id);
+                if (index !== -1) {
+                    posts[index] = postData;
+                }
+            } else {
+                // Create new post
+                postData.id = Date.now();
+                posts.push(postData);
+            }
+
+            // Save updated posts
+            localStorage.setItem('posts', JSON.stringify(posts));
+
+            // Redirect to admin page
+            window.location.href = 'admin.html';
         });
     </script>
 </body>

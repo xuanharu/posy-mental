@@ -43,6 +43,156 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/responsive.css">
 
+    <style>
+        .main {
+            background: #f8f8f8;
+            padding: 80px 0;
+        }
+        
+        .container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+            max-width: 1000px;
+        }
+        
+        .signin-content {
+            display: flex;
+            padding: 50px 0;
+            align-items: center;
+        }
+        
+        .signin-image,
+        .signin-form {
+            width: 50%;
+            padding: 0 40px;
+        }
+        
+        .signin-image figure {
+            margin-bottom: 20px;
+        }
+        
+        .signin-image img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        
+        .form-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 30px;
+            border: none;
+            border-bottom: 2px solid #e6e6e6;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        
+        .form-group input:focus {
+            border-bottom-color: #6dabe4;
+        }
+        
+        .form-group label {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+        
+        .form-submit {
+            background: #2074d4;
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 15px 40px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .form-submit:hover {
+            background: #2074d4;
+            color: #fff;
+        }
+        
+        .social-login {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .social-label {
+            display: block;
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .socials li a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            color: #fff;
+            transition: transform 0.3s ease;
+        }
+        
+        .socials li a:hover {
+            transform: translateY(-3px);
+        }
+        
+        .signup-image-link {
+            color: #6dabe4;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+        
+        .signup-image-link:hover {
+            color: #4292dc;
+        }
+        
+        @media (max-width: 768px) {
+            .signin-content {
+                flex-direction: column;
+            }
+            .signin-image,
+            .signin-form {
+                width: 100%;
+                padding: 0 20px;
+            }
+            .signin-image {
+                order: 2;
+                margin-top: 30px;
+            }
+            .signin-form {
+                order: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -63,21 +213,6 @@
     </div>
     <!-- End Preloader -->
 
-    <!-- Get Pro Button -->
-    <ul class="pro-features">
-        <a class="get-pro" href="#">Get Pro</a>
-        <li class="big-title">Pro Version Available</li>
-        <li class="title">Pro Version Features</li>
-        <li>100+ chat history</li>
-        <li>10 day free consulting sessions with real psychologist</li>
-        <li>Access more news and tips everday</li>
-        <li>Get no-ads forever</li>
-        <!-- <div class="button">
-            <a href="http://preview.themeforest.net/item/mediplus-medical-and-doctor-html-template/full_screen_preview/26665910?_ga=2.145092285.888558928.1591971968-344530658.1588061879" target="_blank" class="btn">Pro Version Demo</a>
-            <a href="https://themeforest.net/item/mediplus-medical-and-doctor-html-template/26665910" target="_blank" class="btn">Buy Pro Version</a>
-        </div> -->
-    </ul>
-
     <!-- Header Area -->
     <header class="header">
         <!-- Header Inner -->
@@ -96,32 +231,6 @@
                             <!-- End Mobile Nav -->
                         </div>
                         <div class="col-lg-7 col-md-9 col-12">
-                            <!-- Main Menu -->
-                            <div class="main-menu">
-                                <nav class="navigation">
-                                    <ul class="nav menu">
-                                        <li><a href="index.html">Home</a></li>
-                                        <li>
-                                            <a href="blog-single.html">News</a>
-                                        </li>
-                                        <li><a href="chat.html">AI Chatbot</a></li>
-                                        <li class="active"><a href="#">Help<i class="icofont-rounded-down"></i></a>
-                                            <ul class="dropdown">
-                                                <li>
-                                                    <a href="portfolio-details.html">Services</a>
-                                                    <a href="contact.html">Contact</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <!-- <li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>
-                                            <ul class="dropdown">
-                                                <li><a href="blog-single.html">Blog Details</a></li>
-                                            </ul>
-                                        </li> -->
-                                    </ul>
-                                </nav>
-                            </div>
-                            <!--/ End Main Menu -->
                         </div>
                         <div class="col-lg-2 col-12">
                             <div class="get-quote">
@@ -138,166 +247,35 @@
 
     <body>
 
+        <!-- Main Content -->
         <div class="main">
-
-            <!-- Sign up form -->
-            <section class="signup">
-                <div class="container">
-                    <div class="signup-content">
-                        <div class="signup-form">
-                            <h2 class="form-title">Sign up</h2>
-                            <form method="POST" class="register-form" id="register-form">
-                                <div class="form-group">
-                                    <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                    <input type="text" name="name" id="name" placeholder="Your Name" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="email"><i class="zmdi zmdi-email"></i></label>
-                                    <input type="email" name="email" id="email" placeholder="Your Email" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-                                    <input type="password" name="pass" id="pass" placeholder="Password" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
-                                    <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" />
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-                                    <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
-                                </div>
-                                <div class="form-group form-button">
-                                    <input type="submit" name="signup" id="signup" class="form-submit" value="Register" />
-                                </div>
-                            </form>
-                        </div>
-                        <div class="signup-image">
-                            <figure><img src="images/signup-image.jpg" alt="sing up image"></figure>
-                            <a href="#" class="signup-image-link">I am already member</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Sign in  Form -->
             <section class="sign-in">
                 <div class="container">
                     <div class="signin-content">
                         <div class="signin-image">
-                            <figure><img src="images/signin-image.jpg" alt="sing up image"></figure>
-                            <a href="#" class="signup-image-link">Create an account</a>
+                            <figure><img src="images/chatting_bot.jpg" alt="Mental Health Support"></figure>
                         </div>
 
                         <div class="signin-form">
-                            <h2 class="form-title">Sign up</h2>
-                            <form method="POST" class="register-form" id="login-form">
+                            <h2 class="form-title">Welcome Back!</h2>
+                            <form class="register-form" id="login-form" onsubmit="handleLogin(event)">
                                 <div class="form-group">
-                                    <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                    <input type="text" name="your_name" id="your_name" placeholder="Your Name" />
+                                    <label for="email"><i class="icofont-email"></i></label>
+                                    <input type="email" name="email" id="email" placeholder="Email Address" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
-                                    <input type="password" name="your_pass" id="your_pass" placeholder="Password" />
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
-                                    <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                                    <label for="password"><i class="icofont-lock"></i></label>
+                                    <input type="password" name="password" id="password" placeholder="Password" required />
                                 </div>
                                 <div class="form-group form-button">
                                     <input type="submit" name="signin" id="signin" class="form-submit" value="Log in" />
                                 </div>
                             </form>
-                            <div class="social-login">
-                                <span class="social-label">Or login with</span>
-                                <ul class="socials">
-                                    <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
-                                    <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
-                                    <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>
             </section>
-
         </div>
-        <!-- Footer Area -->
-        <footer id="footer" class="footer ">
-            <!-- Footer Top -->
-            <div class="footer-top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="single-footer">
-                                <h2>About Us</h2>
-                                <p>Posy is a safe and supportive online space dedicated to promoting mental well-being. Explore our newsfeed, connect with our community, or chat with our AI companion.</p>
-                                <!-- Social -->
-                                <ul class="social">
-                                    <li><a href="#"><i class="icofont-facebook"></i></a></li>
-                                    <li><a href="#"><i class="icofont-google-plus"></i></a></li>
-                                    <li><a href="#"><i class="icofont-twitter"></i></a></li>
-                                    <li><a href="#"><i class="icofont-vimeo"></i></a></li>
-                                    <li><a href="#"><i class="icofont-pinterest"></i></a></li>
-                                </ul>
-                                <!-- End Social -->
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="single-footer f-link">
-                                <h2>Quick Links</h2>
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-12">
-                                        <ul>
-                                            <li><a href="index.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Home</a></li>
-                                            <li><a href="blog-single.html"><i class="fa fa-caret-right" aria-hidden="true"></i>News</a></li>
-                                            <li><a href="chat.html"><i class="fa fa-caret-right" aria-hidden="true"></i>AI chatbot</a></li>
-                                            <li><a href="portfolio-details.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Services</a></li>
-                                            <li><a href="contact.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Contact Us</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="single-footer">
-                                <h2>Newsletter</h2>
-                                <p>Subscribe to our newsletter to get informed news in your inbox & highlight our recent blog post or article on a specific mental health topic</p>
-                                <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
-                                    <input name="email" placeholder="Email Address" class="common-input" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your email address'" required="" type="email">
-                                    <button class="button"><i class="icofont icofont-paper-plane"></i></button>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="single-footer">
-                                <h2>Contact Us</h2>
-                                <ul class="top-contact" style="color: white;">
-                                    <li><i class="fa fa-phone"></i>+89 123 456 789</li>
-                                    <li><i class="fa fa-envelope"></i><a href="mailto:support@posy.com"> support@posy.com.vn</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <!--/ End Footer Top -->
-            <!-- Copyright -->
-            <div class="copyright">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-12">
-                            <div class="copyright-content">
-                                <p>© Copyright 2024 | All Rights Reserved by Xuan Nguyen</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--/ End Copyright -->
-        </footer>
-        <!--/ End Footer Area -->
 
         <!-- jquery Min JS -->
         <script src="js/jquery.min.js"></script>
@@ -339,6 +317,43 @@
         <script src="js/bootstrap.min.js"></script>
         <!-- Main JS -->
         <script src="js/main.js"></script>
+        <script>
+            async function handleLogin(event) {
+                event.preventDefault();
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                try {
+                    const response = await fetch('http://localhost:8000/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Store the token
+                        localStorage.setItem('token', data.access_token);
+                        // Redirect to index page
+                        window.location.href = 'admin.html';
+                    } else {
+                        alert('Login failed: ' + data.detail);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred during login. Please try again.');
+                }
+            }
+        </script>
     </body>
+
+</html>
 
 </html>
