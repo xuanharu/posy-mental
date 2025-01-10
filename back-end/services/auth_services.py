@@ -45,3 +45,15 @@ def create_user(email: str, password: str):
     result = db_mongodb.users.insert_one(user)
     user["_id"] = result.inserted_id
     return user
+
+def verify_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user = db_mongodb.users.find_one({"_id": payload["sub"]})
+        if not user:
+            return False
+        return user
+    except jwt.JWTError:
+        return False
+    except Exception as e:
+        return False

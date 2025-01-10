@@ -18,25 +18,27 @@ def get_post(post_id):
     return db_mongodb['posts'].find_one({"_id": ObjectId(post_id)})
 
 @helpers.iterable_handler
-def create_post(title, content, image_url):
+def create_post(title, content, image_url, author):
     result = db_mongodb['posts'].insert_one(
         {
             "title": title,
             "content": content,
             "imageUrl": image_url,
+            "author":author,
             "createdAt": datetime.now()
         }
     )
     return result.inserted_id
 
 @helpers.iterable_handler
-def update_post(post_id, title, content, image_url):
+def update_post(post_id, title, content, image_url, author):
     result = db_mongodb['posts'].update_one(
         {"_id": ObjectId(post_id)},
         {"$set": {
             "title": title,
             "content": content,
             "imageUrl": image_url,
+            "author":author,
             "updatedAt": datetime.now()
         }
         }
