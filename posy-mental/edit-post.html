@@ -162,21 +162,32 @@
         }
 
         // Load existing post data if editing
-        window.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', async function() {
             const editingPost = JSON.parse(localStorage.getItem('editingPost'));
             if (editingPost) {
-                document.getElementById('title').value = editingPost.title;
-                document.getElementById('author').value = editingPost.author;
-                document.getElementById('content').value = editingPost.content;
+                try {
+                    // Fetch post data from MongoDB
+                    const response = await fetch(`/api/post/${editingPost.id}`);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch post data');
+                    }
+                    const postData = await response.json();
 
-                // Show existing image preview
-                const preview = document.getElementById('imagePreview');
-                const img = document.createElement('img');
-                img.src = editingPost.image;
-                preview.appendChild(img);
+                    // Populate form fields
+                    document.getElementById('title').value = postData.title;
+                    document.getElementById('author').value = postData.author;
+                    document.getElementById('content').value = postData.content;
 
-                // Clear the editing post from storage
-                localStorage.removeItem('editingPost');
+                    // Show existing image preview
+                    const preview = document.getElementById('imagePreview');
+                    const img = document.createElement('img');
+                    img.src = postData.imageUrl;
+                    preview.appendChild(img);
+                } catch (error) {
+                    console.error('Error loading post:', error);
+                    alert('Failed to load post data: ' + error.message);
+                    window.location.href = 'admin.html'; // Redirect back if loading fails
+                }
             }
         });
 
@@ -184,58 +195,85 @@
         document.getElementById('editPostForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // Create FormData object
-            const formData = new FormData(this);
+            try {
+                // Create FormData object
+                const formData = new FormData(this);
 
-            // Get file data
-            const imageFile = formData.get('image');
-            let imageUrl = '';
+                // Get file data
+                const imageFile = formData.get('image');
+                let imageUrl = '';
 
-            if (imageFile.size > 0) { // Only process if new file selected
-                // Convert the image file to base64
-                const reader = new FileReader();
-                imageUrl = await new Promise((resolve) => {
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.readAsDataURL(imageFile);
-                });
-            } else {
-                // If no new image, check for existing image in preview
-                const preview = document.getElementById('imagePreview');
-                const existingImg = preview.querySelector('img');
-                imageUrl = existingImg ? existingImg.src : 'images/chatting_boy.jpeg';
-            }
-
-            // Create post data object
-            const postData = {
-                title: formData.get('title'),
-                author: formData.get('author'),
-                content: formData.get('content'),
-                image: imageUrl
-            };
-
-            // Get existing posts
-            let posts = JSON.parse(localStorage.getItem('posts') || '[]');
-
-            // Check if we're editing an existing post
-            const editingPost = JSON.parse(localStorage.getItem('editingPost'));
-            if (editingPost) {
-                // Update existing post
-                postData.id = editingPost.id;
-                const index = posts.findIndex(p => p.id === editingPost.id);
-                if (index !== -1) {
-                    posts[index] = postData;
+                if (imageFile.size > 0) { // Only process if new file selected
+                    // Convert the image file to base64
+                    const reader = new FileReader();
+                    imageUrl = await new Promise((resolve) => {
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsDataURL(imageFile);
+                    });
+                } else {
+                    // If no new image, check for existing image in preview
+                    const preview = document.getElementById('imagePreview');
+                    const existingImg = preview.querySelector('img');
+                    imageUrl = existingImg ? existingImg.src : 'images/chatting_boy.jpeg';
                 }
-            } else {
-                // Create new post
-                postData.id = Date.now();
-                posts.push(postData);
+
+                // Check if we're editing an existing post
+                const editingPost = JSON.parse(localStorage.getItem('editingPost'));
+                let response;
+
+                if (editingPost) {
+                    // Update existing post
+                    response = await fetch(`/api/update-post/${editingPost.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            title: formData.get('title'),
+                            content: formData.get('content'),
+                            image_url: imageUrl
+                        })
+                    });
+                } else {
+                    // Create new post
+                    response = await fetch('/api/create-post', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            title: formData.get('title'),
+                            content: formData.get('content'),
+                            image_url: imageUrl
+                        })
+                    });
+                }
+
+                if (!response.ok) {
+                    let errorMessage = 'Failed to save post';
+                    try {
+                        const contentType = response.headers.get("content-type");
+                        if (contentType && contentType.includes("application/json")) {
+                            const error = await response.json();
+                            errorMessage = error.detail || errorMessage;
+                        } else {
+                            errorMessage = await response.text() || errorMessage;
+                        }
+                    } catch (e) {
+                        console.error('Error parsing response:', e);
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                // Clear editing post from storage
+                localStorage.removeItem('editingPost');
+
+                // Redirect to admin page
+                window.location.href = 'admin.html';
+            } catch (error) {
+                console.error('Error saving post:', error);
+                alert('Failed to save post: ' + error.message);
             }
-
-            // Save updated posts
-            localStorage.setItem('posts', JSON.stringify(posts));
-
-            // Redirect to admin page
-            window.location.href = 'admin.html';
         });
     </script>
 </body>
