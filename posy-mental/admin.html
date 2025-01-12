@@ -44,7 +44,7 @@
     <link rel="stylesheet" href="css/responsive.css">
 
     <style>
-        :root {
+         :root {
             --primary-color: #2074d4;
             --danger-color: #f44336;
             --success-color: #2074d4;
@@ -133,7 +133,7 @@
             line-height: 1.6;
             margin-bottom: 20px;
         }
-
+        
         .post-date {
             color: #888;
             font-size: 0.9em;
@@ -323,7 +323,7 @@
             div.innerHTML = `
                 <input type="checkbox" class="post-checkbox" data-post-id="${post._id}">
                 <div class="post-image">
-                    <img src="images/chatting_boy.jpeg" alt="Post image">
+                    <img src="${post.imageUrl || 'images/chatting_boy.jpeg'}" alt="Post image">
                 </div>
                 <div class="post-content-wrapper">
                     <div class="post-title">${post.title}</div>
@@ -370,7 +370,9 @@
 
         function editPost(postId) {
             // Store the post ID for editing
-            localStorage.setItem('editingPost', JSON.stringify({ id: postId }));
+            localStorage.setItem('editingPost', JSON.stringify({
+                id: postId
+            }));
             window.location.href = `edit-post.html?mode=edit&id=${postId}`;
         }
 
