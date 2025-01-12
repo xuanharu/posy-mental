@@ -1,16 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html class="no-js" lang="zxx">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Feed</title>
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="Site keywords here">
+    <meta name="description" content="">
+    <meta name='copyright' content=''>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Title -->
+    <title>News Feed - Posy Mental Health</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+
+    <!-- Essential CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/icofont.css">
+    <link rel="stylesheet" href="css/slicknav.min.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
     <style>
         .news-container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 50px auto;
+            padding: 0 15px;
         }
         
         .article-card {
@@ -18,11 +41,18 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            background: #fff;
+            transition: all 0.3s ease;
+            border-left: 4px solid #2074d4;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-5px);
         }
         
         .article-image {
             width: 100%;
-            height: 300px;
+            height: 250px;
             object-fit: cover;
         }
         
@@ -31,55 +61,538 @@
         }
         
         .article-meta {
-            color: #666;
+            color: #2074d4;
             font-size: 0.9em;
             margin-bottom: 15px;
+        }
+        
+        .article-text {
+            color: #444;
+            line-height: 1.6;
+        }
+        /* Featured post styles */
+        
+        .featured-post {
+            width: 95%;
+            margin-bottom: 40px;
+        }
+        
+        .featured-post .article-image {
+            height: 400px;
+        }
+        /* Regular posts grid */
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        /* Right column styles */
+        
+        .search-container {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #2074d4;
+            box-shadow: 0 0 5px rgba(32, 116, 212, 0.3);
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .search-results.active {
+            display: block;
+        }
+        
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(32, 116, 212, 0.1);
+            color: #2074d4;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .sidebar-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-box h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2074d4;
+            color: #2074d4;
+            font-size: 1.2em;
+        }
+        
+        .category-list,
+        .recent-post-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .category-list li,
+        .recent-post-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        
+        .category-list li:hover,
+        .recent-post-list li:hover {
+            padding-left: 5px;
+            color: #2074d4;
+            background-color: rgba(32, 116, 212, 0.1);
+        }
+        
+        .category-list li:last-child,
+        .recent-post-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .no-posts {
+            text-align: center;
+            padding: 40px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .error-message {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .error-message h3 {
+            margin-top: 0;
+            color: inherit;
         }
     </style>
 </head>
 
 <body>
-    <div class="container news-container">
-        <h1 class="text-center mb-5">Latest News</h1>
-        <div id="articlesContainer">
-            <!-- Articles will be dynamically inserted here -->
+    <!-- Preloader -->
+    <!-- <div class="preloader">
+        <div class="loader">
+            <div class="loader-outter"></div>
+            <div class="loader-inner"></div>
+            <div class="indicator">
+                <svg width="16px" height="12px">
+                    <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                    <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                </svg>
+            </div>
         </div>
-    </div>
+    </div> -->
+    <!-- End Preloader -->
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script>
-        function displayArticles() {
-            const articlesContainer = document.getElementById('articlesContainer');
-            const articles = JSON.parse(localStorage.getItem('newsArticles') || '[]');
+    <!-- Get Pro Button -->
+    <ul class="pro-features">
+        <a class="get-pro" href="#">Get Pro</a>
+        <li class="big-title">Pro Version Available</li>
+        <li class="title">Pro Version Features</li>
+        <li>100+ chat history</li>
+        <li>10 day free consulting sessions with real psychologist</li>
+        <li>Access more news and tips everday</li>
+        <li>Get no-ads forever</li>
+    </ul>
 
-            if (articles.length === 0) {
-                articlesContainer.innerHTML = '<p class="text-center">No articles posted yet.</p>';
-                return;
-            }
-
-            articlesContainer.innerHTML = articles.map(article => `
-                <div class="article-card">
-                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}" class="article-image">` : ''}
-                    <div class="article-content">
-                        <h2>${article.title}</h2>
-                        <div class="article-meta">
-                            By ${article.author} | ${article.date}
+    <!-- Header Area -->
+    <header class="header">
+        <!-- Header Inner -->
+        <div class="header-inner">
+            <div class="container">
+                <div class="inner">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-12">
+                            <!-- Start Logo -->
+                            <div class="logo">
+                                <a href="index.html"><img src="images/logo_cbg.png" alt="Posy"></a>
+                            </div>
+                            <!-- End Logo -->
+                            <!-- Mobile Nav -->
+                            <div class="mobile-nav"></div>
+                            <!-- End Mobile Nav -->
                         </div>
-                        <div class="article-text">
-                            ${article.content.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
+                        <div class="col-lg-7 col-md-9 col-12">
+                            <!-- Main Menu -->
+                            <div class="main-menu">
+                                <nav class="navigation">
+                                    <ul class="nav menu">
+                                        <li><a href="index.html">Home</a></li>
+                                        <li class="active">
+                                            <a href="newsfeed.html">News</a>
+                                        </li>
+                                        <li><a href="chat.html">AI Chatbot</a></li>
+                                        <li><a href="#">Help<i class="icofont-rounded-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li>
+                                                    <a href="portfolio-details.html">Services</a>
+                                                    <a href="contact.html">Contact</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <!--/ End Main Menu -->
+                        </div>
+                        <div class="col-lg-2 col-12">
+                            <div class="get-quote">
+                                <a href="login.html" class="btn">Get Started</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            `).join('');
+            </div>
+        </div>
+        <!--/ End Header Inner -->
+    </header>
+    <!-- End Header Area -->
+
+    <!-- News Feed Section -->
+    <div class="container news-container">
+        <h1 class="text-center mb-5">Latest News</h1>
+        <div class="row">
+            <!-- Left Column - Posts -->
+            <div class="col-lg-8">
+                <div id="postsContainer">
+                    <div class="loading">Loading posts...</div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <!-- Search Box -->
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search posts..." id="searchInput">
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+
+                <!-- Categories -->
+                <div class="sidebar-box">
+                    <h3>Categories</h3>
+                    <ul class="category-list">
+                        <li>Mental Health</li>
+                        <li>Wellness</li>
+                        <li>Self Care</li>
+                        <li>Mindfulness</li>
+                        <li>Anxiety & Depression</li>
+                    </ul>
+                </div>
+
+                <!-- Recent Posts -->
+                <div class="sidebar-box">
+                    <h3>Recent Posts</h3>
+                    <ul class="recent-post-list" id="recentPosts">
+                        <!-- Recent posts will be dynamically inserted here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Area -->
+    <footer id="footer" class="footer">
+        <!-- Footer Top -->
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
+                            <h2>About Us</h2>
+                            <p>Posy is a safe and supportive online space dedicated to promoting mental well-being. Explore our newsfeed, connect with our community, or chat with our AI companion.</p>
+                            <!-- Social -->
+                            <ul class="social">
+                                <li><a href="#"><i class="icofont-facebook"></i></a></li>
+                                <li><a href="#"><i class="icofont-google-plus"></i></a></li>
+                                <li><a href="#"><i class="icofont-twitter"></i></a></li>
+                                <li><a href="#"><i class="icofont-vimeo"></i></a></li>
+                                <li><a href="#"><i class="icofont-pinterest"></i></a></li>
+                            </ul>
+                            <!-- End Social -->
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer f-link">
+                            <h2>Quick Links</h2>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <ul>
+                                        <li><a href="index.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Home</a></li>
+                                        <li><a href="blog-single.html"><i class="fa fa-caret-right" aria-hidden="true"></i>News</a></li>
+                                        <li><a href="chat.html"><i class="fa fa-caret-right" aria-hidden="true"></i>AI chatbot</a></li>
+                                        <li><a href="portfolio-details.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Services</a></li>
+                                        <li><a href="contact.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Contact Us</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
+                            <h2>Newsletter</h2>
+                            <p>Subscribe to our newsletter to get informed news in your inbox & highlight our recent blog post or article on a specific mental health topic</p>
+                            <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
+                                <input name="email" placeholder="Email Address" class="common-input" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your email address'" required="" type="email">
+                                <button class="button"><i class="icofont icofont-paper-plane"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
+                            <h2>Contact Us</h2>
+                            <ul class="top-contact" style="color: white;">
+                                <li><i class="fa fa-phone"></i>+89 123 456 789</li>
+                                <li><i class="fa fa-envelope"></i><a href="mailto:support@posy.com"> support@posy.com.vn</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ End Footer Top -->
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-12">
+                        <div class="copyright-content">
+                            <p>© Copyright 2024 | All Rights Reserved by Xuan Nguyen</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ End Copyright -->
+    </footer>
+    <!--/ End Footer Area -->
+
+    <!-- Essential Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.0.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/slicknav.min.js"></script>
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <script src="post_apis.js"></script>
+    <script>
+        // Initialize mobile navigation and scroll to top
+        $(document).ready(function() {
+            $('.mobile-nav').slicknav({
+                prependTo: '.mobile-nav',
+                duration: 300,
+                closeOnClick: true
+            });
+
+            $.scrollUp({
+                scrollName: 'scrollUp',
+                scrollDistance: 300,
+                scrollFrom: 'top',
+                scrollSpeed: 300,
+                easingType: 'linear',
+                animation: 'fade',
+                animationSpeed: 200,
+                scrollTrigger: false,
+                scrollText: ["<i class='fa fa-angle-up'></i>"],
+                scrollTitle: false,
+                scrollImg: false,
+                activeOverlay: false,
+                zIndex: 2147483647
+            });
+
+            // Load and display posts
+            loadPosts();
+
+            // Setup search functionality
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            let allPosts = [];
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                if (searchTerm.length > 0) {
+                    const matchingPosts = allPosts.filter(post =>
+                        post.title.toLowerCase().includes(searchTerm)
+                    );
+
+                    displaySearchResults(matchingPosts);
+                    searchResults.classList.add('active');
+                } else {
+                    searchResults.classList.remove('active');
+                }
+            });
+
+            // Close search results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                    searchResults.classList.remove('active');
+                }
+            });
+
+            async function loadPosts() {
+                try {
+                    allPosts = await getPosts();
+                    if (allPosts && allPosts.length > 0) {
+                        displayPosts(allPosts);
+                        updateRecentPosts(allPosts);
+                    } else {
+                        displayError("No posts available", "Create some posts to see them here");
+                    }
+                } catch (error) {
+                    console.error('Error loading posts:', error);
+                    if (error.message.includes('Failed to fetch')) {
+                        displayError(
+                            "Cannot connect to server",
+                            "Please make sure the backend server is running at http://localhost:8000"
+                        );
+                    } else {
+                        displayError("Error loading posts", "Please try again later");
+                    }
+                }
+            }
+
+            function displayError(title, message) {
+                document.getElementById('postsContainer').innerHTML = `
+                    <div class="error-message">
+                        <h3>${title}</h3>
+                        <p>${message}</p>
+                    </div>
+                `;
+                document.getElementById('recentPosts').innerHTML = `
+                    <li>No recent posts available</li>
+                `;
+            }
+
+            function displayPosts(posts) {
+                const postsContainer = document.getElementById('postsContainer');
+
+                if (posts.length === 0) {
+                    displayError("No posts available", "Check back later for new content");
+                    return;
+                }
+
+                // Display featured post (most recent)
+                const featuredPost = posts[0];
+                let html = `
+                    <div class="article-card featured-post" data-post-id="${featuredPost._id}">
+                        <img src="${featuredPost.imageUrl || 'images/news_feature.png'}" alt="${featuredPost.title}" class="article-image">
+                        <div class="article-content">
+                            <h2>${featuredPost.title}</h2>
+                            <div class="article-meta">
+                                By ${featuredPost.author} | ${new Date(featuredPost.createdAt).toLocaleDateString()}
+                            </div>
+                            <div class="article-text">
+                                ${featuredPost.content}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Display remaining posts in grid
+                if (posts.length > 1) {
+                    html += '<div class="posts-grid">';
+                    posts.slice(1).forEach(post => {
+                        html += `
+                            <div class="article-card" data-post-id="${post._id}">
+                                <img src="${post.imageUrl || 'images/news_feature.png'}" alt="${post.title}" class="article-image">
+                                <div class="article-content">
+                                    <h2>${post.title}</h2>
+                                    <div class="article-meta">
+                                        By ${post.author} | ${new Date(post.createdAt).toLocaleDateString()}
+                                    </div>
+                                    <div class="article-text">
+                                        ${post.content}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+
+                postsContainer.innerHTML = html;
+            }
+
+            function displaySearchResults(posts) {
+                searchResults.innerHTML = posts.length > 0 ?
+                    posts.map(post => `
+                        <div class="search-result-item" onclick="scrollToPost('${post._id}')">
+                            ${post.title}
+                        </div>
+                    `).join('') :
+                    '<div class="search-result-item">No matching posts found</div>';
+            }
+
+            function updateRecentPosts(posts) {
+                const recentPostsList = document.getElementById('recentPosts');
+                const recentPosts = posts.slice(0, 5); // Show 5 most recent posts
+
+                recentPostsList.innerHTML = recentPosts.map(post => `
+                    <li onclick="scrollToPost('${post._id}')" style="cursor: pointer" data-post-id="${post._id}">
+                        ${post.title}
+                    </li>
+                `).join('');
+            }
+        });
+
+        function scrollToPost(postId) {
+            const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+            if (postElement) {
+                postElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                document.getElementById('searchResults').classList.remove('active');
+            }
         }
-
-        // Display articles on page load
-        displayArticles();
-
-        // Refresh articles every 30 seconds
-        setInterval(displayArticles, 30000);
     </script>
 </body>
 
