@@ -136,15 +136,17 @@
         .search-input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            border: 10px solid #ddd;
+            border-radius: 5px;
+            border-width: 3px;
             transition: all 0.3s ease;
         }
         
         .search-input:focus {
             outline: none;
             border-color: #2074d4;
+            border-width: 3px;
+            border-radius: 5px;
             box-shadow: 0 0 5px rgba(32, 116, 212, 0.3);
         }
         
@@ -268,6 +270,61 @@
             margin-top: 0;
             color: inherit;
         }
+        /* Pagination Styles */
+        
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            gap: 10px;
+        }
+        
+        .pagination-button {
+            padding: 8px 16px;
+            background: #fff;
+            border: 2px solid #2074d4;
+            border-radius: 4px;
+            color: #2074d4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-button:hover {
+            background: #2074d4;
+            color: #fff;
+        }
+        
+        .pagination-button:disabled {
+            background: #f0f0f0;
+            border-color: #ccc;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .page-numbers {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        
+        .page-number {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .page-number:hover {
+            background: rgba(32, 116, 212, 0.1);
+        }
+        
+        .page-number.active {
+            background: #2074d4;
+            color: #fff;
+            border-color: #2074d4;
+        }
     </style>
 </head>
 
@@ -360,13 +417,18 @@
                 <div id="postsContainer">
                     <div class="loading">Loading posts...</div>
                 </div>
+                <div class="pagination-container">
+                    <button class="pagination-button" id="prevPage" disabled>Previous</button>
+                    <div class="page-numbers" id="pageNumbers"></div>
+                    <button class="pagination-button" id="nextPage" disabled>Next</button>
+                </div>
             </div>
 
             <!-- Right Column -->
             <div class="col-lg-4">
                 <!-- Search Box -->
                 <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Search posts and press Enter..." id="searchInput">
+                    <input type="text" class="search-input" placeholder="Search posts..." id="searchInput">
                     <button class="clear-search" id="clearSearch" disabled>Clear</button>
                     <div class="search-results" id="searchResults"></div>
                 </div>
@@ -503,8 +565,28 @@
                 zIndex: 2147483647
             });
 
+            // Pagination variables
+            let currentPage = 1;
+            let postsPerPage = 5;
+            let totalPages = 1;
+
             // Load and display posts
             loadPosts();
+
+            // Pagination event listeners
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayPosts(currentSearchResults || allPosts);
+                }
+            });
+
+            document.getElementById('nextPage').addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayPosts(currentSearchResults || allPosts);
+                }
+            });
 
             // Setup search functionality
             const searchInput = document.getElementById('searchInput');
@@ -636,8 +718,17 @@
                     updateRecentPosts(posts);
                 }
 
-                // Display featured post (most recent)
-                const featuredPost = posts[0];
+                // Calculate pagination
+                totalPages = Math.ceil(posts.length / postsPerPage);
+                updatePaginationControls();
+
+                // Get current page posts
+                const startIndex = (currentPage - 1) * postsPerPage;
+                const endIndex = startIndex + postsPerPage;
+                const currentPosts = posts.slice(startIndex, endIndex);
+
+                // Display featured post (first post of current page)
+                const featuredPost = currentPosts[0];
                 let html = `
                     <div class="article-card featured-post" data-post-id="${featuredPost._id}">
                         <img src="${featuredPost.imageUrl || 'images/news_feature.png'}" alt="${featuredPost.title}" class="article-image">
@@ -654,9 +745,9 @@
                 `;
 
                 // Display remaining posts in grid
-                if (posts.length > 1) {
+                if (currentPosts.length > 1) {
                     html += '<div class="posts-grid">';
-                    posts.slice(1).forEach(post => {
+                    currentPosts.slice(1).forEach(post => {
                         html += `
                             <div class="article-card" data-post-id="${post._id}">
                                 <img src="${post.imageUrl || 'images/news_feature.png'}" alt="${post.title}" class="article-image">
@@ -673,6 +764,34 @@
                         `;
                     });
                     html += '</div>';
+                }
+
+                function updatePaginationControls() {
+                    const prevButton = document.getElementById('prevPage');
+                    const nextButton = document.getElementById('nextPage');
+                    const pageNumbersContainer = document.getElementById('pageNumbers');
+
+                    // Update prev/next buttons
+                    prevButton.disabled = currentPage === 1;
+                    nextButton.disabled = currentPage === totalPages;
+
+                    // Update page numbers
+                    let pageNumbersHtml = '';
+                    for (let i = 1; i <= totalPages; i++) {
+                        pageNumbersHtml += `
+                        <span class="page-number ${i === currentPage ? 'active' : ''}" 
+                              onclick="changePage(${i})">
+                            ${i}
+                        </span>
+                    `;
+                    }
+                    pageNumbersContainer.innerHTML = pageNumbersHtml;
+                }
+
+                // Global function for page number clicks
+                window.changePage = function(pageNumber) {
+                    currentPage = pageNumber;
+                    displayPosts(currentSearchResults || allPosts);
                 }
 
                 postsContainer.innerHTML = html;
