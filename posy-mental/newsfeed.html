@@ -58,6 +58,10 @@
         
         .article-content {
             padding: 20px;
+            height: 200px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
         
         .article-meta {
@@ -69,6 +73,19 @@
         .article-text {
             color: #444;
             line-height: 1.6;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+        }
+        
+        .featured-post .article-content {
+            height: 250px;
+        }
+        
+        .featured-post .article-text {
+            -webkit-line-clamp: 8;
         }
         /* Featured post styles */
         
