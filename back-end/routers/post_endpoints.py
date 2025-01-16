@@ -25,3 +25,7 @@ def update_post(post_id, title, content, image_url, author):
 @router.delete("/delete-post/{post_id}")
 def delete_post(post_id):
     return post_services.delete_post(post_id)
+
+@router.get("/search")
+def search_posts(term: str):
+    return post_services.search_posts(term)

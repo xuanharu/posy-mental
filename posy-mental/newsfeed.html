@@ -110,6 +110,27 @@
         .search-container {
             margin-bottom: 30px;
             position: relative;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .clear-search {
+            padding: 0 15px;
+            background: #2074d4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .clear-search:hover {
+            background-color: #1861b3;
+        }
+        
+        .clear-search:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
         
         .search-input {
@@ -158,6 +179,21 @@
         
         .search-result-item:last-child {
             border-bottom: none;
+        }
+        
+        .search-result-title {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .search-result-meta {
+            font-size: 0.8em;
+            color: #666;
+        }
+        
+        .search-result-item:hover .search-result-title {
+            color: #2074d4;
         }
         
         .sidebar-box {
@@ -330,7 +366,8 @@
             <div class="col-lg-4">
                 <!-- Search Box -->
                 <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Search posts..." id="searchInput">
+                    <input type="text" class="search-input" placeholder="Search posts and press Enter..." id="searchInput">
+                    <button class="clear-search" id="clearSearch" disabled>Clear</button>
                     <div class="search-results" id="searchResults"></div>
                 </div>
 
@@ -472,19 +509,72 @@
             // Setup search functionality
             const searchInput = document.getElementById('searchInput');
             const searchResults = document.getElementById('searchResults');
+            const clearSearchBtn = document.getElementById('clearSearch');
             let allPosts = [];
+            let currentSearchResults = null;
 
+            // Enable/disable clear button based on search input
             searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                if (searchTerm.length > 0) {
-                    const matchingPosts = allPosts.filter(post =>
-                        post.title.toLowerCase().includes(searchTerm)
-                    );
+                clearSearchBtn.disabled = !this.value.trim();
+            });
 
-                    displaySearchResults(matchingPosts);
+            // Clear search handler
+            clearSearchBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                clearSearchBtn.disabled = true;
+                currentSearchResults = null;
+                displayPosts(allPosts);
+                searchResults.classList.remove('active');
+            });
+
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.trim();
+
+                // Clear previous timeout
+                clearTimeout(searchTimeout);
+
+                if (searchTerm.length > 0) {
+                    // Add loading indicator
+                    searchResults.innerHTML = '<div class="search-result-item">Searching...</div>';
                     searchResults.classList.add('active');
+
+                    // Debounce search requests
+                    searchTimeout = setTimeout(async() => {
+                        try {
+                            const results = await searchPosts(searchTerm);
+                            displaySearchResults(results);
+                        } catch (error) {
+                            console.error('Search error:', error);
+                            searchResults.innerHTML = '<div class="search-result-item">Error searching posts</div>';
+                        }
+                    }, 300); // Wait 300ms after user stops typing
                 } else {
                     searchResults.classList.remove('active');
+                }
+            });
+
+            // Handle Enter key press
+            searchInput.addEventListener('keydown', async function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const searchTerm = this.value.trim();
+
+                    if (searchTerm) {
+                        try {
+                            const results = await searchPosts(searchTerm);
+                            currentSearchResults = results;
+                            displayPosts(results);
+                            searchResults.classList.remove('active');
+                        } catch (error) {
+                            console.error('Search error:', error);
+                            displayError('Search Error', 'Failed to search posts. Please try again.');
+                        }
+                    } else {
+                        // If search is cleared, show all posts
+                        currentSearchResults = null;
+                        displayPosts(allPosts);
+                    }
                 }
             });
 
@@ -531,10 +621,19 @@
 
             function displayPosts(posts) {
                 const postsContainer = document.getElementById('postsContainer');
+                const isSearchResult = currentSearchResults !== null;
 
                 if (posts.length === 0) {
-                    displayError("No posts available", "Check back later for new content");
+                    displayError(
+                        isSearchResult ? "No matching posts found" : "No posts available",
+                        isSearchResult ? "Try a different search term" : "Check back later for new content"
+                    );
                     return;
+                }
+
+                // Update recent posts only when showing all posts
+                if (!isSearchResult) {
+                    updateRecentPosts(posts);
                 }
 
                 // Display featured post (most recent)
@@ -580,13 +679,19 @@
             }
 
             function displaySearchResults(posts) {
-                searchResults.innerHTML = posts.length > 0 ?
-                    posts.map(post => `
-                        <div class="search-result-item" onclick="scrollToPost('${post._id}')">
-                            ${post.title}
+                if (!Array.isArray(posts) || posts.length === 0) {
+                    searchResults.innerHTML = '<div class="search-result-item">No matching posts found</div>';
+                    return;
+                }
+
+                searchResults.innerHTML = posts.map(post => `
+                    <div class="search-result-item" onclick="scrollToPost('${post._id}')">
+                        <div class="search-result-title">${post.title}</div>
+                        <div class="search-result-meta">
+                            By ${post.author} | ${new Date(post.createdAt).toLocaleDateString()}
                         </div>
-                    `).join('') :
-                    '<div class="search-result-item">No matching posts found</div>';
+                    </div>
+                `).join('');
             }
 
             function updateRecentPosts(posts) {

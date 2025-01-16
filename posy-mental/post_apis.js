@@ -1,5 +1,19 @@
 const BASE_URL = 'http://localhost:8000/post';
 
+// Search posts
+async function searchPosts(searchTerm) {
+    try {
+        const response = await fetch(`${BASE_URL}/search?term=${encodeURIComponent(searchTerm.trim())}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error searching posts:', error);
+        throw error;
+    }
+}
+
 // Get all posts
 async function getPosts() {
     try {
