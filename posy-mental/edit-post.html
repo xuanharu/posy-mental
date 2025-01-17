@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <!-- SimpleMDE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
     <style>
         .edit-post-section {
@@ -42,6 +44,15 @@
             width: 100%;
             height: auto;
             border-radius: 4px;
+        }
+        /* Custom styles for SimpleMDE */
+        
+        .CodeMirror {
+            min-height: 300px;
+        }
+        
+        .editor-toolbar {
+            border-radius: 4px 4px 0 0;
         }
     </style>
 </head>
@@ -124,7 +135,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="copyright-content">
-                            <p>© Copyright 2023 | All Rights Reserved</p>
+                            <p>© Copyright 2024 | All Rights Reserved by Xuan Nguyen</p>
                         </div>
                     </div>
                 </div>
@@ -141,9 +152,26 @@
     <script src="js/bootstrap.min.js"></script>
     <!-- Modernizr JS -->
     <script src="js/modernizr.min.js"></script>
+    <!-- SimpleMDE JS -->
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
     <script src="post_apis.js"></script>
     <script>
+        let simplemde;
+        try {
+            // Initialize SimpleMDE
+            simplemde = new SimpleMDE({
+                element: document.getElementById("content"),
+                spellChecker: false,
+                status: false,
+                // Sync content with original textarea on change
+                forceSync: true
+            });
+        } catch (error) {
+            console.error('Failed to initialize markdown editor:', error);
+            alert('Failed to initialize markdown editor. Using regular textarea instead.');
+        }
+
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const mode = urlParams.get('mode');
@@ -175,7 +203,12 @@
 
                     // Populate form fields
                     document.getElementById('title').value = postData.title;
-                    document.getElementById('content').value = postData.content;
+                    document.getElementById('author').value = postData.author;
+                    if (simplemde) {
+                        simplemde.value(postData.content); // Set markdown editor content
+                    } else {
+                        document.getElementById('content').value = postData.content;
+                    }
 
                     // Update page title based on mode
                     document.querySelector('h2').textContent = 'Edit Post';
@@ -195,15 +228,15 @@
             e.preventDefault();
 
             try {
-                const formData = new FormData(this);
-                const title = formData.get('title');
-                const content = formData.get('content');
-                const author = formData.get('author');
-                const imageFile = formData.get('image');
-                
+                // Get form values directly instead of using FormData
+                const title = document.getElementById('title').value;
+                const author = document.getElementById('author').value;
+                const content = simplemde ? simplemde.value() : document.getElementById('content').value;
+                const imageFile = document.getElementById('image').files[0];
+
                 // Handle image
                 let imageUrl = '';
-                if (imageFile.size > 0) {
+                if (imageFile) {
                     const reader = new FileReader();
                     imageUrl = await new Promise((resolve) => {
                         reader.onload = (e) => resolve(e.target.result);
@@ -213,6 +246,12 @@
                     const preview = document.getElementById('imagePreview');
                     const existingImg = preview.querySelector('img');
                     imageUrl = existingImg ? existingImg.src : 'images/chatting_boy.jpeg';
+                }
+
+                // Validate required fields
+                if (!title || !content || !author) {
+                    alert('Please fill in all required fields');
+                    return;
                 }
 
                 if (mode === 'edit' && postId) {
