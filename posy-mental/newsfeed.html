@@ -730,7 +730,7 @@
                 // Display featured post (first post of current page)
                 const featuredPost = currentPosts[0];
                 let html = `
-                    <div class="article-card featured-post" data-post-id="${featuredPost._id}">
+                    <div class="article-card featured-post" data-post-id="${featuredPost._id}" onclick="window.location.href='blog-single.html?id=${featuredPost._id}'">
                         <img src="${featuredPost.imageUrl || 'images/news_feature.png'}" alt="${featuredPost.title}" class="article-image">
                         <div class="article-content">
                             <h2>${featuredPost.title}</h2>
@@ -749,7 +749,7 @@
                     html += '<div class="posts-grid">';
                     currentPosts.slice(1).forEach(post => {
                         html += `
-                            <div class="article-card" data-post-id="${post._id}">
+                            <div class="article-card" data-post-id="${post._id}" onclick="window.location.href='blog-single.html?id=${post._id}'">
                                 <img src="${post.imageUrl || 'images/news_feature.png'}" alt="${post.title}" class="article-image">
                                 <div class="article-content">
                                     <h2>${post.title}</h2>

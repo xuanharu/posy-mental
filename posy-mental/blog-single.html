@@ -486,6 +486,84 @@
     <script src="js/jquery.min.js"></script>
     <!-- jquery Migrate JS -->
     <script src="js/jquery-migrate-3.0.0.js"></script>
+    <!-- Post APIs -->
+    <script src="post_apis.js"></script>
+    <script>
+        // Function to get URL parameters
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Load post content
+        async function loadPost() {
+            try {
+                const postId = getUrlParam('id');
+                if (!postId) {
+                    window.location.href = 'newsfeed.html';
+                    return;
+                }
+
+                const post = await getPost(postId);
+
+                // Update page content
+                document.title = `${post.title} - Posy Mental Health`;
+                document.querySelector('.news-head img').src = post.imageUrl || 'images/news_feature.png';
+                document.querySelector('.news-title a').textContent = post.title;
+                document.querySelector('.author a').textContent = post.author;
+                document.querySelector('.date').innerHTML = `<i class="fa fa-clock-o"></i>${new Date(post.createdAt).toLocaleDateString()}`;
+                // Convert content to HTML with markdown support
+                const html = post.content.split('\n').map(line => {
+                    // Skip empty lines
+                    if (!line.trim()) return '';
+
+                    // Handle headers
+                    if (line.startsWith('#')) {
+                        const level = line.match(/^#+/)[0].length;
+                        const text = line.replace(/^#+\s*/, '');
+                        return `<h${level}>${text}</h${level}>`;
+                    }
+
+                    // Handle lists
+                    if (line.match(/^[-*]\s/)) {
+                        const text = line.replace(/^[-*]\s/, '');
+                        return `<ul><li>${text}</li></ul>`;
+                    }
+
+                    // Handle blockquotes
+                    if (line.startsWith('>')) {
+                        const text = line.replace(/^>\s*/, '');
+                        return `<blockquote class="overlay"><p>${text}</p></blockquote>`;
+                    }
+
+                    // Handle images
+                    if (line.match(/!\[.*?\]\(.*?\)/)) {
+                        const [, alt, url] = line.match(/!\[(.*?)\]\((.*?)\)/);
+                        return `<img src="${url}" alt="${alt}" class="img-fluid">`;
+                    }
+
+                    // Handle emphasis
+                    const formattedText = line
+                        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') // Bold
+                        .replace(/\*([^*]+)\*/g, '<em>$1</em>') // Italic
+                        .replace(/`([^`]+)`/g, '<code>$1</code>'); // Code
+
+                    // Regular text
+                    return `<p>${formattedText}</p>`;
+                }).join('\n');
+
+                document.querySelector('.news-text').innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading post:', error);
+                // Redirect to newsfeed if there's an error
+                window.location.href = 'newsfeed.html';
+            }
+        }
+
+        // Load post when page loads
+        document.addEventListener('DOMContentLoaded', loadPost);
+    </script>
     <!-- jquery Ui JS -->
     <script src="js/jquery-ui.min.js"></script>
     <!-- Easing JS -->
