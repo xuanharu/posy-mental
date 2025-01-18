@@ -539,7 +539,22 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/slicknav.min.js"></script>
     <script src="js/jquery.scrollUp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="post_apis.js"></script>
+    <script>
+        // Configure marked to decrease heading levels
+        const renderer = new marked.Renderer();
+        renderer.heading = function(text, level) {
+            // Decrease heading level by 2 (h1->h3, h2->h4, etc)
+            level = text.depth;
+            text = text.text;
+            const newLevel = Math.min(level + 4, 6); // Ensure we don't exceed h6
+            console.log('newLevel:', newLevel);
+            console.log('text:', text);
+            return `<h${newLevel}>${text}</h${newLevel}>`;
+        };
+        marked.setOptions({ renderer });
+    </script>
     <script>
         // Initialize mobile navigation and scroll to top
         $(document).ready(function() {
@@ -738,7 +753,7 @@
                                 By ${featuredPost.author} | ${new Date(featuredPost.createdAt).toLocaleDateString()}
                             </div>
                             <div class="article-text">
-                                ${featuredPost.content}
+                                ${marked.parse(featuredPost.content)}
                             </div>
                         </div>
                     </div>
@@ -757,7 +772,7 @@
                                         By ${post.author} | ${new Date(post.createdAt).toLocaleDateString()}
                                     </div>
                                     <div class="article-text">
-                                        ${post.content}
+                                        ${marked.parse(post.content)}
                                     </div>
                                 </div>
                             </div>
