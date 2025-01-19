@@ -161,6 +161,9 @@
                                         <!-- <span class="views"><i class="fa fa-eye"></i>33K Views</span> -->
                                     </div>
                                 </div>
+                                <!-- Post Tags -->
+                                <div class="post-tags" style="margin: 20px 0; display: flex; flex-wrap: wrap; gap: 8px;">
+                                </div>
                                 <!-- News Text -->
                                 <div class="news-text">
                                     <p>In our fast-paced world, stress and burnout have become common companions. Seeking solace, many turn to travel as a powerful tool for healing and rejuvenation. The allure of exploring new horizons, immersing oneself
@@ -335,51 +338,20 @@
                             </ul>
                         </div> -->
                         <!--/ End Single Widget -->
-                        <!-- Single Widget -->
+                        <!-- Latest Posts -->
                         <div class="single-widget recent-post">
-                            <h3 class="title">Recent post</h3>
-                            <!-- Single Post -->
-                            <div class="single-post">
-                                <div class="image">
-                                    <img src="img/blog-sidebar1.jpg" alt="#">
-                                </div>
-                                <div class="content">
-                                    <h5><a href="#">We have annnocuced our new chatbot</a></h5>
-                                    <ul class="comment">
-                                        <li><i class="fa fa-calendar" aria-hidden="true"></i>22 Nov, 2024</li>
-                                        <li><i class="fa fa-commenting-o" aria-hidden="true"></i>3</li>
-                                    </ul>
-                                </div>
+                            <h3 class="title">Latest Posts</h3>
+                            <div id="latestPosts">
+                                <!-- Latest posts will be dynamically inserted here -->
                             </div>
-                            <!-- End Single Post -->
-                            <!-- Single Post -->
-                            <div class="single-post">
-                                <div class="image">
-                                    <img src="img/blog-sidebar2.jpg" alt="#">
-                                </div>
-                                <div class="content">
-                                    <h5><a href="#">Top five way for solving depression problems</a></h5>
-                                    <ul class="comment">
-                                        <li><i class="fa fa-calendar" aria-hidden="true"></i>05 Dec, 2024</li>
-                                        <li><i class="fa fa-commenting-o" aria-hidden="true"></i>5</li>
-                                    </ul>
-                                </div>
+                        </div>
+
+                        <!-- Related Posts -->
+                        <div class="single-widget recent-post">
+                            <h3 class="title">Related Posts</h3>
+                            <div id="relatedPosts">
+                                <!-- Related posts will be dynamically inserted here -->
                             </div>
-                            <!-- End Single Post -->
-                            <!-- Single Post -->
-                            <div class="single-post">
-                                <div class="image">
-                                    <img src="img/blog-sidebar3.jpg" alt="#">
-                                </div>
-                                <div class="content">
-                                    <h5><a href="#">Travel is a healing method</a></h5>
-                                    <ul class="comment">
-                                        <li><i class="fa fa-calendar" aria-hidden="true"></i>05 Jan, 2025</li>
-                                        <li><i class="fa fa-commenting-o" aria-hidden="true"></i>4</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- End Single Post -->
                         </div>
                         <!--/ End Single Widget -->
                         <!-- Single Widget -->
@@ -487,12 +459,99 @@
     <!-- jquery Migrate JS -->
     <script src="js/jquery-migrate-3.0.0.js"></script>
     <!-- Post APIs -->
+    <style>
+        .post-tag {
+            padding: 4px 12px;
+            border-radius: 16px;
+            background-color: #f0f7ff;
+            color: #2074d4;
+            font-size: 0.9em;
+            border: 1px solid #2074d4;
+            display: inline-block;
+            margin: 2px;
+        }
+    </style>
     <script src="post_apis.js"></script>
+    <style>
+        .post-tag {
+            padding: 4px 12px;
+            border-radius: 16px;
+            background-color: #f0f7ff;
+            color: #2074d4;
+            font-size: 0.9em;
+            border: 1px solid #2074d4;
+            display: inline-block;
+            margin: 2px;
+        }
+        
+        .single-post {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .single-post:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .single-post .image {
+            width: 80px;
+            height: 80px;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        
+        .single-post .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .single-post .content h5 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+        
+        .single-post .content h5 a {
+            color: #2c2d3f;
+            transition: all 0.3s ease;
+        }
+        
+        .single-post .content h5 a:hover {
+            color: #2074d4;
+        }
+        
+        .no-posts {
+            padding: 15px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
     <script>
         // Function to get URL parameters
         function getUrlParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
+        }
+
+        // Function to format post preview
+        function formatPostPreview(post) {
+            return `
+                <div class="single-post">
+                    <div class="image">
+                        <img src="${post.imageUrl || 'images/news_feature.png'}" alt="${post.title}">
+                    </div>
+                    <div class="content">
+                        <h5><a href="blog-single.html?id=${post._id}">${post.title}</a></h5>
+                        <ul class="comment">
+                            <li><i class="fa fa-calendar" aria-hidden="true"></i>${new Date(post.createdAt).toLocaleDateString()}</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
         }
 
         // Load post content
@@ -512,6 +571,16 @@
                 document.querySelector('.news-title a').textContent = post.title;
                 document.querySelector('.author a').textContent = post.author;
                 document.querySelector('.date').innerHTML = `<i class="fa fa-clock-o"></i>${new Date(post.createdAt).toLocaleDateString()}`;
+
+                // Display tags
+                const tagsContainer = document.querySelector('.post-tags');
+                if (post.tags && Array.isArray(post.tags) && post.tags.length > 0) {
+                    tagsContainer.innerHTML = post.tags.map(tag =>
+                        `<span class="post-tag">${tag}</span>`
+                    ).join('');
+                } else {
+                    tagsContainer.style.display = 'none';
+                }
                 // Convert content to HTML with markdown support
                 const html = post.content.split('\n').map(line => {
                     // Skip empty lines
@@ -553,6 +622,41 @@
                 }).join('\n');
 
                 document.querySelector('.news-text').innerHTML = html;
+
+                // Get all posts for latest and related posts
+                const allPosts = await getPosts();
+
+                // Sort posts by date for latest posts
+                const latestPosts = allPosts
+                    .filter(p => p._id !== postId) // Exclude current post
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .slice(0, 3); // Get top 3
+
+                // Find related posts by matching tags
+                const relatedPosts = allPosts
+                    .filter(p => {
+                        if (p._id === postId) return false; // Exclude current post
+                        if (!p.tags || !post.tags) return false;
+                        // Check if posts share any tags
+                        return p.tags.some(tag => post.tags.includes(tag));
+                    })
+                    .slice(0, 5); // Get up to 5 related posts
+
+                // Display latest posts
+                const latestPostsContainer = document.getElementById('latestPosts');
+                if (latestPosts.length > 0) {
+                    latestPostsContainer.innerHTML = latestPosts.map(formatPostPreview).join('');
+                } else {
+                    latestPostsContainer.innerHTML = '<div class="no-posts">No recent posts available</div>';
+                }
+
+                // Display related posts
+                const relatedPostsContainer = document.getElementById('relatedPosts');
+                if (relatedPosts.length > 0) {
+                    relatedPostsContainer.innerHTML = relatedPosts.map(formatPostPreview).join('');
+                } else {
+                    relatedPostsContainer.innerHTML = '<div class="no-posts">No related posts available</div>';
+                }
 
             } catch (error) {
                 console.error('Error loading post:', error);
