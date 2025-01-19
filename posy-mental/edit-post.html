@@ -54,6 +54,26 @@
         .editor-toolbar {
             border-radius: 4px 4px 0 0;
         }
+        /* Tag button styles */
+        
+        .btn-outline-primary {
+            transition: all 0.2s ease;
+            background-color: #fff;
+            color: #2074d4;
+        }
+        
+        .btn-outline-primary.active,
+        .btn-outline-primary:active {
+            background-color: black !important;
+            color: white !important;
+            border-color: var(--primary-color) !important;
+        }
+        
+        .btn-group-toggle label.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
     </style>
 </head>
 
@@ -115,6 +135,99 @@
                                 <textarea class="form-control" id="content" name="content" rows="6" required></textarea>
                             </div>
 
+                            <!-- Tags Selection -->
+                            <div class="form-group">
+                                <label>Tags</label>
+                                <div id="tagGroups">
+                                    <div class="mb-3">
+                                        <h6>MENTAL HEALTH</h6>
+                                        <div class="btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Addiction"> Addiction
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Anxiety"> Anxiety
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="ADHD"> ADHD
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Asperger's"> Asperger's
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Autism"> Autism
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Bipolar Disorder"> Bipolar Disorder
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Chronic Pain"> Chronic Pain
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Depression"> Depression
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Eating Disorders"> Eating Disorders
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>PERSONALITY</h6>
+                                        <div class="btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Passive Aggression"> Passive Aggression
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Personality"> Personality
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Shyness"> Shyness
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>PERSONAL GROWTH</h6>
+                                        <div class="btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Goal Setting"> Goal Setting
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Happiness"> Happiness
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Positive Psychology"> Positive Psychology
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Stopping Smoking"> Stopping Smoking
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>RELATIONSHIP</h6>
+                                        <div class="btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Low Sexual Desire"> Low Sexual Desire
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Relationships"> Relationships
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Sex"> Sex
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Family Life"> Family Life
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Child Development"> Child Development
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="tags" value="Parenting"> Parenting
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Submit Button -->
                             <div class="form-group">
                                 <button type="submit" class="btn">Publish Post</button>
@@ -157,7 +270,38 @@
 
     <script src="post_apis.js"></script>
     <script>
+        // Initialize variables
         let simplemde;
+        const tagLabels = document.querySelectorAll('.btn-group-toggle label');
+
+        // Add click handlers for tag buttons
+        tagLabels.forEach(label => {
+            label.addEventListener('click', function(e) {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked; // Toggle checkbox state
+
+                // Toggle active class based on new checkbox state
+                if (checkbox.checked) {
+                    this.classList.add('active');
+                } else {
+                    this.classList.remove('active');
+                }
+
+                // Prevent the default bootstrap toggle behavior
+                e.preventDefault();
+            });
+
+            // Also handle the change event on checkboxes
+            const checkbox = label.querySelector('input[type="checkbox"]');
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    this.parentElement.classList.add('active');
+                } else {
+                    this.parentElement.classList.remove('active');
+                }
+            });
+        });
+
         try {
             // Initialize SimpleMDE
             simplemde = new SimpleMDE({
@@ -210,6 +354,17 @@
                         document.getElementById('content').value = postData.content;
                     }
 
+                    // Set selected tags
+                    if (postData.tags) {
+                        const checkboxes = document.querySelectorAll('input[name="tags"]');
+                        checkboxes.forEach(checkbox => {
+                            if (postData.tags.includes(checkbox.value)) {
+                                checkbox.checked = true;
+                                checkbox.parentElement.classList.add('active');
+                            }
+                        });
+                    }
+
                     // Update page title based on mode
                     document.querySelector('h2').textContent = 'Edit Post';
                 } catch (error) {
@@ -234,6 +389,10 @@
                 const content = simplemde ? simplemde.value() : document.getElementById('content').value;
                 const imageFile = document.getElementById('image').files[0];
 
+                // Get selected tags
+                const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
+                    .map(checkbox => checkbox.value);
+
                 // Handle image
                 let imageUrl = '';
                 if (imageFile) {
@@ -256,10 +415,10 @@
 
                 if (mode === 'edit' && postId) {
                     // Update existing post
-                    await updatePost(postId, title, content, imageUrl, author);
+                    await updatePost(postId, title, content, imageUrl, author, selectedTags);
                 } else {
                     // Create new post
-                    await createPost(title, content, imageUrl, author);
+                    await createPost(title, content, imageUrl, author, selectedTags);
                 }
 
                 // Redirect to admin page

@@ -15,12 +15,18 @@ def get_post(post_id):
     return post_services.get_post(post_id)
 
 @router.post("/create-post")
-def create_post(title, content, image_url, author):
-    return post_services.create_post(title, content, image_url, author)
+def create_post(title, content, image_url, author, tags: Optional[str] = None):
+    tag_list = [] if not tags else eval(tags)  # Convert string representation of list to actual list
+    return post_services.create_post(title, content, image_url, author, tag_list)
 
 @router.put("/update-post/{post_id}")
-def update_post(post_id, title, content, image_url, author):
-    return post_services.update_post(post_id, title, content, image_url, author)
+def update_post(post_id, title, content, image_url, author, tags: Optional[str] = None):
+    tag_list = [] if not tags else eval(tags)  # Convert string representation of list to actual list
+    return post_services.update_post(post_id, title, content, image_url, author, tag_list)
+
+@router.get("/posts/tag/{tag}")
+def get_posts_by_tag(tag: str):
+    return post_services.get_posts_by_tag(tag)
 
 @router.delete("/delete-post/{post_id}")
 def delete_post(post_id):

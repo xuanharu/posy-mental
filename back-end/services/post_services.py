@@ -8,8 +8,9 @@ from utils import (
 )
 from datetime import datetime
 
-# Create text index for search
+# Create indexes
 db_mongodb['posts'].create_index([("title", "text"), ("content", "text")])
+db_mongodb['posts'].create_index([("tags", 1)])  # Index for tag filtering
 
 @helpers.iterable_handler
 def get_posts():
@@ -21,30 +22,31 @@ def get_post(post_id):
     return db_mongodb['posts'].find_one({"_id": ObjectId(post_id)})
 
 @helpers.iterable_handler
-def create_post(title, content, image_url, author):
+def create_post(title, content, image_url, author, tags=None):
     result = db_mongodb['posts'].insert_one(
         {
             "title": title,
             "content": content,
             "imageUrl": image_url,
-            "author":author,
+            "author": author,
+            "tags": tags or [],
             "createdAt": datetime.now()
         }
     )
     return result.inserted_id
 
 @helpers.iterable_handler
-def update_post(post_id, title, content, image_url, author):
+def update_post(post_id, title, content, image_url, author, tags=None):
     result = db_mongodb['posts'].update_one(
         {"_id": ObjectId(post_id)},
         {"$set": {
             "title": title,
             "content": content,
             "imageUrl": image_url,
-            "author":author,
+            "author": author,
+            "tags": tags or [],
             "updatedAt": datetime.now()
-        }
-        }
+        }}
     )
     return result.modified_count
 
@@ -54,6 +56,11 @@ def delete_post(post_id):
     return result.deleted_count
 
 @helpers.iterable_handler
+@helpers.iterable_handler
+def get_posts_by_tag(tag: str):
+    cursor = db_mongodb['posts'].find({"tags": tag})
+    return list(cursor)
+
 def search_posts(term: str):
     # Search in both title and content using text index
     cursor = db_mongodb['posts'].find(

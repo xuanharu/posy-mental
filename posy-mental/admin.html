@@ -190,6 +190,47 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
+        .tag-groups {
+            margin-bottom: 20px;
+        }
+        
+        .tag-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag-button {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--primary-color);
+            background: transparent;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tag-button:hover,
+        .tag-button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .post-tag {
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 0.85em;
+        }
+        
         h1 {
             color: var(--text-color);
             margin-bottom: 30px;
@@ -240,6 +281,56 @@
             <div class="mb-3 action-buttons">
                 <button class="btn btn-success" onclick="createNewPost()">Create New</button>
                 <button class="btn btn-danger" onclick="deleteSelectedPosts()">Delete Selected</button>
+            </div>
+
+            <!-- Tag Filter Buttons -->
+            <div class="mb-4">
+                <h5>Filter by Tags</h5>
+                <div class="tag-groups">
+                    <div class="mb-3">
+                        <h6>MENTAL HEALTH</h6>
+                        <div class="tag-buttons">
+                            <button class="tag-button" onclick="filterByTag('Addiction')">Addiction</button>
+                            <button class="tag-button" onclick="filterByTag('Anxiety')">Anxiety</button>
+                            <button class="tag-button" onclick="filterByTag('ADHD')">ADHD</button>
+                            <button class="tag-button" onclick="filterByTag('Asperger\'s')">Asperger's</button>
+                            <button class="tag-button" onclick="filterByTag('Autism')">Autism</button>
+                            <button class="tag-button" onclick="filterByTag('Bipolar Disorder')">Bipolar Disorder</button>
+                            <button class="tag-button" onclick="filterByTag('Chronic Pain')">Chronic Pain</button>
+                            <button class="tag-button" onclick="filterByTag('Depression')">Depression</button>
+                            <button class="tag-button" onclick="filterByTag('Eating Disorders')">Eating Disorders</button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h6>PERSONALITY</h6>
+                        <div class="tag-buttons">
+                            <button class="tag-button" onclick="filterByTag('Passive Aggression')">Passive Aggression</button>
+                            <button class="tag-button" onclick="filterByTag('Personality')">Personality</button>
+                            <button class="tag-button" onclick="filterByTag('Shyness')">Shyness</button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h6>PERSONAL GROWTH</h6>
+                        <div class="tag-buttons">
+                            <button class="tag-button" onclick="filterByTag('Goal Setting')">Goal Setting</button>
+                            <button class="tag-button" onclick="filterByTag('Happiness')">Happiness</button>
+                            <button class="tag-button" onclick="filterByTag('Positive Psychology')">Positive Psychology</button>
+                            <button class="tag-button" onclick="filterByTag('Stopping Smoking')">Stopping Smoking</button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h6>RELATIONSHIP</h6>
+                        <div class="tag-buttons">
+                            <button class="tag-button" onclick="filterByTag('Low Sexual Desire')">Low Sexual Desire</button>
+                            <button class="tag-button" onclick="filterByTag('Relationships')">Relationships</button>
+                            <button class="tag-button" onclick="filterByTag('Sex')">Sex</button>
+                            <button class="tag-button" onclick="filterByTag('Family Life')">Family Life</button>
+                            <button class="tag-button" onclick="filterByTag('Child Development')">Child Development</button>
+                            <button class="tag-button" onclick="filterByTag('Parenting')">Parenting</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary" onclick="clearTagFilter()">Show All Posts</button>
             </div>
 
             <div id="post-list">
@@ -329,6 +420,9 @@
                     <div class="post-title">${post.title}</div>
                     <div class="post-content">${post.content}</div>
                     <div class="post-date">Created: ${formattedDate}</div>
+                    <div class="post-tags">
+                        ${(post.tags || []).map(tag => `<span class="post-tag">${tag}</span>`).join('')}
+                    </div>
                     <div class="post-controls">
                         <button class="btn btn-edit" onclick="editPost('${post._id}')">Edit</button>
                         <button class="btn btn-delete" onclick="beforeDeletePost('${post._id}')">Delete</button>
@@ -374,6 +468,45 @@
                 id: postId
             }));
             window.location.href = `edit-post.html?mode=edit&id=${postId}`;
+        }
+
+        // Tag filtering functionality
+        let currentTag = null;
+
+        async function filterByTag(tag) {
+            try {
+                // Update active state of tag buttons
+                document.querySelectorAll('.tag-button').forEach(btn => {
+                    if (btn.textContent === tag) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+
+                currentTag = tag;
+                const posts = await filterPostsByTag(tag);
+                const postList = document.getElementById('post-list');
+                postList.innerHTML = ''; // Clear existing posts
+
+                posts.forEach(post => {
+                    const postElement = createPostElement(post);
+                    postList.appendChild(postElement);
+                });
+            } catch (error) {
+                console.error('Error filtering posts:', error);
+                alert('Failed to filter posts: ' + error.message);
+            }
+        }
+
+        function clearTagFilter() {
+            // Remove active state from all tag buttons
+            document.querySelectorAll('.tag-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            currentTag = null;
+            loadPosts(); // Reload all posts
         }
 
         async function beforeDeletePost(postId) {

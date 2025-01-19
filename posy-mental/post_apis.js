@@ -43,13 +43,14 @@ async function getPost(postId) {
 }
 
 // Create a new post
-async function createPost(title, content, imageUrl, author) {
+async function createPost(title, content, imageUrl, author, tags) {
     try {
         const params = new URLSearchParams({
             title: title,
             content: content,
             image_url: imageUrl,
-            author: author
+            author: author,
+            tags: JSON.stringify(tags || [])
         });
 
         const response = await fetch(`${BASE_URL}/create-post?${params.toString()}`, {
@@ -67,13 +68,14 @@ async function createPost(title, content, imageUrl, author) {
 }
 
 // Update a post
-async function updatePost(postId, title, content, imageUrl, author) {
+async function updatePost(postId, title, content, imageUrl, author, tags) {
     try {
         const params = new URLSearchParams({
             title: title,
             content: content,
             image_url: imageUrl,
-            author: author
+            author: author,
+            tags: JSON.stringify(tags || [])
         });
 
         const response = await fetch(`${BASE_URL}/update-post/${postId}?${params.toString()}`, {
@@ -86,6 +88,20 @@ async function updatePost(postId, title, content, imageUrl, author) {
         return await response.json();
     } catch (error) {
         console.error('Error updating post:', error);
+        throw error;
+    }
+}
+
+// Filter posts by tag
+async function filterPostsByTag(tag) {
+    try {
+        const response = await fetch(`${BASE_URL}/posts/tag/${encodeURIComponent(tag)}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error filtering posts by tag:', error);
         throw error;
     }
 }

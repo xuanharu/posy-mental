@@ -539,212 +539,197 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/slicknav.min.js"></script>
     <script src="js/jquery.scrollUp.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="post_apis.js"></script>
-    <script>
-        // Configure marked to decrease heading levels
-        const renderer = new marked.Renderer();
-        renderer.heading = function(text, level) {
-            // Decrease heading level by 2 (h1->h3, h2->h4, etc)
-            level = text.depth;
-            text = text.text;
-            const newLevel = Math.min(level + 4, 6); // Ensure we don't exceed h6
-            console.log('newLevel:', newLevel);
-            console.log('text:', text);
-            return `<h${newLevel}>${text}</h${newLevel}>`;
-        };
-        marked.setOptions({ renderer });
-    </script>
     <script>
         // Initialize mobile navigation and scroll to top
         $(document).ready(function() {
-            $('.mobile-nav').slicknav({
-                prependTo: '.mobile-nav',
-                duration: 300,
-                closeOnClick: true
-            });
+                    $('.mobile-nav').slicknav({
+                        prependTo: '.mobile-nav',
+                        duration: 300,
+                        closeOnClick: true
+                    });
 
-            $.scrollUp({
-                scrollName: 'scrollUp',
-                scrollDistance: 300,
-                scrollFrom: 'top',
-                scrollSpeed: 300,
-                easingType: 'linear',
-                animation: 'fade',
-                animationSpeed: 200,
-                scrollTrigger: false,
-                scrollText: ["<i class='fa fa-angle-up'></i>"],
-                scrollTitle: false,
-                scrollImg: false,
-                activeOverlay: false,
-                zIndex: 2147483647
-            });
+                    $.scrollUp({
+                        scrollName: 'scrollUp',
+                        scrollDistance: 300,
+                        scrollFrom: 'top',
+                        scrollSpeed: 300,
+                        easingType: 'linear',
+                        animation: 'fade',
+                        animationSpeed: 200,
+                        scrollTrigger: false,
+                        scrollText: ["<i class='fa fa-angle-up'></i>"],
+                        scrollTitle: false,
+                        scrollImg: false,
+                        activeOverlay: false,
+                        zIndex: 2147483647
+                    });
 
-            // Pagination variables
-            let currentPage = 1;
-            let postsPerPage = 5;
-            let totalPages = 1;
+                    // Pagination variables
+                    let currentPage = 1;
+                    let postsPerPage = 5;
+                    let totalPages = 1;
 
-            // Load and display posts
-            loadPosts();
+                    // Load and display posts
+                    loadPosts();
 
-            // Pagination event listeners
-            document.getElementById('prevPage').addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    displayPosts(currentSearchResults || allPosts);
-                }
-            });
-
-            document.getElementById('nextPage').addEventListener('click', () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    displayPosts(currentSearchResults || allPosts);
-                }
-            });
-
-            // Setup search functionality
-            const searchInput = document.getElementById('searchInput');
-            const searchResults = document.getElementById('searchResults');
-            const clearSearchBtn = document.getElementById('clearSearch');
-            let allPosts = [];
-            let currentSearchResults = null;
-
-            // Enable/disable clear button based on search input
-            searchInput.addEventListener('input', function() {
-                clearSearchBtn.disabled = !this.value.trim();
-            });
-
-            // Clear search handler
-            clearSearchBtn.addEventListener('click', function() {
-                searchInput.value = '';
-                clearSearchBtn.disabled = true;
-                currentSearchResults = null;
-                displayPosts(allPosts);
-                searchResults.classList.remove('active');
-            });
-
-            let searchTimeout;
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.trim();
-
-                // Clear previous timeout
-                clearTimeout(searchTimeout);
-
-                if (searchTerm.length > 0) {
-                    // Add loading indicator
-                    searchResults.innerHTML = '<div class="search-result-item">Searching...</div>';
-                    searchResults.classList.add('active');
-
-                    // Debounce search requests
-                    searchTimeout = setTimeout(async() => {
-                        try {
-                            const results = await searchPosts(searchTerm);
-                            displaySearchResults(results);
-                        } catch (error) {
-                            console.error('Search error:', error);
-                            searchResults.innerHTML = '<div class="search-result-item">Error searching posts</div>';
+                    // Pagination event listeners
+                    document.getElementById('prevPage').addEventListener('click', () => {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            displayPosts(currentSearchResults || allPosts);
                         }
-                    }, 300); // Wait 300ms after user stops typing
-                } else {
-                    searchResults.classList.remove('active');
-                }
-            });
+                    });
 
-            // Handle Enter key press
-            searchInput.addEventListener('keydown', async function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const searchTerm = this.value.trim();
-
-                    if (searchTerm) {
-                        try {
-                            const results = await searchPosts(searchTerm);
-                            currentSearchResults = results;
-                            displayPosts(results);
-                            searchResults.classList.remove('active');
-                        } catch (error) {
-                            console.error('Search error:', error);
-                            displayError('Search Error', 'Failed to search posts. Please try again.');
+                    document.getElementById('nextPage').addEventListener('click', () => {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            displayPosts(currentSearchResults || allPosts);
                         }
-                    } else {
-                        // If search is cleared, show all posts
+                    });
+
+                    // Setup search functionality
+                    const searchInput = document.getElementById('searchInput');
+                    const searchResults = document.getElementById('searchResults');
+                    const clearSearchBtn = document.getElementById('clearSearch');
+                    let allPosts = [];
+                    let currentSearchResults = null;
+
+                    // Enable/disable clear button based on search input
+                    searchInput.addEventListener('input', function() {
+                        clearSearchBtn.disabled = !this.value.trim();
+                    });
+
+                    // Clear search handler
+                    clearSearchBtn.addEventListener('click', function() {
+                        searchInput.value = '';
+                        clearSearchBtn.disabled = true;
                         currentSearchResults = null;
                         displayPosts(allPosts);
-                    }
-                }
-            });
+                        searchResults.classList.remove('active');
+                    });
 
-            // Close search results when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!searchResults.contains(e.target) && e.target !== searchInput) {
-                    searchResults.classList.remove('active');
-                }
-            });
+                    let searchTimeout;
+                    searchInput.addEventListener('input', function() {
+                        const searchTerm = this.value.trim();
 
-            async function loadPosts() {
-                try {
-                    allPosts = await getPosts();
-                    if (allPosts && allPosts.length > 0) {
-                        displayPosts(allPosts);
-                        updateRecentPosts(allPosts);
-                    } else {
-                        displayError("No posts available", "Create some posts to see them here");
-                    }
-                } catch (error) {
-                    console.error('Error loading posts:', error);
-                    if (error.message.includes('Failed to fetch')) {
-                        displayError(
-                            "Cannot connect to server",
-                            "Please make sure the backend server is running at http://localhost:8000"
-                        );
-                    } else {
-                        displayError("Error loading posts", "Please try again later");
-                    }
-                }
-            }
+                        // Clear previous timeout
+                        clearTimeout(searchTimeout);
 
-            function displayError(title, message) {
-                document.getElementById('postsContainer').innerHTML = `
+                        if (searchTerm.length > 0) {
+                            // Add loading indicator
+                            searchResults.innerHTML = '<div class="search-result-item">Searching...</div>';
+                            searchResults.classList.add('active');
+
+                            // Debounce search requests
+                            searchTimeout = setTimeout(async() => {
+                                try {
+                                    const results = await searchPosts(searchTerm);
+                                    displaySearchResults(results);
+                                } catch (error) {
+                                    console.error('Search error:', error);
+                                    searchResults.innerHTML = '<div class="search-result-item">Error searching posts</div>';
+                                }
+                            }, 300); // Wait 300ms after user stops typing
+                        } else {
+                            searchResults.classList.remove('active');
+                        }
+                    });
+
+                    // Handle Enter key press
+                    searchInput.addEventListener('keydown', async function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const searchTerm = this.value.trim();
+
+                            if (searchTerm) {
+                                try {
+                                    const results = await searchPosts(searchTerm);
+                                    currentSearchResults = results;
+                                    displayPosts(results);
+                                    searchResults.classList.remove('active');
+                                } catch (error) {
+                                    console.error('Search error:', error);
+                                    displayError('Search Error', 'Failed to search posts. Please try again.');
+                                }
+                            } else {
+                                // If search is cleared, show all posts
+                                currentSearchResults = null;
+                                displayPosts(allPosts);
+                            }
+                        }
+                    });
+
+                    // Close search results when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                            searchResults.classList.remove('active');
+                        }
+                    });
+
+                    async function loadPosts() {
+                        try {
+                            allPosts = await getPosts();
+                            if (allPosts && allPosts.length > 0) {
+                                displayPosts(allPosts);
+                                updateRecentPosts(allPosts);
+                            } else {
+                                displayError("No posts available", "Create some posts to see them here");
+                            }
+                        } catch (error) {
+                            console.error('Error loading posts:', error);
+                            if (error.message.includes('Failed to fetch')) {
+                                displayError(
+                                    "Cannot connect to server",
+                                    "Please make sure the backend server is running at http://localhost:8000"
+                                );
+                            } else {
+                                displayError("Error loading posts", "Please try again later");
+                            }
+                        }
+                    }
+
+                    function displayError(title, message) {
+                        document.getElementById('postsContainer').innerHTML = `
                     <div class="error-message">
                         <h3>${title}</h3>
                         <p>${message}</p>
                     </div>
                 `;
-                document.getElementById('recentPosts').innerHTML = `
+                        document.getElementById('recentPosts').innerHTML = `
                     <li>No recent posts available</li>
                 `;
-            }
+                    }
 
-            function displayPosts(posts) {
-                const postsContainer = document.getElementById('postsContainer');
-                const isSearchResult = currentSearchResults !== null;
+                    function displayPosts(posts) {
+                        const postsContainer = document.getElementById('postsContainer');
+                        const isSearchResult = currentSearchResults !== null;
 
-                if (posts.length === 0) {
-                    displayError(
-                        isSearchResult ? "No matching posts found" : "No posts available",
-                        isSearchResult ? "Try a different search term" : "Check back later for new content"
-                    );
-                    return;
-                }
+                        if (posts.length === 0) {
+                            displayError(
+                                isSearchResult ? "No matching posts found" : "No posts available",
+                                isSearchResult ? "Try a different search term" : "Check back later for new content"
+                            );
+                            return;
+                        }
 
-                // Update recent posts only when showing all posts
-                if (!isSearchResult) {
-                    updateRecentPosts(posts);
-                }
+                        // Update recent posts only when showing all posts
+                        if (!isSearchResult) {
+                            updateRecentPosts(posts);
+                        }
 
-                // Calculate pagination
-                totalPages = Math.ceil(posts.length / postsPerPage);
-                updatePaginationControls();
+                        // Calculate pagination
+                        totalPages = Math.ceil(posts.length / postsPerPage);
+                        updatePaginationControls();
 
-                // Get current page posts
-                const startIndex = (currentPage - 1) * postsPerPage;
-                const endIndex = startIndex + postsPerPage;
-                const currentPosts = posts.slice(startIndex, endIndex);
+                        // Get current page posts
+                        const startIndex = (currentPage - 1) * postsPerPage;
+                        const endIndex = startIndex + postsPerPage;
+                        const currentPosts = posts.slice(startIndex, endIndex);
 
-                // Display featured post (first post of current page)
-                const featuredPost = currentPosts[0];
-                let html = `
+                        // Display featured post (first post of current page)
+                        const featuredPost = currentPosts[0];
+                        let html = `
                     <div class="article-card featured-post" data-post-id="${featuredPost._id}" onclick="window.location.href='blog-single.html?id=${featuredPost._id}'">
                         <img src="${featuredPost.imageUrl || 'images/news_feature.png'}" alt="${featuredPost.title}" class="article-image">
                         <div class="article-content">
@@ -753,7 +738,7 @@
                                 By ${featuredPost.author} | ${new Date(featuredPost.createdAt).toLocaleDateString()}
                             </div>
                             <div class="article-text">
-                                ${marked.parse(featuredPost.content)}
+                                ${featuredPost.content.replace(/[*_#`]/g, '').replace(/\n/g, '<br>')}
                             </div>
                         </div>
                     </div>
@@ -772,7 +757,7 @@
                                         By ${post.author} | ${new Date(post.createdAt).toLocaleDateString()}
                                     </div>
                                     <div class="article-text">
-                                        ${marked.parse(post.content)}
+                                        ${post.content.replace(/[*_#`]/g, '').replace(/\n/g, '<br>')}
                                     </div>
                                 </div>
                             </div>
