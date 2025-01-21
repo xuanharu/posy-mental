@@ -43,41 +43,102 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/responsive.css">
 
+    <style>
+        .post-tag {
+            padding: 4px 12px;
+            border-radius: 16px;
+            background-color: #f0f7ff;
+            color: #2074d4;
+            font-size: 0.9em;
+            border: 1px solid #2074d4;
+            display: inline-block;
+            margin: 2px;
+        }
+        
+        .single-post {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fff;
+            transition: all 0.3s ease;
+            border-left: 3px solid #2074d4;
+        }
+        
+        .single-post:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .single-post:last-child {
+            margin-bottom: 0;
+        }
+        
+        .single-post .content {
+            padding: 5px 0;
+        }
+        
+        .single-post .content h5 {
+            font-size: 15px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .single-post .content h5 a {
+            color: #2c2d3f;
+            transition: all 0.3s ease;
+        }
+        
+        .single-post .content h5 a:hover {
+            color: #2074d4;
+        }
+        
+        .single-post .content .comment {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            color: #777;
+            font-size: 0.9em;
+        }
+        
+        .single-post .content .comment li {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        
+        .single-post .content .comment li i {
+            margin-right: 5px;
+            color: #2074d4;
+        }
+        
+        .no-posts {
+            padding: 15px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .single-widget {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .single-widget h3.title {
+            position: relative;
+            font-size: 18px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #2c2d3f;
+            border-bottom: 2px solid #2074d4;
+        }
+    </style>
 </head>
 
 <body>
-
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="loader">
-            <div class="loader-outter"></div>
-            <div class="loader-inner"></div>
-
-            <div class="indicator">
-                <svg width="16px" height="12px">
-                        <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                        <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                    </svg>
-            </div>
-        </div>
-    </div>
-    <!-- End Preloader -->
-
-    <!-- Get Pro Button -->
-    <ul class="pro-features">
-        <a class="get-pro" href="#">Get Pro</a>
-        <li class="big-title">Pro Version Available</li>
-        <li class="title">Pro Version Features</li>
-        <li>100+ chat history</li>
-        <li>10 day free consulting sessions with real psychologist</li>
-        <li>Access more news and tips everday</li>
-        <li>Get no-ads forever</li>
-        <!-- <div class="button">
-            <a href="http://preview.themeforest.net/item/mediplus-medical-and-doctor-html-template/full_screen_preview/26665910?_ga=2.145092285.888558928.1591971968-344530658.1588061879" target="_blank" class="btn">Pro Version Demo</a>
-            <a href="https://themeforest.net/item/mediplus-medical-and-doctor-html-template/26665910" target="_blank" class="btn">Buy Pro Version</a>
-        </div> -->
-    </ul>
-
     <!-- Header Area -->
     <header class="header">
         <!-- Header Inner -->
@@ -113,11 +174,6 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                        <!-- <li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>
-                                            <ul class="dropdown">
-                                                <li><a href="blog-single.html">Blog Details</a></li>
-                                            </ul>
-                                        </li> -->
                                     </ul>
                                 </nav>
                             </div>
@@ -158,7 +214,6 @@
                                     </div>
                                     <div class="meta-right">
                                         <span class="comments"><a href="#"><i class="fa fa-comments"></i>02 Comments</a></span>
-                                        <!-- <span class="views"><i class="fa fa-eye"></i>33K Views</span> -->
                                     </div>
                                 </div>
                                 <!-- Post Tags -->
@@ -172,27 +227,9 @@
                                         individuals can gain a fresh perspective on life and reduce stress levels. Additionally, experiencing new cultures and viewpoints can challenge our assumptions, leading to personal growth and a renewed sense of
                                         purpose.
                                     </p>
-                                    <!-- <div class="image-gallery">
-                                        <div class="row">
-                                            <div class="col-lg-6 col-md-6 col-12">
-                                                <div class="single-image">
-                                                    <img src="img/blog2.jpg" alt="#">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-12">
-                                                <div class="single-image">
-                                                    <img src="img/blog3.jpg" alt="#">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                     <p>Physically, travel can encourage increased activity, improve sleep patterns, and boost the immune system. Exploring new destinations often involves physical activity, such as walking, hiking, or swimming, which can
                                         contribute to overall health and fitness. Changes in routine and exposure to natural light during travel can regulate sleep patterns and promote restful nights. Moreover, exposure to diverse environments can strengthen
                                         the immune system.</p>
-                                    <!-- <blockquote class="overlay">
-                                        <p>Aliquam nec lacus pulvinar, laoreet dolor quis, pellentesque ante. Cras nulla orci, pharetra at dictum consequat, pretium pretium nulla. Suspendisse porttitor nunc a sodales tempor. Mauris sed felis maximus, interdum
-                                            metus vel, tincidunt diam. Nam ac risus vitae sem vehicula egestas. Sed velit nulla, viverra non commodo et, sodales</p>
-                                    </blockquote> -->
                                     <p>Emotionally, travel can foster self-discovery, connection with nature, and social connection. Solo travel, in particular, can provide an opportunity for self-reflection and personal growth. Spending time in natural
                                         settings, such as forests or beaches, has been shown to reduce stress and improve mood. Interacting with people from different cultures can broaden horizons, foster empathy, and create lasting friendships.</p>
                                     <p>To maximize the healing benefits of travel, it's important to approach it mindfully. By focusing on the present moment, savoring experiences, and practicing gratitude, travelers can deepen their connection with themselves
@@ -203,14 +240,6 @@
                                         refreshed and rejuvenated is the ultimate goal.</p>
                                 </div>
                                 <div class="blog-bottom">
-                                    <!-- Social Share -->
-                                    <!-- <ul class="social-share">
-                                        <li class="facebook"><a href="#"><i class="fa fa-facebook"></i><span>Facebook</span></a></li>
-                                        <li class="twitter"><a href="#"><i class="fa fa-twitter"></i><span>Twitter</span></a></li>
-                                        <li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                        <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                        <li class="pinterest"><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                                    </ul> -->
                                     <!-- Next Prev -->
                                     <ul class="prev-next">
                                         <li class="prev"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
@@ -234,26 +263,9 @@
                                                 <h4>Xun Nguyen</h4>
                                                 <div class="comment-meta"><span class="meta"><i class="fa fa-calendar"></i>06 Dec, 2024</span><span class="meta"><i class="fa fa-clock-o"></i>03:38 AM</span></div>
                                                 <p>I couldn't agree more! Travel has been a lifesaver for me. It's amazing how a simple change of scenery can do wonders for mental and physical health. The article perfectly captures the healing power of exploration.</p>
-                                                <!-- <a href="#"><i class="fa fa-reply"></i>replay</a> -->
                                             </div>
                                         </div>
                                     </div>
-                                    <!--/ End Single Comments -->
-                                    <!-- Single Comments -->
-                                    <!-- <div class="single-comments left">
-                                        <div class="main">
-                                            <div class="head">
-                                                <img src="img/author2.jpg" alt="#" />
-                                            </div>
-                                            <div class="body">
-                                                <h4>Naimur Rahman</h4>
-                                                <div class="comment-meta"><span class="meta"><i class="fa fa-calendar"></i>March 05, 2019</span><span class="meta"><i class="fa fa-clock-o"></i>03:38 AM</span></div>
-                                                <p>Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit
-                                                    litterarum formas</p>
-                                                <a href="#"><i class="fa fa-reply"></i>replay</a>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                     <!--/ End Single Comments -->
                                     <!-- Single Comments -->
                                     <div class="single-comments">
@@ -266,7 +278,6 @@
                                                 <div class="comment-meta"><span class="meta"><i class="fa fa-calendar"></i>15 Dec, 2024</span><span class="meta"><i class="fa fa-clock-o"></i>03:38 AM</span></div>
                                                 <p>One thing I'd add is the importance of a digital detox during travel. Disconnecting from social media and constant notifications can truly amplify the therapeutic benefits. It's a chance to fully immerse
                                                     oneself in the present moment.</p>
-                                                <!-- <a href="#"><i class="fa fa-reply"></i>replay</a> -->
                                             </div>
                                         </div>
                                     </div>
@@ -326,18 +337,6 @@
                             </div>
                         </div>
                         <!--/ End Single Widget -->
-                        <!-- Single Widget -->
-                        <!-- <div class="single-widget category">
-                            <h3 class="title">Blog Categories</h3>
-                            <ul class="categor-list">
-                                <li><a href="#">Men's Apparel</a></li>
-                                <li><a href="#">Women's Apparel</a></li>
-                                <li><a href="#">Bags Collection</a></li>
-                                <li><a href="#">Accessories</a></li>
-                                <li><a href="#">Sun Glasses</a></li>
-                            </ul>
-                        </div> -->
-                        <!--/ End Single Widget -->
                         <!-- Latest Posts -->
                         <div class="single-widget recent-post">
                             <h3 class="title">Latest Posts</h3>
@@ -353,23 +352,6 @@
                                 <!-- Related posts will be dynamically inserted here -->
                             </div>
                         </div>
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
-                        <!-- <div class="single-widget side-tags">
-                            <h3 class="title">Tags</h3>
-                            <ul class="tag">
-                                <li><a href="#">business</a></li>
-                                <li><a href="#">wordpress</a></li>
-                                <li><a href="#">html</a></li>
-                                <li><a href="#">multipurpose</a></li>
-                                <li><a href="#">education</a></li>
-                                <li><a href="#">template</a></li>
-                                <li><a href="#">Ecommerce</a></li>
-                            </ul>
-                        </div> -->
-                        <!--/ End Single Widget -->
                     </div>
                 </div>
             </div>
@@ -436,7 +418,6 @@
                 </div>
             </div>
         </div>
-        </div>
         <!--/ End Footer Top -->
         <!-- Copyright -->
         <div class="copyright">
@@ -459,77 +440,8 @@
     <!-- jquery Migrate JS -->
     <script src="js/jquery-migrate-3.0.0.js"></script>
     <!-- Post APIs -->
-    <style>
-        .post-tag {
-            padding: 4px 12px;
-            border-radius: 16px;
-            background-color: #f0f7ff;
-            color: #2074d4;
-            font-size: 0.9em;
-            border: 1px solid #2074d4;
-            display: inline-block;
-            margin: 2px;
-        }
-    </style>
     <script src="post_apis.js"></script>
-    <style>
-        .post-tag {
-            padding: 4px 12px;
-            border-radius: 16px;
-            background-color: #f0f7ff;
-            color: #2074d4;
-            font-size: 0.9em;
-            border: 1px solid #2074d4;
-            display: inline-block;
-            margin: 2px;
-        }
-        
-        .single-post {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .single-post:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        
-        .single-post .image {
-            width: 80px;
-            height: 80px;
-            overflow: hidden;
-            border-radius: 4px;
-        }
-        
-        .single-post .image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .single-post .content h5 {
-            font-size: 15px;
-            margin-bottom: 5px;
-        }
-        
-        .single-post .content h5 a {
-            color: #2c2d3f;
-            transition: all 0.3s ease;
-        }
-        
-        .single-post .content h5 a:hover {
-            color: #2074d4;
-        }
-        
-        .no-posts {
-            padding: 15px;
-            text-align: center;
-            color: #666;
-            font-style: italic;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // Function to get URL parameters
         function getUrlParam(param) {
@@ -540,14 +452,12 @@
         // Function to format post preview
         function formatPostPreview(post) {
             return `
-                <div class="single-post">
-                    <div class="image">
-                        <img src="${post.imageUrl || 'images/news_feature.png'}" alt="${post.title}">
-                    </div>
+                <div class="single-post" onclick="window.location.href='blog-single.html?id=${post._id}'" style="cursor: pointer;">
                     <div class="content">
                         <h5><a href="blog-single.html?id=${post._id}">${post.title}</a></h5>
                         <ul class="comment">
                             <li><i class="fa fa-calendar" aria-hidden="true"></i>${new Date(post.createdAt).toLocaleDateString()}</li>
+                            <li><i class="fa fa-user" aria-hidden="true"></i>${post.author}</li>
                         </ul>
                     </div>
                 </div>
@@ -581,45 +491,9 @@
                 } else {
                     tagsContainer.style.display = 'none';
                 }
+
                 // Convert content to HTML with markdown support
-                const html = post.content.split('\n').map(line => {
-                    // Skip empty lines
-                    if (!line.trim()) return '';
-
-                    // Handle headers
-                    if (line.startsWith('#')) {
-                        const level = line.match(/^#+/)[0].length;
-                        const text = line.replace(/^#+\s*/, '');
-                        return `<h${level}>${text}</h${level}>`;
-                    }
-
-                    // Handle lists
-                    if (line.match(/^[-*]\s/)) {
-                        const text = line.replace(/^[-*]\s/, '');
-                        return `<ul><li>${text}</li></ul>`;
-                    }
-
-                    // Handle blockquotes
-                    if (line.startsWith('>')) {
-                        const text = line.replace(/^>\s*/, '');
-                        return `<blockquote class="overlay"><p>${text}</p></blockquote>`;
-                    }
-
-                    // Handle images
-                    if (line.match(/!\[.*?\]\(.*?\)/)) {
-                        const [, alt, url] = line.match(/!\[(.*?)\]\((.*?)\)/);
-                        return `<img src="${url}" alt="${alt}" class="img-fluid">`;
-                    }
-
-                    // Handle emphasis
-                    const formattedText = line
-                        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') // Bold
-                        .replace(/\*([^*]+)\*/g, '<em>$1</em>') // Italic
-                        .replace(/`([^`]+)`/g, '<code>$1</code>'); // Code
-
-                    // Regular text
-                    return `<p>${formattedText}</p>`;
-                }).join('\n');
+                const html = marked.parse(post.content);
 
                 document.querySelector('.news-text').innerHTML = html;
 
