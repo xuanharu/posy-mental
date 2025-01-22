@@ -8,6 +8,15 @@ from utils import (
 )
 from datetime import datetime
 
+# Comment schema in MongoDB:
+# {
+#     "_id": ObjectId,
+#     "postId": ObjectId,
+#     "author": str,
+#     "content": str,
+#     "createdAt": datetime
+# }
+
 # Create indexes
 db_mongodb['posts'].create_index([("title", "text"), ("content", "text")])
 db_mongodb['posts'].create_index([("tags", 1)])  # Index for tag filtering
@@ -82,3 +91,34 @@ def search_posts(term: str):
         results = list(cursor)
     
     return results
+
+@helpers.iterable_handler
+def add_comment(post_id: str, author: str, content: str):
+    """Add a comment to a post"""
+    comment = {
+        "postId": ObjectId(post_id),
+        "author": author,
+        "content": content,
+        "createdAt": datetime.now()
+    }
+    result = db_mongodb['comments'].insert_one(comment)
+    return result.inserted_id
+
+@helpers.iterable_handler
+def get_comments(post_id: str):
+    """Get all comments for a post"""
+    cursor = db_mongodb['comments'].find(
+        {"postId": ObjectId(post_id)}
+    ).sort("createdAt", -1)  # Sort by newest first
+    return list(cursor)
+
+@helpers.iterable_handler
+def get_comment_count(post_id: str):
+    """Get the number of comments for a post"""
+    return db_mongodb['comments'].count_documents({"postId": ObjectId(post_id)})
+
+@helpers.iterable_handler
+def delete_comment(comment_id: str):
+    """Delete a comment"""
+    result = db_mongodb['comments'].delete_one({"_id": ObjectId(comment_id)})
+    return result.deleted_count

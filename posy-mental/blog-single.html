@@ -307,15 +307,17 @@
                                     <img src="img/blog1.jpg" alt="#">
                                 </div>
                                 <!-- News Title -->
-                                <h1 class="news-title"><a href="news-single.html">Travel: A Journey to Healing</a></h1>
+                                <h1 class="news-title" style="font-size: large;"><a href="news-single.html">Travel: A Journey to Healing</a></h1>
+                                <span class="author"><a href="#"><img src="img/author1.jpg" alt="#">Xuan Nguyen</a></span>
                                 <!-- Meta -->
                                 <div class="meta">
                                     <div class="meta-left">
-                                        <span class="author"><a href="#"><img src="img/author1.jpg" alt="#">Xuan Nguyen</a></span>
+
                                         <span class="date"><i class="fa fa-clock-o"></i>05 Dec, 2024</span>
                                     </div>
                                     <div class="meta-right">
-                                        <span class="comments"><a href="#"><i class="fa fa-comments"></i>02 Comments</a></span>
+                                        <span class="comments"><a href="#comments-section"><i class="fa fa-comments"></i><span id="commentCount">0</span> Comments</a>
+                                        </span>
                                     </div>
                                 </div>
                                 <!-- Post Tags -->
@@ -323,23 +325,6 @@
                                 </div>
                                 <!-- News Text -->
                                 <div class="news-text">
-                                    <p>In our fast-paced world, stress and burnout have become common companions. Seeking solace, many turn to travel as a powerful tool for healing and rejuvenation. The allure of exploring new horizons, immersing oneself
-                                        in different cultures, and simply disconnecting from daily routines offers a profound therapeutic experience.</p>
-                                    <p>The benefits of travel extend to both mental and physical well-being. Mentally, travel can reduce stress, shift perspectives, and alleviate anxiety. By stepping away from familiar surroundings and responsibilities,
-                                        individuals can gain a fresh perspective on life and reduce stress levels. Additionally, experiencing new cultures and viewpoints can challenge our assumptions, leading to personal growth and a renewed sense of
-                                        purpose.
-                                    </p>
-                                    <p>Physically, travel can encourage increased activity, improve sleep patterns, and boost the immune system. Exploring new destinations often involves physical activity, such as walking, hiking, or swimming, which can
-                                        contribute to overall health and fitness. Changes in routine and exposure to natural light during travel can regulate sleep patterns and promote restful nights. Moreover, exposure to diverse environments can strengthen
-                                        the immune system.</p>
-                                    <p>Emotionally, travel can foster self-discovery, connection with nature, and social connection. Solo travel, in particular, can provide an opportunity for self-reflection and personal growth. Spending time in natural
-                                        settings, such as forests or beaches, has been shown to reduce stress and improve mood. Interacting with people from different cultures can broaden horizons, foster empathy, and create lasting friendships.</p>
-                                    <p>To maximize the healing benefits of travel, it's important to approach it mindfully. By focusing on the present moment, savoring experiences, and practicing gratitude, travelers can deepen their connection with themselves
-                                        and the world around them. Choosing a destination that aligns with personal goals, whether it's a serene beach, a bustling city, or a tranquil nature retreat, can enhance the overall experience.</p>
-                                    <p>Disconnecting from technology and embracing the opportunity to unwind is crucial for a truly restorative travel experience. Being open to spontaneous experiences and detours can lead to unexpected discoveries and unforgettable
-                                        memories. Prioritizing self-care, such as getting enough rest, eating nutritious food, and staying hydrated, is essential for maintaining well-being throughout the journey.</p>
-                                    <p>By embarking on a journey of exploration and self-discovery, individuals can unlock the healing potential of travel. Whether it's a weekend getaway or a month-long adventure, prioritizing well-being and returning home
-                                        refreshed and rejuvenated is the ultimate goal.</p>
                                 </div>
                                 <div class="blog-bottom">
                                     <!-- Next Prev -->
@@ -352,69 +337,29 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <div class="blog-comments">
+                            <div class="blog-comments" id="comments-section">
                                 <h2>All Comments</h2>
-                                <div class="comments-body">
-                                    <!-- Single Comments -->
-                                    <div class="single-comments">
-                                        <div class="main">
-                                            <div class="head">
-                                                <img src="img/author1.jpg" alt="#" />
-                                            </div>
-                                            <div class="body">
-                                                <h4>Xun Nguyen</h4>
-                                                <div class="comment-meta"><span class="meta"><i class="fa fa-calendar"></i>06 Dec, 2024</span><span class="meta"><i class="fa fa-clock-o"></i>03:38 AM</span></div>
-                                                <p>I couldn't agree more! Travel has been a lifesaver for me. It's amazing how a simple change of scenery can do wonders for mental and physical health. The article perfectly captures the healing power of exploration.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/ End Single Comments -->
-                                    <!-- Single Comments -->
-                                    <div class="single-comments">
-                                        <div class="main">
-                                            <div class="head">
-                                                <img src="img/author2.jpg" alt="#" />
-                                            </div>
-                                            <div class="body">
-                                                <h4>Anh Tam</h4>
-                                                <div class="comment-meta"><span class="meta"><i class="fa fa-calendar"></i>15 Dec, 2024</span><span class="meta"><i class="fa fa-clock-o"></i>03:38 AM</span></div>
-                                                <p>One thing I'd add is the importance of a digital detox during travel. Disconnecting from social media and constant notifications can truly amplify the therapeutic benefits. It's a chance to fully immerse
-                                                    oneself in the present moment.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/ End Single Comments -->
+                                <div class="comments-body" id="commentsContainer">
+                                    <!-- Comments will be dynamically loaded here -->
                                 </div>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="comments-form">
                                 <h2>Leave Comments</h2>
-                                <!-- Contact Form -->
-                                <form class="form" method="post" action="mail/mail.php">
+                                <!-- Comment Form -->
+                                <form class="form" id="commentForm">
                                     <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-12">
+                                        <div class="col-lg-6 col-md-6 col-12">
                                             <div class="form-group">
                                                 <i class="fa fa-user"></i>
-                                                <input type="text" name="first-name" placeholder="First name" required="required">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-12">
-                                            <div class="form-group">
-                                                <i class="fa fa-envelope"></i>
-                                                <input type="text" name="last-name" placeholder="Last name" required="required">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-12">
-                                            <div class="form-group">
-                                                <i class="fa fa-envelope"></i>
-                                                <input type="email" name="email" placeholder="Your Email" required="required">
+                                                <input type="text" id="commentAuthor" placeholder="Your Name" required="required">
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group message">
                                                 <i class="fa fa-pencil"></i>
-                                                <textarea name="message" rows="7" placeholder="Type Your Message Here"></textarea>
+                                                <textarea id="commentContent" rows="7" placeholder="Type Your Comment Here" required="required"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -711,8 +656,86 @@
             }
         }
 
-        // Load post when page loads
-        document.addEventListener('DOMContentLoaded', loadPost);
+        // Format comment date
+        function formatCommentDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        }
+
+        // Format single comment HTML
+        function formatComment(comment) {
+            return `
+                <div class="single-comments">
+                    <div class="main">
+                        <div class="head">
+                            <img src="img/author1.jpg" alt="#" />
+                        </div>
+                        <div class="body">
+                            <h4>${comment.author}</h4>
+                            <div class="comment-meta">
+                                <span class="meta"><i class="fa fa-calendar"></i>${formatCommentDate(comment.createdAt)}</span>
+                            </div>
+                            <p>${comment.content}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load and display comments
+        async function loadComments(postId) {
+            try {
+                const comments = await getComments(postId);
+                const commentsContainer = document.getElementById('commentsContainer');
+
+                if (comments.length === 0) {
+                    commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+                    return;
+                }
+
+                commentsContainer.innerHTML = comments.map(formatComment).join('');
+
+                // Update comment count
+                const count = await getCommentCount(postId);
+                document.getElementById('commentCount').textContent = count;
+            } catch (error) {
+                console.error('Error loading comments:', error);
+                document.getElementById('commentsContainer').innerHTML =
+                    '<p>Error loading comments. Please try again later.</p>';
+            }
+        }
+
+        // Handle comment form submission
+        document.getElementById('commentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const postId = getUrlParam('id');
+            const author = document.getElementById('commentAuthor').value;
+            const content = document.getElementById('commentContent').value;
+
+            try {
+                await addComment(postId, author, content);
+
+                // Clear form
+                document.getElementById('commentAuthor').value = '';
+                document.getElementById('commentContent').value = '';
+
+                // Reload comments to show the new comment
+                await loadComments(postId);
+            } catch (error) {
+                console.error('Error adding comment:', error);
+                alert('Error adding comment. Please try again.');
+            }
+        });
+
+        // Load post and comments when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadPost();
+            const postId = getUrlParam('id');
+            if (postId) {
+                await loadComments(postId);
+            }
+        });
     </script>
     <!-- jquery Ui JS -->
     <script src="js/jquery-ui.min.js"></script>

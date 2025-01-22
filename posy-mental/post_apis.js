@@ -122,3 +122,70 @@ async function deletePost(postId) {
         throw error;
     }
 }
+
+// Add a comment to a post
+async function addComment(postId, author, content) {
+    try {
+        const params = new URLSearchParams({
+            author: author,
+            content: content
+        });
+
+        const response = await fetch(`${BASE_URL}/post/${postId}/comment?${params.toString()}`, {
+            method: 'POST',
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error adding comment:', error);
+        throw error;
+    }
+}
+
+// Get all comments for a post
+async function getComments(postId) {
+    try {
+        const response = await fetch(`${BASE_URL}/post/${postId}/comments`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        throw error;
+    }
+}
+
+// Get comment count for a post
+async function getCommentCount(postId) {
+    try {
+        const response = await fetch(`${BASE_URL}/post/${postId}/comment-count`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching comment count:', error);
+        throw error;
+    }
+}
+
+// Delete a comment
+async function deleteComment(commentId) {
+    try {
+        const response = await fetch(`${BASE_URL}/comment/${commentId}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+        throw error;
+    }
+}
