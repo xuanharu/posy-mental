@@ -7,7 +7,9 @@ from typing import Optional
 from routers import (
     chatbot_endpoints,
     post_endpoints,
-    auth_endpoints
+    auth_endpoints,
+    question_endpoints,
+    advice_endpoints
 )
 
 app = FastAPI()
@@ -31,6 +33,8 @@ def read_item(item_id: int, q: Optional[str] = None):
 app.include_router(chatbot_endpoints.router, prefix="/chatbot", tags=["chatbot"])
 app.include_router(post_endpoints.router, prefix="/post", tags=["post on newfeed"])
 app.include_router(auth_endpoints.router, prefix="/auth", tags=["authentication"])
+app.include_router(question_endpoints.router, prefix="/mental-health", tags=["mental health"])
+app.include_router(advice_endpoints.router, prefix="/mental-health", tags=["mental health advice"])
 
 if __name__ == "__main__":
     import uvicorn
