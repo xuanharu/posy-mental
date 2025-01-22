@@ -57,11 +57,10 @@
         
         .single-post {
             margin-bottom: 20px;
-            padding: 15px;
             border-radius: 8px;
             background: #fff;
             transition: all 0.3s ease;
-            border-left: 3px solid #2074d4;
+            padding: 0;
         }
         
         .single-post:hover {
@@ -74,18 +73,21 @@
         }
         
         .single-post .content {
-            padding: 5px 0;
+            padding: 5px;
+            margin: 0;
         }
         
         .single-post .content h5 {
             font-size: 15px;
-            margin-bottom: 8px;
+            margin: 0 0 8px 0;
             line-height: 1.4;
+            text-align: left;
         }
         
         .single-post .content h5 a {
             color: #2c2d3f;
             transition: all 0.3s ease;
+            padding: 0;
         }
         
         .single-post .content h5 a:hover {
@@ -98,11 +100,13 @@
             margin: 0;
             color: #777;
             font-size: 0.9em;
+            text-align: left;
         }
         
         .single-post .content .comment li {
             display: inline-block;
             margin-right: 15px;
+            padding: 0;
         }
         
         .single-post .content .comment li i {
@@ -118,10 +122,103 @@
             background: #f8f9fa;
             border-radius: 8px;
         }
+        /* Search styles */
+        
+        .search-container {
+            margin-bottom: 30px;
+            position: relative;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .clear-search {
+            padding: 0 15px;
+            background: #2074d4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .clear-search:hover {
+            background-color: #1861b3;
+        }
+        
+        .clear-search:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 10px solid #ddd;
+            border-radius: 5px;
+            border-width: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #2074d4;
+            border-width: 3px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(32, 116, 212, 0.3);
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .search-results.active {
+            display: block;
+        }
+        
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(32, 116, 212, 0.1);
+            color: #2074d4;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-title {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .search-result-meta {
+            font-size: 0.8em;
+            color: #666;
+        }
+        
+        .search-result-item:hover .search-result-title {
+            color: #2074d4;
+        }
+        /* Widget styles */
         
         .single-widget {
             background: #f8f9fa;
-            padding: 20px;
+            padding: 20px 0;
             border-radius: 8px;
             margin-bottom: 30px;
         }
@@ -130,10 +227,15 @@
             position: relative;
             font-size: 18px;
             font-weight: 600;
-            padding-bottom: 10px;
+            padding: 0 20px 10px 20px;
             margin-bottom: 20px;
             color: #2c2d3f;
             border-bottom: 2px solid #2074d4;
+        }
+        
+        .single-widget #latestPosts,
+        .single-widget #relatedPosts {
+            padding: 0 20px;
         }
     </style>
 </head>
@@ -329,16 +431,15 @@
                 </div>
                 <div class="col-lg-4 col-12">
                     <div class="main-sidebar">
-                        <!-- Single Widget -->
-                        <div class="single-widget search">
-                            <div class="form">
-                                <input type="email" placeholder="Search Here...">
-                                <a class="button" href="#"><i class="fa fa-search"></i></a>
-                            </div>
+                        <!-- Search Widget -->
+                        <div class="search-container">
+                            <input type="text" class="search-input" placeholder="Search posts..." id="searchInput">
+                            <button class="clear-search" id="clearSearch" disabled>Clear</button>
+                            <div class="search-results" id="searchResults"></div>
                         </div>
-                        <!--/ End Single Widget -->
+
                         <!-- Latest Posts -->
-                        <div class="single-widget recent-post">
+                        <div class="single-widget">
                             <h3 class="title">Latest Posts</h3>
                             <div id="latestPosts">
                                 <!-- Latest posts will be dynamically inserted here -->
@@ -346,7 +447,7 @@
                         </div>
 
                         <!-- Related Posts -->
-                        <div class="single-widget recent-post">
+                        <div class="single-widget">
                             <h3 class="title">Related Posts</h3>
                             <div id="relatedPosts">
                                 <!-- Related posts will be dynamically inserted here -->
@@ -443,6 +544,71 @@
     <script src="post_apis.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
+        // Setup search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const clearSearchBtn = document.getElementById('clearSearch');
+
+        searchInput.addEventListener('input', function() {
+            clearSearchBtn.disabled = !this.value.trim();
+        });
+
+        clearSearchBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            clearSearchBtn.disabled = true;
+            searchResults.classList.remove('active');
+        });
+
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.trim();
+
+            clearTimeout(searchTimeout);
+
+            if (searchTerm.length > 0) {
+                searchResults.innerHTML = '<div class="search-result-item">Searching...</div>';
+                searchResults.classList.add('active');
+
+                searchTimeout = setTimeout(async() => {
+                    try {
+                        if (searchTerm.length < 2) {
+                            searchResults.innerHTML = '<div class="search-result-item">Please enter at least 2 characters</div>';
+                            return;
+                        }
+                        const results = await searchPosts(searchTerm);
+                        displaySearchResults(results);
+                    } catch (error) {
+                        console.error('Search error:', error);
+                        searchResults.innerHTML = '<div class="search-result-item">Error searching posts. Please make sure the server is running.</div>';
+                    }
+                }, 300);
+            } else {
+                searchResults.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                searchResults.classList.remove('active');
+            }
+        });
+
+        function displaySearchResults(posts) {
+            if (!Array.isArray(posts) || posts.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item">No matching posts found</div>';
+                return;
+            }
+
+            searchResults.innerHTML = posts.map(post => `
+                <div class="search-result-item" onclick="window.location.href='blog-single.html?id=${post._id}'">
+                    <div class="search-result-title">${post.title}</div>
+                    <div class="search-result-meta">
+                        By ${post.author} | ${new Date(post.createdAt).toLocaleDateString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
         // Function to get URL parameters
         function getUrlParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -500,21 +666,24 @@
                 // Get all posts for latest and related posts
                 const allPosts = await getPosts();
 
-                // Sort posts by date for latest posts
+                // Sort posts by date for latest posts (show 5 most recent)
                 const latestPosts = allPosts
                     .filter(p => p._id !== postId) // Exclude current post
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                    .slice(0, 3); // Get top 3
+                    .slice(0, 5); // Get top 5 most recent posts
 
                 // Find related posts by matching tags
                 const relatedPosts = allPosts
                     .filter(p => {
                         if (p._id === postId) return false; // Exclude current post
                         if (!p.tags || !post.tags) return false;
-                        // Check if posts share any tags
-                        return p.tags.some(tag => post.tags.includes(tag));
+                        // Check if posts share any tags and sort by number of matching tags
+                        const matchingTags = post.tags.filter(tag => p.tags.includes(tag));
+                        p.matchingTagCount = matchingTags.length; // Store for sorting
+                        return matchingTags.length > 0;
                     })
-                    .slice(0, 5); // Get up to 5 related posts
+                    .sort((a, b) => b.matchingTagCount - a.matchingTagCount) // Sort by most matching tags first
+                    .slice(0, 5); // Get up to 5 most relevant posts
 
                 // Display latest posts
                 const latestPostsContainer = document.getElementById('latestPosts');
