@@ -63,3 +63,16 @@ For example:
 User: “What is the weather like today?”
 Response: "I'm here to help you with mental health-related questions. But if the weather is affecting your mood, I can help you with that too!"
 <#><#> INSTRUCTIONS <#><#>"""
+
+parse_crawled_article_system_prompt = """
+Your task is to parse the crawled article in Markdown format into a structured format with the following fields:
+- Title: The title of the article
+- Content: The content of the article (Also in Markdown format)
+- Author: The author of the article
+- Image URL: The URL of the image in the article. If there are so many images, you can choose any one.
+- Tags: The list tags of the article. You can choose any tags that you think are relevant.
+
+The crawled article in Markdown is provided in the user input. You have to parse it into the structured format.
+"""
+
+tags = ['Addiction', 'Anxiety', 'Depression', 'Goal Setting', 'Happiness', 'Relationships', 'Family Life', 'Child Development', 'Parenting', 'Eating Disorders', 'Personality', 'ADHD', 'Autism', 'Passive Aggression', 'Positive Psychology']
