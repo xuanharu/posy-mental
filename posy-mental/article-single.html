@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title -->
-    <title>Posy - Mental Health Consultant</title>
+    <title>Article - Posy Mental Health</title>
 
     <!-- Favicon -->
     <link rel="icon" href="img/favicon.png">
@@ -43,41 +43,123 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/responsive.css">
 
+    <style>
+        .article-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #444;
+        }
+        
+        .article-content p {
+            margin-bottom: 20px;
+        }
+        
+        .article-content h2 {
+            font-size: 24px;
+            margin: 30px 0 15px;
+            color: #2c2d3f;
+        }
+        
+        .article-content h3 {
+            font-size: 20px;
+            margin: 25px 0 12px;
+            color: #2c2d3f;
+        }
+        
+        .article-meta {
+            margin: 20px 0;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .article-meta span {
+            margin-right: 20px;
+        }
+        
+        .article-meta i {
+            margin-right: 5px;
+            color: #1A76D1;
+        }
+        
+        .article-tags {
+            margin: 30px 0;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 0 5px 5px 0;
+            background: #f5f5f5;
+            border-radius: 20px;
+            color: #666;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        
+        .tag:hover {
+            background: #1A76D1;
+            color: #fff;
+        }
+        
+        .article-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+        
+        .related-articles {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        
+        .related-articles h3 {
+            margin-bottom: 20px;
+            color: #2c2d3f;
+        }
+        
+        .related-article-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .related-article-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .related-article-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .related-article-content {
+            padding: 15px;
+        }
+        
+        .related-article-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #2c2d3f;
+        }
+        
+        .related-article-meta {
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
 </head>
 
 <body>
-
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="loader">
-            <div class="loader-outter"></div>
-            <div class="loader-inner"></div>
-
-            <div class="indicator">
-                <svg width="16px" height="12px">
-                        <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                        <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                    </svg>
-            </div>
-        </div>
-    </div>
-    <!-- End Preloader -->
-
-    <!-- Get Pro Button -->
-    <ul class="pro-features">
-        <a class="get-pro" href="#">Get Pro</a>
-        <li class="big-title">Pro Version Available</li>
-        <li class="title">Pro Version Features</li>
-        <li>100+ chat history</li>
-        <li>10 day free consulting sessions with real psychologist</li>
-        <li>Access more news and tips everday</li>
-        <li>Get no-ads forever</li>
-        <!-- <div class="button">
-            <a href="http://preview.themeforest.net/item/mediplus-medical-and-doctor-html-template/full_screen_preview/26665910?_ga=2.145092285.888558928.1591971968-344530658.1588061879" target="_blank" class="btn">Pro Version Demo</a>
-            <a href="https://themeforest.net/item/mediplus-medical-and-doctor-html-template/26665910" target="_blank" class="btn">Buy Pro Version</a>
-        </div> -->
-    </ul>
-
     <!-- Header Area -->
     <header class="header">
         <!-- Header Inner -->
@@ -100,8 +182,8 @@
                             <div class="main-menu">
                                 <nav class="navigation">
                                     <ul class="nav menu">
-                                        <li class="active"><a href="index.html">Home</a></li>
-                                        <li>
+                                        <li><a href="index.html">Home</a></li>
+                                        <li class="active">
                                             <a href="#">News<i class="icofont-rounded-down"></i></a>
                                             <ul class="dropdown">
                                                 <li><a href="newsfeed.html">Admin Posts</a></li>
@@ -118,11 +200,6 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                        <!-- <li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>
-                                            <ul class="dropdown">
-                                                <li><a href="blog-single.html">Blog Details</a></li>
-                                            </ul>
-                                        </li> -->
                                     </ul>
                                 </nav>
                             </div>
@@ -141,26 +218,63 @@
     </header>
     <!-- End Header Area -->
 
-    <!-- Error Page -->
-    <section class="error-page section">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs overlay">
+        <div class="container">
+            <div class="bread-inner">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 id="articleTitle">Article Title</h2>
+                        <ul class="bread-list">
+                            <li><a href="index.html">Home</a></li>
+                            <li><i class="icofont-simple-right"></i></li>
+                            <li><a href="articles.html">Articles</a></li>
+                            <li><i class="icofont-simple-right"></i></li>
+                            <li class="active">Article</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumbs -->
+
+    <!-- Article Content -->
+    <section class="news-single section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 offset-lg-3 col-12">
-                    <!-- Error Inner -->
-                    <div class="error-inner">
-                        <h1>404<span>Oop's sorry we can't find that page!</span></h1>
-                        <p>You can get back to the Homepage by clicking on the logo on navigation bar</p>
-                        <form class="search-form">
-                            <input placeholder="Search from Here" type="text">
-                            <button class="btn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>
+                <div class="col-lg-8 col-12">
+                    <div class="blog-single">
+                        <div class="main-image">
+                            <img id="articleImage" src="" alt="" class="article-image">
+                        </div>
+                        <div class="article-meta">
+                            <span><i class="fa fa-user"></i><span id="articleAuthor">Author</span></span>
+                            <span><i class="fa fa-calendar"></i><span id="articleDate">Date</span></span>
+                            <span><i class="fa fa-folder"></i><span id="articleCategory">Category</span></span>
+                        </div>
+                        <div class="article-content" id="articleContent">
+                            <!-- Article content will be loaded here -->
+                        </div>
+                        <div class="article-tags" id="articleTags">
+                            <!-- Tags will be loaded here -->
+                        </div>
                     </div>
-                    <!--/ End Error Inner -->
+                </div>
+                <div class="col-lg-4 col-12">
+                    <div class="main-sidebar">
+                        <!-- Related Articles -->
+                        <div class="single-widget">
+                            <h3>Related Articles</h3>
+                            <div id="relatedArticles">
+                                <!-- Related articles will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <!--/ End Error Page -->
 
     <!-- Footer Area -->
     <footer id="footer" class="footer ">
@@ -190,7 +304,7 @@
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <ul>
                                         <li><a href="index.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Home</a></li>
-                                        <li><a href="blog-single.html"><i class="fa fa-caret-right" aria-hidden="true"></i>News</a></li>
+                                        <li><a href="articles.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Articles</a></li>
                                         <li><a href="chat.html"><i class="fa fa-caret-right" aria-hidden="true"></i>AI chatbot</a></li>
                                         <li><a href="portfolio-details.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Services</a></li>
                                         <li><a href="contact.html"><i class="fa fa-caret-right" aria-hidden="true"></i>Contact Us</a></li>
@@ -202,25 +316,15 @@
                     <div class="col-lg-3 col-md-6 col-12">
                         <div class="single-footer">
                             <h2>Newsletter</h2>
-                            <p>Subscribe to our newsletter to get informed news in your inbox & highlight our recent blog post or article on a specific mental health topic</p>
+                            <p>subscribe to our newsletter to get all our news in your inbox.</p>
                             <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
                                 <input name="email" placeholder="Email Address" class="common-input" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your email address'" required="" type="email">
                                 <button class="button"><i class="icofont icofont-paper-plane"></i></button>
                             </form>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <div class="single-footer">
-                            <h2>Contact Us</h2>
-                            <ul class="top-contact" style="color: white;">
-                                <li><i class="fa fa-phone"></i>+89 123 456 789</li>
-                                <li><i class="fa fa-envelope"></i><a href="mailto:support@posy.com"> support@posy.com.vn</a></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
-        </div>
         </div>
         <!--/ End Footer Top -->
         <!-- Copyright -->
@@ -273,12 +377,95 @@
     <script src="js/wow.min.js"></script>
     <!-- Magnific Popup JS -->
     <script src="js/jquery.magnific-popup.min.js"></script>
-    <!-- Counter Up CDN JS -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="js/bootstrap.min.js"></script>
     <!-- Main JS -->
     <script src="js/main.js"></script>
+
+    <script src="articles_data.js"></script>
+    <script>
+        // Function to get URL parameters
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Function to load article content
+        function loadArticle() {
+            const articleId = getUrlParam('id');
+            if (!articleId || !window.articles) {
+                window.location.href = 'articles.html';
+                return;
+            }
+
+            try {
+                const article = window.articles.find(a => a.id === articleId);
+                if (!article) {
+                    window.location.href = 'articles.html';
+                    return;
+                }
+
+                // Update page content
+                document.title = `${article.title} - Posy Mental Health`;
+                document.getElementById('articleTitle').textContent = article.title;
+                document.getElementById('articleImage').src = article.image;
+                document.getElementById('articleAuthor').textContent = article.author;
+                document.getElementById('articleDate').textContent = article.date;
+                document.getElementById('articleCategory').textContent = article.category;
+                document.getElementById('articleContent').innerHTML = article.content;
+
+                // Display tags
+                const tagsContainer = document.getElementById('articleTags');
+                if (article.tags && article.tags.length > 0) {
+                    tagsContainer.innerHTML = article.tags
+                        .map(tag => `<a href="#" class="tag">${tag}</a>`)
+                        .join('');
+                }
+
+                // Load related articles
+                loadRelatedArticles(article);
+            } catch (error) {
+                console.error('Error loading article:', error);
+                window.location.href = 'articles.html';
+            }
+        }
+
+        // Function to load related articles
+        function loadRelatedArticles(currentArticle) {
+            const relatedContainer = document.getElementById('relatedArticles');
+
+            const relatedArticles = window.articles
+                .filter(article =>
+                    article.id !== currentArticle.id &&
+                    article.category === currentArticle.category
+                )
+                .slice(0, 3);
+
+            if (relatedArticles.length === 0) {
+                relatedContainer.innerHTML = '<p>No related articles found</p>';
+                return;
+            }
+
+            relatedContainer.innerHTML = relatedArticles
+                .map(article => `
+                    <div class="related-article-card">
+                        <img src="${article.image}" alt="${article.title}" class="related-article-image">
+                        <div class="related-article-content">
+                            <h4 class="related-article-title">
+                                <a href="article-single.html?id=${article.id}">${article.title}</a>
+                            </h4>
+                            <div class="related-article-meta">
+                                <span><i class="fa fa-calendar"></i>${article.date}</span>
+                            </div>
+                        </div>
+                    </div>
+                `)
+                .join('');
+        }
+
+        // Load article when page loads
+        document.addEventListener('DOMContentLoaded', loadArticle);
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,716 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Posy - Mental Health Advice</title>
+    <link rel="icon" href="img/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/nice-select.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/icofont.css">
+    <link rel="stylesheet" href="css/slicknav.min.css">
+    <link rel="stylesheet" href="css/owl-carousel.css">
+    <link rel="stylesheet" href="css/datepicker.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <style>
+        .tag-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tag-section h3 {
+            color: #2074d4;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tag {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid #2074d4;
+            background: white;
+            color: #2074d4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tag:hover {
+            background: #e8f0fe;
+        }
+        
+        .tag.selected {
+            background: #2074d4;
+            color: white;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 12px 24px;
+            background: #2074d4;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background: #1b5eb8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        .questions-section {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background: #2074d4;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn:not(:disabled):hover {
+            background: #1b5eb8;
+            transform: translateY(-2px);
+        }
+        
+        .question-page {
+            display: none;
+        }
+        
+        .question-page.active {
+            display: block;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            margin-bottom: 20px;
+            border-radius: 2px;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #2074d4;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .questions-section.visible {
+            display: block;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-left: 4px solid #2074d4;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .advice-section {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .advice-section.visible {
+            display: block;
+        }
+        
+        .advice-summary {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #e8f0fe;
+            border-radius: 8px;
+        }
+        
+        .advice-recommendations {
+            margin-bottom: 20px;
+        }
+        
+        .recommendation-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-left: 3px solid #2074d4;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .resources-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .resource-link {
+            padding: 10px 15px;
+            background: #2074d4;
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .resource-link:hover {
+            background: #1b5eb8;
+            transform: translateY(-2px);
+        }
+        
+        .resource-link:visited {
+            color: white;
+        }
+        
+        .next-steps {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .next-steps h4 {
+            color: #2074d4;
+            margin-bottom: 10px;
+        }
+        
+        .next-steps ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .next-steps li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .next-steps li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #2074d4;
+        }
+        
+        .question-text {
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option-item:hover {
+            background: #e8f0fe;
+        }
+        
+        .option-item input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .option-item label {
+            cursor: pointer;
+            flex: 1;
+            margin: 0;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .loading.visible {
+            display: block;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2074d4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Area -->
+    <header class="header">
+        <!-- Header Inner -->
+        <div class="header-inner">
+            <div class="container">
+                <div class="inner">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-12">
+                            <!-- Start Logo -->
+                            <div class="logo">
+                                <a href="index.html"><img src="images/logo_cbg.png" alt="Posy"></a>
+                            </div>
+                            <!-- End Logo -->
+                            <!-- Mobile Nav -->
+                            <div class="mobile-nav"></div>
+                            <!-- End Mobile Nav -->
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-12">
+                            <!-- Main Menu -->
+                            <div class="main-menu">
+                                <nav class="navigation">
+                                    <ul class="nav menu">
+                                        <li><a href="index.html">Home</a></li>
+                                        <li>
+                                            <a href="#">News<i class="icofont-rounded-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li><a href="newsfeed.html">Admin Posts</a></li>
+                                                <li><a href="articles.html">Featured Articles</a></li>
+                                                <li><a href="advice.html">Get Advice (Quiz)</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="chat.html">AI Chatbot</a></li>
+                                        <li><a href="#">Help<i class="icofont-rounded-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li>
+                                                    <a href="portfolio-details.html">Services</a>
+                                                    <a href="contact.html">Contact</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <!-- <li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li><a href="blog-single.html">Blog Details</a></li>
+                                            </ul>
+                                        </li> -->
+                                    </ul>
+                                </nav>
+                            </div>
+                            <!--/ End Main Menu -->
+                        </div>
+                        <div class="col-lg-2 col-12">
+                            <div class="get-quote">
+                                <a href="login.html" class="btn">Get Started</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ End Header Inner -->
+    </header>
+    <!-- End Header Area -->
+
+    <!-- Start Advice Section -->
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title">
+                        <h2>Mental Health Self-Assessment</h2>
+                        <p>Select the tags that best describe your current situation or concerns. We'll generate personalized questions to help you reflect on your mental health journey.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tag-section">
+                <h3>Mental Health</h3>
+                <div class="tag-container" id="mental-health-tags">
+                    <button class="tag" onclick="toggleTag(this)">Addiction</button>
+                    <button class="tag" onclick="toggleTag(this)">Anxiety</button>
+                    <button class="tag" onclick="toggleTag(this)">ADHD</button>
+                    <button class="tag" onclick="toggleTag(this)">Asperger's</button>
+                    <button class="tag" onclick="toggleTag(this)">Autism</button>
+                    <button class="tag" onclick="toggleTag(this)">Bipolar Disorder</button>
+                    <button class="tag" onclick="toggleTag(this)">Chronic Pain</button>
+                    <button class="tag" onclick="toggleTag(this)">Depression</button>
+                    <button class="tag" onclick="toggleTag(this)">Eating Disorders</button>
+                </div>
+
+                <h3>Personality</h3>
+                <div class="tag-container" id="personality-tags">
+                    <button class="tag" onclick="toggleTag(this)">Passive Aggression</button>
+                    <button class="tag" onclick="toggleTag(this)">Personality</button>
+                    <button class="tag" onclick="toggleTag(this)">Shyness</button>
+                </div>
+
+                <h3>Personal Growth</h3>
+                <div class="tag-container" id="growth-tags">
+                    <button class="tag" onclick="toggleTag(this)">Goal Setting</button>
+                    <button class="tag" onclick="toggleTag(this)">Happiness</button>
+                    <button class="tag" onclick="toggleTag(this)">Positive Psychology</button>
+                    <button class="tag" onclick="toggleTag(this)">Stopping Smoking</button>
+                </div>
+
+                <h3>Relationship</h3>
+                <div class="tag-container" id="relationship-tags">
+                    <button class="tag" onclick="toggleTag(this)">Low Sexual Desire</button>
+                    <button class="tag" onclick="toggleTag(this)">Relationships</button>
+                    <button class="tag" onclick="toggleTag(this)">Sex</button>
+                    <button class="tag" onclick="toggleTag(this)">Family Life</button>
+                    <button class="tag" onclick="toggleTag(this)">Child Development</button>
+                    <button class="tag" onclick="toggleTag(this)">Parenting</button>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="generateQuestions()">Generate Questions</button>
+
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Generating personalized questions...</p>
+            </div>
+
+            <div class="questions-section" id="questions-section">
+                <h3>Your Personalized Questions</h3>
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar"></div>
+                </div>
+                <div id="questions-container">
+                    <!-- Questions will be inserted here -->
+                </div>
+                <div class="navigation-buttons">
+                    <button class="nav-btn" id="prev-btn" onclick="previousQuestion()" disabled>Previous</button>
+                    <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Next</button>
+                </div>
+                <button class="submit-btn" onclick="submitAnswers()" style="margin-top: 30px; display: none;">Get Personalized Advice</button>
+            </div>
+
+            <div class="advice-section" id="advice-section">
+                <h3>Your Personalized Advice</h3>
+                <div id="advice-container">
+                    <!-- Advice will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Advice Section -->
+
+    <!-- jquery Min JS -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.0.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/easing.js"></script>
+    <script src="js/colors.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.nav.js"></script>
+    <script src="js/slicknav.min.js"></script>
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <script src="js/niceselect.js"></script>
+    <script src="js/tilt.jquery.min.js"></script>
+    <script src="js/owl-carousel.js"></script>
+    <script src="js/jquery.counterup.min.js"></script>
+    <script src="js/steller.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        function toggleTag(element) {
+            element.classList.toggle('selected');
+        }
+
+        let currentQuestion = 0;
+        let totalQuestions = 0;
+
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        function showQuestion(index) {
+            document.querySelectorAll('.question-page').forEach(q => q.classList.remove('active'));
+            document.querySelector(`.question-page[data-index="${index}"]`).classList.add('active');
+
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').textContent = index === totalQuestions - 1 ? 'Submit' : 'Next';
+
+            updateProgressBar();
+        }
+
+        function nextQuestion() {
+            const currentPage = document.querySelector(`.question-page[data-index="${currentQuestion}"]`);
+            const isMultiSelect = currentPage.querySelector('input[type="checkbox"]') !== null;
+            const hasSelection = isMultiSelect ?
+                currentPage.querySelector('input[type="checkbox"]:checked') !== null :
+                currentPage.querySelector('input[type="radio"]:checked') !== null;
+
+            if (!hasSelection) {
+                alert('Please select at least one option before proceeding');
+                return;
+            }
+
+            if (currentQuestion === totalQuestions - 1) {
+                submitAnswers();
+                return;
+            }
+
+            currentQuestion++;
+            showQuestion(currentQuestion);
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        async function collectAnswers() {
+            const answers = [];
+            const questions = document.querySelectorAll('.question-page');
+
+            for (let i = 0; i < questions.length; i++) {
+                const question = questions[i];
+                const questionText = question.querySelector('.question-text').textContent;
+                const isMultiSelect = question.querySelector('input[type="checkbox"]') !== null;
+
+                if (isMultiSelect) {
+                    const selectedOptions = Array.from(question.querySelectorAll('input[type="checkbox"]:checked'))
+                        .map(input => input.value);
+                    if (selectedOptions.length === 0) return null;
+                    answers.push({
+                        question: questionText,
+                        answer: selectedOptions
+                    });
+                } else {
+                    const selectedOption = question.querySelector('input[type="radio"]:checked');
+                    if (!selectedOption) return null;
+                    answers.push({
+                        question: questionText,
+                        answer: selectedOption.value
+                    });
+                }
+            }
+
+            return answers;
+        }
+
+        async function submitAnswers() {
+            const answers = await collectAnswers();
+            if (!answers) {
+                alert('Please answer all questions before submitting');
+                return;
+            }
+
+            const selectedTags = Array.from(document.querySelectorAll('.tag.selected'))
+                .map(tag => tag.textContent);
+
+            document.querySelector('.loading').classList.add('visible');
+            document.querySelector('.advice-section').classList.remove('visible');
+            document.querySelector('.questions-section').style.display = 'none';
+
+            try {
+                const response = await fetch('http://localhost:8000/mental-health/generate-advice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        answers: answers,
+                        tags: selectedTags
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate advice');
+                }
+
+                const advice = await response.json();
+                displayAdvice(advice);
+
+                // Scroll to advice section
+                document.querySelector('.advice-section').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to generate advice. Please try again.');
+                document.querySelector('.questions-section').style.display = 'block';
+            } finally {
+                document.querySelector('.loading').classList.remove('visible');
+            }
+        }
+
+        function displayAdvice(advice) {
+            const adviceContainer = document.getElementById('advice-container');
+            adviceContainer.innerHTML = `
+                <div class="advice-summary">${advice.summary}</div>
+                
+                <div class="advice-recommendations">
+                    <h4>Recommendations</h4>
+                    ${advice.recommendations.map(rec => `
+                        <div class="recommendation-item">${rec}</div>
+                    `).join('')}
+                </div>
+
+                <div class="resources">
+                    <h4>Helpful Resources</h4>
+                    <div class="resources-list">
+                        ${advice.resources.map(resource => `
+                            <a href="${resource.url}" target="_blank" class="resource-link">${resource.name}</a>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h4>Next Steps</h4>
+                    <ul>
+                        ${advice.next_steps.map(step => `
+                            <li>${step}</li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+
+            document.querySelector('.advice-section').classList.add('visible');
+            document.querySelector('.advice-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function generateQuestions() {
+            const selectedTags = Array.from(document.querySelectorAll('.tag.selected'))
+                .map(tag => tag.textContent);
+
+            if (selectedTags.length === 0) {
+                alert('Please select at least one tag');
+                return;
+            }
+
+            // Show loading spinner
+            document.querySelector('.loading').classList.add('visible');
+            document.querySelector('.questions-section').classList.remove('visible');
+
+            try {
+                // Call your backend API to generate questions
+                const response = await fetch('http://localhost:8000/mental-health/generate-questions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        tags: selectedTags
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate questions');
+                }
+
+                const data = await response.json();
+
+                // Display the questions
+                const questionsContainer = document.getElementById('questions-container');
+                totalQuestions = data.questions.length;
+                currentQuestion = 0;
+
+                questionsContainer.innerHTML = data.questions
+                    .map((q, qIndex) => `
+                        <div class="question-page" data-index="${qIndex}">
+                            <div class="question">
+                                <div class="question-text">${q.question}</div>
+                                <div class="options-list">
+                                    ${q.options.map((option, oIndex) => `
+                                        <div class="option-item">
+                                            <input type="${q.multiple ? 'checkbox' : 'radio'}" 
+                                                   id="q${qIndex}_o${oIndex}" 
+                                                   name="question${qIndex}" 
+                                                   value="${option}">
+                                            <label for="q${qIndex}_o${oIndex}">${option}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                showQuestion(0);
+
+                // Show questions section
+                document.querySelector('.questions-section').classList.add('visible');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to generate questions. Please try again.');
+            } finally {
+                // Hide loading spinner
+                document.querySelector('.loading').classList.remove('visible');
+            }
+        }
+    </script>
+</body>
+
+</html>
