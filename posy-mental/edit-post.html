@@ -140,6 +140,26 @@
                                 <label>Tags</label>
                                 <div id="tagGroups">
                                     <div class="mb-3">
+                                        <h6>POST TYPE (Required)</h6>
+                                        <div class="btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="post_type" value="Advice"> Advice
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="post_type" value="Information"> Information
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="post_type" value="News"> News
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="post_type" value="Review"> Review
+                                            </label>
+                                            <label class="btn btn-outline-primary m-1">
+                                                <input type="checkbox" name="post_type" value="Tutorial"> Tutorial
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
                                         <h6>MENTAL HEALTH</h6>
                                         <div class="btn-group-toggle" data-toggle="buttons">
                                             <label class="btn btn-outline-primary m-1">
@@ -202,6 +222,7 @@
                                             </label>
                                         </div>
                                     </div>
+
                                     <div class="mb-3">
                                         <h6>RELATIONSHIP</h6>
                                         <div class="btn-group-toggle" data-toggle="buttons">
@@ -354,10 +375,20 @@
                         document.getElementById('content').value = postData.content;
                     }
 
-                    // Set selected tags
+                    // Set selected tags and post types
                     if (postData.tags) {
-                        const checkboxes = document.querySelectorAll('input[name="tags"]');
-                        checkboxes.forEach(checkbox => {
+                        // Handle regular tags
+                        const tagCheckboxes = document.querySelectorAll('input[name="tags"]');
+                        tagCheckboxes.forEach(checkbox => {
+                            if (postData.tags.includes(checkbox.value)) {
+                                checkbox.checked = true;
+                                checkbox.parentElement.classList.add('active');
+                            }
+                        });
+
+                        // Handle post types
+                        const postTypeCheckboxes = document.querySelectorAll('input[name="post_type"]');
+                        postTypeCheckboxes.forEach(checkbox => {
                             if (postData.tags.includes(checkbox.value)) {
                                 checkbox.checked = true;
                                 checkbox.parentElement.classList.add('active');
@@ -389,10 +420,6 @@
                 const content = simplemde ? simplemde.value() : document.getElementById('content').value;
                 const imageFile = document.getElementById('image').files[0];
 
-                // Get selected tags
-                const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
-                    .map(checkbox => checkbox.value);
-
                 // Handle image
                 let imageUrl = '';
                 if (imageFile) {
@@ -412,6 +439,20 @@
                     alert('Please fill in all required fields');
                     return;
                 }
+
+                // Validate at least one post type is selected
+                const selectedPostTypes = Array.from(document.querySelectorAll('input[name="post_type"]:checked'))
+                    .map(checkbox => checkbox.value);
+                if (selectedPostTypes.length === 0) {
+                    alert('Please select at least one post type');
+                    return;
+                }
+
+                // Get selected tags and post types
+                const selectedTags = [
+                    ...Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(checkbox => checkbox.value),
+                    ...selectedPostTypes
+                ];
 
                 if (mode === 'edit' && postId) {
                     // Update existing post
