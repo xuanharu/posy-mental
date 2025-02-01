@@ -54,6 +54,12 @@
             margin-bottom: 20px;
         }
         
+        .article-content h1 {
+            font-size: 28px;
+            margin: 35px 0 20px;
+            color: #2c2d3f;
+        }
+        
         .article-content h2 {
             font-size: 24px;
             margin: 30px 0 15px;
@@ -64,6 +70,68 @@
             font-size: 20px;
             margin: 25px 0 12px;
             color: #2c2d3f;
+        }
+        
+        .article-content h4,
+        .article-content h5,
+        .article-content h6 {
+            font-size: 18px;
+            margin: 20px 0 10px;
+            color: #2c2d3f;
+        }
+        
+        .article-content ul,
+        .article-content ol {
+            margin: 0 0 20px 20px;
+        }
+        
+        .article-content li {
+            margin-bottom: 8px;
+        }
+        
+        .article-content blockquote {
+            margin: 20px 0;
+            padding: 15px 30px;
+            border-left: 4px solid #1A76D1;
+            background: #f8f9fa;
+            font-style: italic;
+        }
+        
+        .article-content pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .article-content code {
+            background: #f8f9fa;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .article-content a {
+            color: #1A76D1;
+            text-decoration: none;
+        }
+        
+        .article-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .article-content hr {
+            margin: 30px 0;
+            border: none;
+            border-top: 1px solid #eee;
         }
         
         .article-meta {
@@ -382,6 +450,9 @@
     <!-- Main JS -->
     <script src="js/main.js"></script>
 
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <script src="articles_data.js"></script>
     <script src="post_apis.js"></script>
     <script>
@@ -425,10 +496,12 @@
                 document.getElementById('articleAuthor').textContent = article.author || 'Unknown';
                 document.getElementById('articleDate').textContent = type === 'article' ? article.date : new Date(article.createdAt).toLocaleDateString();
                 document.getElementById('articleCategory').textContent = article.category || 'General';
-                document.getElementById('articleContent').innerHTML = type === 'article' ? article.content : `
+                // Parse markdown content if it's a crawled post
+                const content = type === 'article' ? article.content : `
                     ${article.sourceUrl ? `<p><strong>Source:</strong> <a href="${article.sourceUrl}" target="_blank">${article.sourceUrl}</a></p>` : ''}
-                    ${article.content}
+                    ${marked.parse(article.content)}
                 `;
+                document.getElementById('articleContent').innerHTML = content;
 
                 // Display tags
                 const tagsContainer = document.getElementById('articleTags');

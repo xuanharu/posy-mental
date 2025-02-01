@@ -14,7 +14,20 @@ def crawl(url):
         "Connection": "keep-alive"
     }
     response = requests.request("GET", url, headers=headers, data=payload)
-    markdown = md(response.text)
+    
+    # Convert relative URLs to absolute URLs before converting to markdown
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+    
+    soup = BeautifulSoup(response.text, 'html.parser')
+    
+    # Convert all relative image URLs to absolute URLs
+    for img in soup.find_all('img'):
+        if img.get('src'):
+            img['src'] = urljoin(url, img['src'])
+    
+    # Convert the modified HTML to markdown
+    markdown = md(str(soup))
     
     return markdown
 

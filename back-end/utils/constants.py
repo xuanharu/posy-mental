@@ -69,7 +69,11 @@ Your task is to parse the crawled article in Markdown format into a structured f
 - Title: The title of the article
 - Content: The content of the article (Also in Markdown format)
 - Author: The author of the article
-- Image URL: The URL of the image in the article. If there are so many images, you can choose any one.
+- Image URL: For the image selection:
+  * Extract the first image URL that appears in the markdown content
+  * The image URL will be in markdown format like: ![alt text](image_url)
+  * Extract just the URL from within the parentheses
+  * If no image is found in the markdown content, return an empty string
 - Tags: The list tags of the article. You can choose any tags that you think are relevant.
 
 The crawled article in Markdown is provided in the user input. You have to parse it into the structured format.
