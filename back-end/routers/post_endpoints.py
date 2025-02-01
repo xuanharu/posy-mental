@@ -15,9 +15,9 @@ def get_post(post_id):
     return post_services.get_post(post_id)
 
 @router.post("/create-post")
-def create_post(title, content, image_url, author, tags: Optional[str] = None):
+def create_post(title, content, image_url, author, tags: Optional[str] = None, source: Optional[str] = None):
     tag_list = [] if not tags else eval(tags)  # Convert string representation of list to actual list
-    return post_services.create_post(title, content, image_url, author, tag_list)
+    return post_services.create_post(title, content, image_url, author, tag_list, source)
 
 @router.put("/update-post/{post_id}")
 def update_post(post_id, title, content, image_url, author, tags: Optional[str] = None):
@@ -51,3 +51,8 @@ def get_comment_count(post_id: str):
 @router.delete("/comment/{comment_id}")
 def delete_comment(comment_id: str):
     return post_services.delete_comment(comment_id)
+
+@router.get("/crawled-posts")
+def get_crawled_posts():
+    """Get all posts that were created from crawled content"""
+    return post_services.get_crawled_posts()

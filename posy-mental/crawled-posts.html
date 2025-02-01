@@ -305,7 +305,7 @@
                 <div class="post-content-wrapper">
                     <div class="post-title">${post.title}</div>
                     <div class="post-content">${post.content}</div>
-                    <div class="post-source">Source: <a href="${post.sourceUrl}" target="_blank">${post.sourceUrl}</a></div>
+                    <div class="post-source">Source: <a href="${post.source}" target="_blank">${post.source}</a></div>
                     <div class="post-date">Crawled on: ${formattedDate}</div>
                     <div class="mt-2">
                         <a href="article-single.html?id=${post._id}&type=post" class="btn btn-primary">Read More</a>
@@ -339,17 +339,24 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                const result = await response.json();
+                const crawlResult = await response.json();
 
-                // Get the newly crawled post
-                const post = await getPost(result.id);
+                // Create a new post from the crawled content
+                const postResult = await createPost(
+                    crawlResult.title,
+                    crawlResult.content,
+                    crawlResult.imageUrl || 'images/chatting_boy.jpeg',
+                    crawlResult.author || 'Crawled Content',
+                    crawlResult.tags || [],
+                    url // Pass the source URL
+                );
 
                 // Create and prepend the new post element at the top of the list
-                const postElement = createPostElement(post);
+                const postElement = createPostElement(postResult);
                 const postsContainer = document.getElementById('crawled-posts-list');
                 postsContainer.insertBefore(postElement, postsContainer.firstChild);
 
-                alert('Post crawled successfully!');
+                alert('Post crawled and saved successfully!');
                 urlInput.value = ''; // Clear the input
             } catch (error) {
                 console.error('Error crawling post:', error);

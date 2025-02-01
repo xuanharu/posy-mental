@@ -394,10 +394,12 @@
         async function loadPosts() {
             try {
                 const posts = await getPosts();
+                // Filter out crawled posts (posts with source URLs)
+                const adminPosts = posts.filter(post => !post.source);
                 const postList = document.getElementById('post-list');
                 postList.innerHTML = ''; // Clear existing posts
 
-                posts.forEach(post => {
+                adminPosts.forEach(post => {
                     const postElement = createPostElement(post);
                     postList.appendChild(postElement);
                 });

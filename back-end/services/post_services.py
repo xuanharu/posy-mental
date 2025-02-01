@@ -31,17 +31,20 @@ def get_post(post_id):
     return db_mongodb['posts'].find_one({"_id": ObjectId(post_id)})
 
 @helpers.iterable_handler
-def create_post(title, content, image_url, author, tags=None):
-    result = db_mongodb['posts'].insert_one(
-        {
-            "title": title,
-            "content": content,
-            "imageUrl": image_url,
-            "author": author,
-            "tags": tags or [],
-            "createdAt": datetime.now()
-        }
-    )
+def create_post(title, content, image_url, author, tags=None, source=None):
+    post_data = {
+        "title": title,
+        "content": content,
+        "imageUrl": image_url,
+        "author": author,
+        "tags": tags or [],
+        "createdAt": datetime.now()
+    }
+    
+    if source:
+        post_data["source"] = source
+        
+    result = db_mongodb['posts'].insert_one(post_data)
     return result.inserted_id
 
 @helpers.iterable_handler
@@ -122,3 +125,11 @@ def delete_comment(comment_id: str):
     """Delete a comment"""
     result = db_mongodb['comments'].delete_one({"_id": ObjectId(comment_id)})
     return result.deleted_count
+
+@helpers.iterable_handler
+def get_crawled_posts():
+    """Get all posts that have a source URL (crawled posts)"""
+    cursor = db_mongodb['posts'].find(
+        {"source": {"$exists": True}}
+    ).sort("createdAt", -1)  # Sort by newest first
+    return list(cursor)

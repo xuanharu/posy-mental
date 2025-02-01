@@ -641,7 +641,9 @@
 
                     async function loadPosts() {
                         try {
-                            allPosts = await getPosts();
+                            const posts = await getPosts();
+                            // Filter out crawled posts (posts with source URLs)
+                            allPosts = posts.filter(post => !post.source);
                             if (allPosts && allPosts.length > 0) {
                                 // Collect all unique tags
                                 allPosts.forEach(post => {
