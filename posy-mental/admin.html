@@ -276,7 +276,10 @@
     <!-- Start Contact Us -->
     <section class="contact-us section">
         <div class="container">
-            <h1>Manage Posts</h1>
+            <div class="text-center mb-4">
+                <a href="admin.html" class="btn btn-primary active" style="font-size: 1.2em; padding: 10px 30px; margin-right: 25px;">Manage Posts</a>
+                <a href="crawled-posts.html" class="btn btn-outline-primary" style="font-size: 1.2em; padding: 10px 30px; margin-left: 25px;">Crawled Articles</a>
+            </div>
 
             <div class="mb-3 action-buttons">
                 <button class="btn btn-success" onclick="createNewPost()">Create New</button>
@@ -521,6 +524,37 @@
                     console.error('Error deleting post:', error);
                     alert('Failed to delete post: ' + error.message);
                 }
+            }
+        }
+
+        async function crawlPost() {
+            const urlInput = document.getElementById('crawl-url');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter a URL to crawl');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8000/crawl/crawl?url=${encodeURIComponent(url)}`, {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                alert('Post crawled successfully!');
+                urlInput.value = ''; // Clear the input
+                loadPosts(); // Reload the posts list to show the new crawled post
+            } catch (error) {
+                console.error('Error crawling post:', error);
+                alert('Failed to crawl post: ' + error.message);
             }
         }
     </script>

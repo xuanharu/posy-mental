@@ -365,22 +365,31 @@
     <script src="js/main.js"></script>
 
     <script src="articles_data.js"></script>
+    <script src="post_apis.js"></script>
     <script>
         // Function to create article card HTML
         function createArticleCard(article) {
+            const isRegularArticle = 'id' in article;
+            const id = isRegularArticle ? article.id : article._id;
+            const image = isRegularArticle ? article.image : (article.imageUrl || 'images/chatting_boy.jpeg');
+            const excerpt = isRegularArticle ? article.excerpt : article.content.substring(0, 150) + '...';
+            const date = isRegularArticle ? article.date : new Date(article.createdAt).toLocaleDateString();
+            const category = article.category || 'General';
+
             return `
                 <div class="col-lg-6 col-md-6 col-12">
-                    <div class="article-card" data-category="${article.category}">
-                        <img src="${article.image}" alt="${article.title}" class="article-image">
+                    <div class="article-card" data-category="${category}">
+                        <img src="${image}" alt="${article.title}" class="article-image">
                         <div class="article-content">
                             <h3 class="article-title">
-                                <a href="article-single.html?id=${article.id}">${article.title}</a>
+                                <a href="article-single.html?id=${id}&type=${isRegularArticle ? 'article' : 'post'}">${article.title}</a>
                             </h3>
-                            <p class="article-excerpt">${article.excerpt}</p>
+                            <p class="article-excerpt">${excerpt}</p>
                             <div class="article-meta">
-                                <span><i class="fa fa-user"></i>${article.author}</span>
-                                <span><i class="fa fa-calendar"></i>${article.date}</span>
-                                <span><i class="fa fa-folder"></i>${article.category}</span>
+                                <span><i class="fa fa-user"></i>${article.author || 'Unknown'}</span>
+                                <span><i class="fa fa-calendar"></i>${date}</span>
+                                <span><i class="fa fa-folder"></i>${category}</span>
+                                ${article.sourceUrl ? `<span><i class="fa fa-link"></i>Crawled</span>` : ''}
                             </div>
                         </div>
                     </div>
@@ -388,28 +397,54 @@
             `;
         }
 
+        // Function to load all articles
+        async function loadAllArticles() {
+            try {
+                // Get both regular articles and crawled posts
+                const regularArticles = window.articles || [];
+                const crawledPosts = await getCrawledPosts();
+                return [...regularArticles, ...crawledPosts];
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                alert('Failed to load some articles: ' + error.message);
+                return window.articles || [];
+            }
+        }
+
         // Function to filter articles by category
-        function filterArticles(category) {
+        async function filterArticles(category) {
             const grid = document.getElementById('articlesGrid');
-            grid.innerHTML = window.articles
-                .filter(article => category === 'all' || article.category === category)
-                .map(createArticleCard)
-                .join('');
+            grid.innerHTML = ''; // Clear grid
+
+            try {
+                const allArticles = await loadAllArticles();
+                const filteredArticles = allArticles.filter(article => 
+                    category === 'all' || article.category === category
+                );
+                grid.innerHTML = filteredArticles.map(createArticleCard).join('');
+            } catch (error) {
+                console.error('Error filtering articles:', error);
+                alert('Failed to filter articles: ' + error.message);
+            }
         }
 
         // Function to search articles
-        function searchArticles(query) {
+        async function searchArticles(query) {
             const grid = document.getElementById('articlesGrid');
             const searchTerm = query.toLowerCase();
 
-            grid.innerHTML = window.articles
-                .filter(article =>
+            try {
+                const allArticles = await loadAllArticles();
+                const filteredArticles = allArticles.filter(article =>
                     article.title.toLowerCase().includes(searchTerm) ||
-                    article.excerpt.toLowerCase().includes(searchTerm) ||
-                    article.category.toLowerCase().includes(searchTerm)
-                )
-                .map(createArticleCard)
-                .join('');
+                    (article.excerpt || article.content).toLowerCase().includes(searchTerm) ||
+                    (article.category || 'General').toLowerCase().includes(searchTerm)
+                );
+                grid.innerHTML = filteredArticles.map(createArticleCard).join('');
+            } catch (error) {
+                console.error('Error searching articles:', error);
+                alert('Failed to search articles: ' + error.message);
+            }
         }
 
         // Event listeners
@@ -424,18 +459,16 @@
                 });
             });
 
-            // Search input
+            // Search input with debounce
             const searchInput = document.getElementById('searchInput');
+            let searchTimeout;
             searchInput.addEventListener('input', function() {
-                searchArticles(this.value);
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => searchArticles(this.value), 300);
             });
 
             // Load initial articles
-            if (window.articles) {
-                filterArticles('all');
-            } else {
-                console.error('Articles data not loaded');
-            }
+            filterArticles('all');
         });
     </script>
 </body>

@@ -383,6 +383,7 @@
     <script src="js/main.js"></script>
 
     <script src="articles_data.js"></script>
+    <script src="post_apis.js"></script>
     <script>
         // Function to get URL parameters
         function getUrlParam(param) {
@@ -391,15 +392,27 @@
         }
 
         // Function to load article content
-        function loadArticle() {
+        async function loadArticle() {
             const articleId = getUrlParam('id');
-            if (!articleId || !window.articles) {
+            const type = getUrlParam('type') || 'article';
+
+            if (!articleId) {
                 window.location.href = 'articles.html';
                 return;
             }
 
             try {
-                const article = window.articles.find(a => a.id === articleId);
+                let article;
+                if (type === 'article') {
+                    if (!window.articles) {
+                        throw new Error('Articles data not loaded');
+                    }
+                    article = window.articles.find(a => a.id === articleId);
+                } else {
+                    // Load crawled post
+                    article = await getPost(articleId);
+                }
+
                 if (!article) {
                     window.location.href = 'articles.html';
                     return;
@@ -408,11 +421,14 @@
                 // Update page content
                 document.title = `${article.title} - Posy Mental Health`;
                 document.getElementById('articleTitle').textContent = article.title;
-                document.getElementById('articleImage').src = article.image;
-                document.getElementById('articleAuthor').textContent = article.author;
-                document.getElementById('articleDate').textContent = article.date;
-                document.getElementById('articleCategory').textContent = article.category;
-                document.getElementById('articleContent').innerHTML = article.content;
+                document.getElementById('articleImage').src = type === 'article' ? article.image : (article.imageUrl || 'images/chatting_boy.jpeg');
+                document.getElementById('articleAuthor').textContent = article.author || 'Unknown';
+                document.getElementById('articleDate').textContent = type === 'article' ? article.date : new Date(article.createdAt).toLocaleDateString();
+                document.getElementById('articleCategory').textContent = article.category || 'General';
+                document.getElementById('articleContent').innerHTML = type === 'article' ? article.content : `
+                    ${article.sourceUrl ? `<p><strong>Source:</strong> <a href="${article.sourceUrl}" target="_blank">${article.sourceUrl}</a></p>` : ''}
+                    ${article.content}
+                `;
 
                 // Display tags
                 const tagsContainer = document.getElementById('articleTags');
@@ -423,7 +439,7 @@
                 }
 
                 // Load related articles
-                loadRelatedArticles(article);
+                await loadRelatedArticles(article, type);
             } catch (error) {
                 console.error('Error loading article:', error);
                 window.location.href = 'articles.html';
@@ -431,36 +447,63 @@
         }
 
         // Function to load related articles
-        function loadRelatedArticles(currentArticle) {
+        async function loadRelatedArticles(currentArticle, type) {
             const relatedContainer = document.getElementById('relatedArticles');
 
-            const relatedArticles = window.articles
-                .filter(article =>
-                    article.id !== currentArticle.id &&
-                    article.category === currentArticle.category
-                )
-                .slice(0, 3);
+            try {
+                let relatedArticles = [];
+                const category = currentArticle.category || 'General';
 
-            if (relatedArticles.length === 0) {
-                relatedContainer.innerHTML = '<p>No related articles found</p>';
-                return;
-            }
+                // Get articles from both sources
+                const regularArticles = (window.articles || [])
+                    .filter(article => 
+                        (type === 'post' || article.id !== currentArticle.id) &&
+                        article.category === category
+                    );
 
-            relatedContainer.innerHTML = relatedArticles
-                .map(article => `
-                    <div class="related-article-card">
-                        <img src="${article.image}" alt="${article.title}" class="related-article-image">
-                        <div class="related-article-content">
-                            <h4 class="related-article-title">
-                                <a href="article-single.html?id=${article.id}">${article.title}</a>
-                            </h4>
-                            <div class="related-article-meta">
-                                <span><i class="fa fa-calendar"></i>${article.date}</span>
+                const crawledPosts = await getCrawledPosts();
+                const relatedPosts = crawledPosts
+                    .filter(post => 
+                        (type === 'article' || post._id !== currentArticle._id) &&
+                        (post.category === category)
+                    );
+
+                // Combine and limit to 3 related items
+                relatedArticles = [...regularArticles, ...relatedPosts]
+                    .slice(0, 3);
+
+                if (relatedArticles.length === 0) {
+                    relatedContainer.innerHTML = '<p>No related articles found</p>';
+                    return;
+                }
+
+                relatedContainer.innerHTML = relatedArticles
+                    .map(article => {
+                        const isRegularArticle = 'id' in article;
+                        const id = isRegularArticle ? article.id : article._id;
+                        const image = isRegularArticle ? article.image : (article.imageUrl || 'images/chatting_boy.jpeg');
+                        const date = isRegularArticle ? article.date : new Date(article.createdAt).toLocaleDateString();
+
+                        return `
+                            <div class="related-article-card">
+                                <img src="${image}" alt="${article.title}" class="related-article-image">
+                                <div class="related-article-content">
+                                    <h4 class="related-article-title">
+                                        <a href="article-single.html?id=${id}&type=${isRegularArticle ? 'article' : 'post'}">${article.title}</a>
+                                    </h4>
+                                    <div class="related-article-meta">
+                                        <span><i class="fa fa-calendar"></i>${date}</span>
+                                        ${article.sourceUrl ? '<span><i class="fa fa-link"></i>Crawled</span>' : ''}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                `)
-                .join('');
+                        `;
+                    })
+                    .join('');
+            } catch (error) {
+                console.error('Error loading related articles:', error);
+                relatedContainer.innerHTML = '<p>Failed to load related articles</p>';
+            }
         }
 
         // Load article when page loads

@@ -1,0 +1,364 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="Site keywords here">
+    <meta name="description" content="">
+    <meta name='copyright' content=''>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Title -->
+    <title>Manage Crawled Posts - Posy Mental Health</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Nice Select CSS -->
+    <link rel="stylesheet" href="css/nice-select.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- icofont CSS -->
+    <link rel="stylesheet" href="css/icofont.css">
+    <!-- Slicknav -->
+    <link rel="stylesheet" href="css/slicknav.min.css">
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="css/owl-carousel.css">
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="css/datepicker.css">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="css/animate.min.css">
+    <!-- Magnific Popup CSS -->
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <!-- Medipro CSS -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <style>
+         :root {
+            --primary-color: #2074d4;
+            --danger-color: #f44336;
+            --success-color: #2074d4;
+            --border-color: #e0e0e0;
+            --text-color: #333;
+            --background-hover: #f8f9fa;
+        }
+        
+        .crawl-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .crawl-input {
+            margin-bottom: 20px;
+        }
+        
+        .crawl-history {
+            margin-top: 30px;
+        }
+        
+        .post {
+            position: relative;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            gap: 20px;
+        }
+        
+        .post-image {
+            flex: 0 0 200px;
+            height: 200px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .post-content-wrapper {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .post:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background: var(--background-hover);
+        }
+        
+        .post-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+        
+        .post-content {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-height: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .post-date {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .post-source {
+            color: var(--primary-color);
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            word-break: break-all;
+        }
+        
+        .btn-crawl {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-crawl:hover {
+            background-color: #1756a9;
+            transform: translateY(-1px);
+        }
+        
+        .loading {
+            display: none;
+            margin-left: 10px;
+        }
+        
+        .loading.active {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Area -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="container">
+                <div class="inner">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-12">
+                            <div class="logo">
+                                <a href="index.html"><img src="images/logo_cbg.png" alt="Posy"></a>
+                            </div>
+                            <div class="mobile-nav"></div>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-12">
+                        </div>
+                        <div class="col-lg-2 col-12">
+                            <div class="get-quote">
+                                <a href="login.html" class="btn">Get Started</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Header Area -->
+
+    <!-- Start Contact Us -->
+    <section class="contact-us section">
+        <div class="container">
+            <div class="text-center mb-4">
+                <a href="admin.html" class="btn btn-outline-primary" style="font-size: 1.2em; padding: 10px 30px; margin-right: 25px;">Manage Posts</a>
+                <a href="crawled-posts.html" class="btn btn-primary active" style="font-size: 1.2em; padding: 10px 30px; margin-left: 25px;">Crawled Articles</a>
+            </div>
+
+            <!-- Crawl Section -->
+            <div class="crawl-section">
+                <h2>Crawl New Post</h2>
+                <div class="crawl-input">
+                    <div class="input-group">
+                        <input type="text" id="crawl-url" class="form-control" placeholder="Enter URL to crawl (e.g., https://www.psychologytoday.com/us/blog/...)">
+                        <div class="input-group-append">
+                            <button class="btn btn-crawl" onclick="crawlPost()">
+                                <span>Crawl Post</span>
+                                <span class="loading">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crawl History -->
+                <div class="crawl-history">
+                    <h3>Recent Crawls</h3>
+                    <div id="crawl-history-list">
+                        <!-- Crawl history items will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crawled Posts List -->
+            <div id="crawled-posts-list">
+                <!-- Crawled posts will be loaded here -->
+            </div>
+        </div>
+    </section>
+    <!--/ End Contact Us -->
+
+    <!-- jquery Min JS -->
+    <script src="js/jquery.min.js"></script>
+    <!-- jquery Migrate JS -->
+    <script src="js/jquery-migrate-3.0.0.js"></script>
+    <!-- jquery Ui JS -->
+    <script src="js/jquery-ui.min.js"></script>
+    <!-- Easing JS -->
+    <script src="js/easing.js"></script>
+    <!-- Color JS -->
+    <script src="js/colors.js"></script>
+    <!-- Popper JS -->
+    <script src="js/popper.min.js"></script>
+    <!-- Bootstrap Datepicker JS -->
+    <script src="js/bootstrap-datepicker.js"></script>
+    <!-- Jquery Nav JS -->
+    <script src="js/jquery.nav.js"></script>
+    <!-- Slicknav JS -->
+    <script src="js/slicknav.min.js"></script>
+    <!-- ScrollUp JS -->
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <!-- Niceselect JS -->
+    <script src="js/niceselect.js"></script>
+    <!-- Tilt Jquery JS -->
+    <script src="js/tilt.jquery.min.js"></script>
+    <!-- Owl Carousel JS -->
+    <script src="js/owl-carousel.js"></script>
+    <!-- counterup JS -->
+    <script src="js/jquery.counterup.min.js"></script>
+    <!-- Steller JS -->
+    <script src="js/steller.js"></script>
+    <!-- Wow JS -->
+    <script src="js/wow.min.js"></script>
+    <!-- Magnific Popup JS -->
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+    <!-- Post APIs -->
+    <script src="post_apis.js"></script>
+
+    <script>
+        // Load crawled posts when page loads
+        window.addEventListener('DOMContentLoaded', loadCrawledPosts);
+
+        async function loadCrawledPosts() {
+            try {
+                const posts = await getCrawledPosts();
+                const postsContainer = document.getElementById('crawled-posts-list');
+                postsContainer.innerHTML = ''; // Clear existing posts
+
+                posts.forEach(post => {
+                    const postElement = createPostElement(post);
+                    postsContainer.appendChild(postElement);
+                });
+            } catch (error) {
+                console.error('Error loading crawled posts:', error);
+                alert('Failed to load crawled posts: ' + error.message);
+            }
+        }
+
+        function createPostElement(post) {
+            const div = document.createElement('div');
+            div.className = 'post';
+
+            const date = new Date(post.createdAt);
+            const formattedDate = date.toLocaleString();
+
+            div.innerHTML = `
+                <div class="post-image">
+                    <img src="${post.imageUrl || 'images/chatting_boy.jpeg'}" alt="${post.title}">
+                </div>
+                <div class="post-content-wrapper">
+                    <div class="post-title">${post.title}</div>
+                    <div class="post-content">${post.content}</div>
+                    <div class="post-source">Source: <a href="${post.sourceUrl}" target="_blank">${post.sourceUrl}</a></div>
+                    <div class="post-date">Crawled on: ${formattedDate}</div>
+                    <div class="mt-2">
+                        <a href="article-single.html?id=${post._id}&type=post" class="btn btn-primary">Read More</a>
+                    </div>
+                </div>
+            `;
+
+            return div;
+        }
+
+        async function crawlPost() {
+            const urlInput = document.getElementById('crawl-url');
+            const url = urlInput.value.trim();
+            const loadingSpinner = document.querySelector('.loading');
+
+            if (!url) {
+                alert('Please enter a URL to crawl');
+                return;
+            }
+
+            try {
+                loadingSpinner.classList.add('active');
+                const response = await fetch(`http://localhost:8000/crawl/crawl?url=${encodeURIComponent(url)}`, {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // Get the newly crawled post
+                const post = await getPost(result.id);
+
+                // Create and prepend the new post element at the top of the list
+                const postElement = createPostElement(post);
+                const postsContainer = document.getElementById('crawled-posts-list');
+                postsContainer.insertBefore(postElement, postsContainer.firstChild);
+
+                alert('Post crawled successfully!');
+                urlInput.value = ''; // Clear the input
+            } catch (error) {
+                console.error('Error crawling post:', error);
+                alert('Failed to crawl post: ' + error.message);
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
