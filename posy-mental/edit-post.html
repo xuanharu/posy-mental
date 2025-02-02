@@ -375,6 +375,15 @@
                         document.getElementById('content').value = postData.content;
                     }
 
+                    // Set image preview for existing image
+                    if (postData.imageUrl) {
+                        const preview = document.getElementById('imagePreview');
+                        const img = document.createElement('img');
+                        img.src = postData.imageUrl;
+                        preview.innerHTML = ''; // Clear any existing preview
+                        preview.appendChild(img);
+                    }
+
                     // Set selected tags and post types
                     if (postData.tags) {
                         // Handle regular tags
@@ -428,10 +437,14 @@
                         reader.onload = (e) => resolve(e.target.result);
                         reader.readAsDataURL(imageFile);
                     });
-                } else {
+                } else if (mode === 'edit' && postId) {
+                    // For edit mode, use the existing image from preview if no new image selected
                     const preview = document.getElementById('imagePreview');
                     const existingImg = preview.querySelector('img');
                     imageUrl = existingImg ? existingImg.src : 'images/chatting_boy.jpeg';
+                } else {
+                    // For create mode, use default image
+                    imageUrl = 'images/chatting_boy.jpeg';
                 }
 
                 // Validate required fields
