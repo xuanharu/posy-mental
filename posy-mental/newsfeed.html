@@ -641,8 +641,9 @@
                     async function loadPosts() {
                         try {
                             const posts = await getPosts();
-                            // Filter out crawled posts (posts with source URLs)
-                            allPosts = posts.filter(post => !post.source);
+                            // Filter out crawled posts (posts with source URLs) and sort by date
+                            allPosts = posts.filter(post => !post.source)
+                                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                             if (allPosts && allPosts.length > 0) {
                                 // Collect all unique tags
                                 allPosts.forEach(post => {
