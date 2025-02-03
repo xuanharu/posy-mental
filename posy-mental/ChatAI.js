@@ -32,7 +32,7 @@ async function loadChatHistory(chatHistoryId) {
     try {
         const history = await getChatHistoryById(chatHistoryId);
         currentChatHistoryId = chatHistoryId;
-        
+
         // Update active chat item
         document.querySelectorAll('.chat-item').forEach(item => {
             item.classList.remove('active');
@@ -65,7 +65,7 @@ async function loadChatHistory(chatHistoryId) {
 // Setup event listeners
 function setupEventListeners() {
     // New chat button
-    document.getElementById('newChatBtn').onclick = async () => {
+    document.getElementById('newChatBtn').onclick = async() => {
         const name = prompt('Enter conversation name:');
         if (name) {
             try {
@@ -98,8 +98,26 @@ function setupEventListeners() {
             messageInput.disabled = true;
             sendBtn.disabled = true;
 
-            // Add user message to UI
+            // Add loading bubble
             const messagesContainer = document.getElementById('messages');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message assistant';
+            loadingDiv.innerHTML = `
+                <div class="message-content loading">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+            `;
+            messagesContainer.appendChild(loadingDiv);
+
+            // Send message to API
+            const response = await sendChatMessage(currentChatHistoryId, message);
+
+            // Remove loading bubble and add both messages
+            messagesContainer.removeChild(loadingDiv);
+
+            // Add user message
             const userMessageDiv = document.createElement('div');
             userMessageDiv.className = 'message user';
             userMessageDiv.innerHTML = `
@@ -108,10 +126,7 @@ function setupEventListeners() {
             `;
             messagesContainer.appendChild(userMessageDiv);
 
-            // Send message to API
-            const response = await sendChatMessage(currentChatHistoryId, message);
-
-            // Add AI response to UI
+            // Add AI response
             const aiMessageDiv = document.createElement('div');
             aiMessageDiv.className = 'message assistant';
             aiMessageDiv.innerHTML = `
