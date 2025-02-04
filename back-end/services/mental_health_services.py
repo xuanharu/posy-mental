@@ -56,6 +56,66 @@ SYMPTOM_QUESTIONS = {
             "text": "How do you typically cope with stress?",
             "options": ["Exercise", "Meditation", "Social support", "Avoidance"]
         }
+    ],
+    "Mood Swings": [
+        {
+            "text": "How frequently do you experience mood swings?",
+            "options": ["Multiple times daily", "Daily", "Several times a week", "Weekly"]
+        },
+        {
+            "text": "How severe are your mood changes typically?",
+            "options": ["Very severe", "Moderate", "Mild", "Minimal"]
+        }
+    ],
+    "Social Withdrawal": [
+        {
+            "text": "How often do you avoid social interactions?",
+            "options": ["Almost always", "Frequently", "Sometimes", "Rarely"]
+        },
+        {
+            "text": "What type of social situations do you most often avoid?",
+            "options": ["Large groups", "Small gatherings", "One-on-one interactions", "Specific situations"]
+        }
+    ],
+    "Concentration Problems": [
+        {
+            "text": "How often do you have difficulty focusing?",
+            "options": ["Almost constantly", "Several times a day", "Occasionally", "Rarely"]
+        },
+        {
+            "text": "When is your concentration typically worst?",
+            "options": ["Morning", "Afternoon", "Evening", "It varies"]
+        }
+    ],
+    "Fatigue": [
+        {
+            "text": "How often do you feel extremely tired?",
+            "options": ["All day", "Most of the day", "Several hours", "Occasionally"]
+        },
+        {
+            "text": "Does rest improve your energy levels?",
+            "options": ["Not at all", "Slightly", "Moderately", "Significantly"]
+        }
+    ],
+    "Loss of Interest": [
+        {
+            "text": "How many activities have you lost interest in?",
+            "options": ["Most activities", "Several activities", "A few activities", "One or two activities"]
+        },
+        {
+            "text": "How long have you experienced this loss of interest?",
+            "options": ["More than 2 months", "1-2 months", "2-4 weeks", "Less than 2 weeks"]
+        }
+    ],
+    "Irritability": [
+        {
+            "text": "How often do you feel irritable?",
+            "options": ["Almost constantly", "Several times a day", "A few times a week", "Occasionally"]
+        },
+        {
+            "text": "What typically triggers your irritability?",
+            "options": ["Minor frustrations", "Specific situations", "People", "Environmental factors"]
+        }
     ]
 }
 
@@ -101,11 +161,12 @@ async def generate_mental_health_advice(symptoms: List[str], answers: Dict[str, 
     context = f"Based on the following symptoms and responses:\n"
     for symptom in symptoms:
         context += f"\nSymptom: {symptom}"
-        for q_key, answer in answers.items():
-            if q_key.startswith(symptom):
-                context += f"\nQ: {q_key}\nA: {answer}"
+        # Find questions related to this symptom
+        symptom_questions = [q for q, a in answers.items() if symptom.lower() in q.lower()]
+        for question in symptom_questions:
+            context += f"\nQ: {question}\nA: {answers[question]}"
     
-    prompt = f"{context}\n\nProvide:\n1. A brief assessment of potential mental health status\n2. Personalized advice and coping strategies\n3. Recommended professional help if needed\n4. Keywords for related articles"
+    prompt = f"{context}\n\nProvide a response with:\n1. assessment: A brief assessment of potential mental health status\n2. advice: Personalized advice and coping strategies\n3. professional_help: Recommended professional help if needed\n4. related_keywords: A list of keywords for related articles\n\nEnsure the response is properly formatted as JSON with these exact field names."
     
     response = await run_llm_structure_output(
         system="You are a mental health advisor. Analyze symptoms and provide personalized advice.",
