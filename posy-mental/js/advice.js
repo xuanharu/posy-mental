@@ -43,62 +43,137 @@ function renderSymptoms() {
     `).join('');
 }
 
+// Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 // Setup event listeners
 function setupEventListeners() {
-    // Symptom selection
+    // Clear existing content and re-render
+    symptomsContainer.innerHTML = '';
+    renderSymptoms();
+
+    // Debounced symptom click handler
+    const debouncedToggle = debounce(async(target) => {
+        if (!target.classList.contains('symptom-tag')) return;
+
+        // Add visual feedback
+        target.style.opacity = '0.6';
+        target.style.pointerEvents = 'none';
+
+        try {
+            await toggleSymptom(target);
+        } finally {
+            // Remove visual feedback
+            target.style.opacity = '';
+            target.style.pointerEvents = '';
+        }
+    }, 300);
+
+    // Symptom selection with event delegation
     symptomsContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('symptom-tag')) {
-            toggleSymptom(e.target);
+        debouncedToggle(e.target);
+    });
+
+    // Generate button click handler
+    generateBtn.addEventListener('click', debounce(async() => {
+        generateBtn.disabled = true;
+        try {
+            await fetchQuestions();
+        } finally {
+            generateBtn.disabled = false;
+        }
+    }, 300));
+
+    // Navigation buttons
+    prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!prevBtn.disabled) {
+            showPreviousQuestion();
         }
     });
 
-    // Generate button
-    generateBtn.addEventListener('click', fetchQuestions);
+    nextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!nextBtn.disabled) {
+            handleNextButton();
+        }
+    });
 
-    // Navigation buttons
-    prevBtn.addEventListener('click', showPreviousQuestion);
-    nextBtn.addEventListener('click', handleNextButton);
+    // Ensure buttons are properly initialized
+    updateNavigationButtons();
 }
 
 // Toggle symptom selection
-function toggleSymptom(element) {
-    const symptom = element.dataset.symptom;
-    element.classList.toggle('selected');
+async function toggleSymptom(element) {
+    return new Promise((resolve) => {
+        const symptom = element.dataset.symptom;
+        const wasSelected = element.classList.contains('selected');
 
-    if (element.classList.contains('selected')) {
-        selectedSymptoms.push(symptom);
-    } else {
-        selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
-    }
+        // Update visual state
+        element.classList.toggle('selected');
 
-    if (selectedSymptoms.length > 0) {
-        generateBtn.style.display = 'inline-block';
-    } else {
-        generateBtn.style.display = 'none';
-        hideQuestions();
-    }
+        // Update selected symptoms array
+        if (!wasSelected) {
+            selectedSymptoms.push(symptom);
+        } else {
+            selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
+        }
+
+        // Update generate button visibility
+        if (selectedSymptoms.length > 0) {
+            generateBtn.style.display = 'inline-block';
+        } else {
+            generateBtn.style.display = 'none';
+            hideQuestions();
+        }
+
+        resolve();
+    });
 }
 
 // Fetch questions from backend
 async function fetchQuestions() {
+    console.log('Fetching questions for symptoms:', selectedSymptoms);
     try {
+        if (selectedSymptoms.length === 0) {
+            throw new Error('Please select at least one symptom');
+        }
+
+        const requestBody = { symptoms: selectedSymptoms };
         const response = await fetch('http://localhost:8000/mental-health/get_questions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
-            body: JSON.stringify({ symptoms: selectedSymptoms })
+            body: JSON.stringify(requestBody)
         });
 
-        if (!response.ok) throw new Error('Failed to fetch questions');
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
 
         const data = await response.json();
+        if (!data.questions || !Array.isArray(data.questions)) {
+            throw new Error('Invalid response format: missing questions array');
+        }
+
         currentQuestions = data.questions;
         currentQuestionIndex = 0;
         showQuestions();
     } catch (error) {
         console.error('Error fetching questions:', error);
-        alert('Failed to load questions. Please try again.');
+        alert(error.message || 'Failed to load questions. Please try again.');
     }
 }
 
@@ -122,7 +197,20 @@ function hideQuestions() {
 // Display current question
 function displayCurrentQuestion() {
     const question = currentQuestions[currentQuestionIndex];
-    questionText.textContent = question.question;
+    if (!question) {
+        console.error('No question found for index:', currentQuestionIndex);
+        return;
+    }
+
+    // Show symptom context along with the question
+    questionText.innerHTML = `
+        <div class="symptom-context mb-3">
+            <span class="badge bg-primary">${question.symptom}</span>
+        </div>
+        <div class="question-text">
+            ${question.question}
+        </div>
+    `;
 
     optionsContainer.innerHTML = question.options.map(option => `
         <button class="option-btn ${userAnswers[question.question] === option ? 'selected' : ''}" 
@@ -136,7 +224,6 @@ function displayCurrentQuestion() {
         btn.addEventListener('click', () => selectOption(btn, question.question));
     });
 
-    // Update navigation buttons
     updateNavigationButtons();
 }
 
@@ -154,8 +241,28 @@ function selectOption(button, question) {
 
 // Update navigation buttons
 function updateNavigationButtons() {
+    console.log('Updating navigation buttons:', {
+        currentIndex: currentQuestionIndex,
+        totalQuestions: currentQuestions.length,
+        isLastQuestion: currentQuestionIndex === currentQuestions.length - 1
+    });
+
     prevBtn.disabled = currentQuestionIndex === 0;
+    nextBtn.disabled = false;
     nextBtn.textContent = currentQuestionIndex === currentQuestions.length - 1 ? 'Get Advice' : 'Next';
+
+    // Ensure buttons are visible and clickable
+    prevBtn.style.display = 'inline-block';
+    nextBtn.style.display = 'inline-block';
+    prevBtn.style.pointerEvents = prevBtn.disabled ? 'none' : 'auto';
+    nextBtn.style.pointerEvents = 'auto';
+
+    // Add specific styling for better visibility
+    nextBtn.style.backgroundColor = '#1A76D1';
+    nextBtn.style.color = '#fff';
+    nextBtn.style.padding = '10px 20px';
+    nextBtn.style.borderRadius = '5px';
+    nextBtn.style.cursor = 'pointer';
 }
 
 // Show previous question
@@ -168,16 +275,33 @@ function showPreviousQuestion() {
 
 // Handle next button click
 function handleNextButton() {
-    const currentQuestion = currentQuestions[currentQuestionIndex].question;
+    console.log('Handle next button:', {
+        currentIndex: currentQuestionIndex,
+        totalQuestions: currentQuestions.length,
+        currentAnswers: userAnswers
+    });
 
-    if (!userAnswers[currentQuestion]) {
+    const question = currentQuestions[currentQuestionIndex];
+    if (!question || !question.question) {
+        console.error('No current question found');
+        return;
+    }
+
+    if (!userAnswers[question.question]) {
         alert('Please select an option before proceeding.');
         return;
     }
 
+    console.log('Current question answered:', {
+        question: question.question,
+        answer: userAnswers[question.question]
+    });
+
     if (currentQuestionIndex === currentQuestions.length - 1) {
+        console.log('Last question reached, submitting answers');
         submitAnswers();
     } else {
+        console.log('Moving to next question');
         currentQuestionIndex++;
         displayCurrentQuestion();
     }
@@ -189,7 +313,7 @@ async function submitAnswers() {
         const response = await fetch('http://localhost:8000/mental-health/get_advice', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 symptoms: selectedSymptoms,
@@ -197,13 +321,19 @@ async function submitAnswers() {
             })
         });
 
-        if (!response.ok) throw new Error('Failed to get advice');
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
 
-        const advice = await response.json();
-        displayAdvice(advice);
+        const data = await response.json();
+        if (!data.assessment || !data.advice) {
+            throw new Error('Invalid response format from server');
+        }
+
+        displayAdvice(data);
     } catch (error) {
         console.error('Error getting advice:', error);
-        alert('Failed to generate advice. Please try again.');
+        alert(error.message || 'Failed to generate advice. Please try again.');
     }
 }
 
@@ -237,14 +367,48 @@ function displayAdvice(advice) {
 
 // Fetch related articles based on keywords
 async function fetchRelatedArticles(keywords) {
-    // This function would integrate with your existing articles system
-    // For now, we'll just display the keywords
-    relatedPostsList.innerHTML = `
-        <div class="related-post-item">
-            <p>Related topics: ${keywords.join(', ')}</p>
-            <p>Check our Articles section for more information on these topics.</p>
-        </div>
-    `;
+    try {
+        // First try to fetch articles from your articles system
+        const response = await fetch('http://localhost:8000/posts/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                keywords: keywords,
+                limit: 3
+            })
+        });
+
+        if (response.ok) {
+            const articles = await response.json();
+            if (articles && articles.length > 0) {
+                relatedPostsList.innerHTML = articles.map(article => `
+                    <div class="related-post-item">
+                        <h5><a href="/article-single.html?id=${article.id}">${article.title}</a></h5>
+                        <p>${article.excerpt || article.description}</p>
+                    </div>
+                `).join('');
+                return;
+            }
+        }
+
+        // Fallback to displaying keywords if no articles found
+        relatedPostsList.innerHTML = `
+            <div class="related-post-item">
+                <p>Related topics: ${keywords.join(', ')}</p>
+                <p>Visit our <a href="/articles.html">Articles section</a> for more information on mental health topics.</p>
+            </div>
+        `;
+    } catch (error) {
+        console.error('Error fetching related articles:', error);
+        relatedPostsList.innerHTML = `
+            <div class="related-post-item">
+                <p>Explore articles about: ${keywords.join(', ')}</p>
+                <p>Visit our <a href="/articles.html">Articles section</a> for more information.</p>
+            </div>
+        `;
+    }
 }
 
 // Initialize the page when DOM is loaded

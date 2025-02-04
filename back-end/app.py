@@ -3,7 +3,9 @@ dotenv.load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from typing import Optional
+import os
 from routers import (
     chatbot_endpoints,
     post_endpoints,
@@ -35,6 +37,10 @@ app.include_router(post_endpoints.router, prefix="/post", tags=["post on newfeed
 app.include_router(auth_endpoints.router, prefix="/auth", tags=["authentication"])
 app.include_router(crawl_endpoint.router, prefix="/crawl", tags=["crawl content from other sources"])
 app.include_router(mental_health_endpoints.router, prefix="/mental-health", tags=["mental health assessment"])
+
+# Mount the static files directory
+static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "posy-mental")
+app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn
