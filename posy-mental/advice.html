@@ -1,0 +1,379 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="Site keywords here">
+    <meta name="description" content="">
+    <meta name='copyright' content=''>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Title -->
+    <title>Posy - Mental Health Advice</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.png">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Nice Select CSS -->
+    <link rel="stylesheet" href="css/nice-select.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- icofont CSS -->
+    <link rel="stylesheet" href="css/icofont.css">
+    <!-- Slicknav -->
+    <link rel="stylesheet" href="css/slicknav.min.css">
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="css/owl-carousel.css">
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="css/datepicker.css">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="css/animate.min.css">
+    <!-- Magnific Popup CSS -->
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <!-- Medipro CSS -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <style>
+        .advice-container {
+            padding: 50px 0;
+            background: #f9f9f9;
+        }
+        
+        .symptoms-container {
+            margin-bottom: 30px;
+        }
+        
+        .symptom-tag {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px;
+            background: #fff;
+            border: 2px solid #1A76D1;
+            border-radius: 20px;
+            color: #1A76D1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .symptom-tag.selected {
+            background: #1A76D1;
+            color: #fff;
+        }
+        
+        .question-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .options-container {
+            margin-top: 20px;
+        }
+        
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #eee;
+            border-radius: 5px;
+            background: #fff;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover {
+            border-color: #1A76D1;
+            background: #f8f9fa;
+        }
+        
+        .option-btn.selected {
+            border-color: #1A76D1;
+            background: #e3f2fd;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #1A76D1;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .advice-result {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .advice-result.active {
+            display: block;
+        }
+        
+        .related-posts {
+            margin-top: 20px;
+        }
+        
+        .related-post-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 3px solid #1A76D1;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Area -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="container">
+                <div class="inner">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-12">
+                            <div class="logo">
+                                <a href="index.html"><img src="images/logo_cbg.png" alt="Posy"></a>
+                            </div>
+                            <div class="mobile-nav"></div>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-12">
+                            <div class="main-menu">
+                                <nav class="navigation">
+                                    <ul class="nav menu">
+                                        <li><a href="index.html">Home</a></li>
+                                        <li>
+                                            <a href="#">News<i class="icofont-rounded-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li><a href="newsfeed.html">Admin Posts</a></li>
+                                                <li><a href="articles.html">Featured Articles</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="chat.html">AI Chatbot</a></li>
+                                        <li class="active"><a href="advice.html">Mental Health Advice</a></li>
+                                        <li><a href="#">Help<i class="icofont-rounded-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li>
+                                                    <a href="portfolio-details.html">Services</a>
+                                                    <a href="contact.html">Contact</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-12">
+                            <div class="get-quote">
+                                <a href="login.html" class="btn">Get Started</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Header Area -->
+
+    <!-- Start Advice Section -->
+    <section class="advice-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title">
+                        <h2>Mental Health Assessment</h2>
+                        <p>Select the symptoms you're experiencing to receive personalized advice and recommendations.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="symptoms-container" id="symptomsContainer">
+                        <!-- Symptoms will be added here dynamically -->
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="nav-btn" id="generateBtn" style="display: none;">Generate Advice</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="question-container" id="questionContainer">
+                        <h4 id="questionText"></h4>
+                        <div class="options-container" id="optionsContainer">
+                            <!-- Options will be added here dynamically -->
+                        </div>
+                        <div class="navigation-buttons">
+                            <button class="nav-btn" id="prevBtn" disabled>Previous</button>
+                            <button class="nav-btn" id="nextBtn">Next</button>
+                        </div>
+                    </div>
+
+                    <div class="advice-result" id="adviceResult">
+                        <h3>Your Personalized Mental Health Advice</h3>
+                        <div id="adviceContent"></div>
+                        <div class="related-posts">
+                            <h4>Related Articles</h4>
+                            <div id="relatedPostsList">
+                                <!-- Related posts will be added here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Advice Section -->
+
+    <!-- Footer Area -->
+    <footer id="footer" class="footer">
+        <!-- Footer Top -->
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
+                            <h2>About Us</h2>
+                            <p>Posy is a safe and supportive online space dedicated to promoting mental well-being. Explore our newsfeed, connect with our community, or chat with our AI companion.</p>
+                            <ul class="social">
+                                <li><a href="#"><i class="icofont-facebook"></i></a></li>
+                                <li><a href="#"><i class="icofont-google-plus"></i></a></li>
+                                <li><a href="#"><i class="icofont-twitter"></i></a></li>
+                                <li><a href="#"><i class="icofont-vimeo"></i></a></li>
+                                <li><a href="#"><i class="icofont-pinterest"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer f-link">
+                            <h2>Quick Links</h2>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <ul>
+                                        <li><a href="index.html"><i class="fa fa-caret-right"></i>Home</a></li>
+                                        <li><a href="blog-single.html"><i class="fa fa-caret-right"></i>News</a></li>
+                                        <li><a href="chat.html"><i class="fa fa-caret-right"></i>AI chatbot</a></li>
+                                        <li><a href="portfolio-details.html"><i class="fa fa-caret-right"></i>Services</a></li>
+                                        <li><a href="contact.html"><i class="fa fa-caret-right"></i>Contact Us</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
+                            <h2>Newsletter</h2>
+                            <p>Subscribe to our newsletter to get informed news in your inbox & highlight our recent blog post or article on a specific mental health topic</p>
+                            <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
+                                <input name="email" placeholder="Email Address" class="common-input" onfocus="this.placeholder=''" onblur="this.placeholder='Your email address'" required="" type="email">
+                                <button class="button"><i class="icofont icofont-paper-plane"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
+                            <h2>Contact Us</h2>
+                            <ul class="top-contact" style="color: white;">
+                                <li><i class="fa fa-phone"></i>+89 123 456 789</li>
+                                <li><i class="fa fa-envelope"></i><a href="mailto:support@posy.com">support@posy.com.vn</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ End Footer Top -->
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-12">
+                        <div class="copyright-content">
+                            <p>© Copyright 2024 | All Rights Reserved by Xuan Nguyen</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ End Copyright -->
+    </footer>
+    <!--/ End Footer Area -->
+
+    <!-- jquery Min JS -->
+    <script src="js/jquery.min.js"></script>
+    <!-- jquery Migrate JS -->
+    <script src="js/jquery-migrate-3.0.0.js"></script>
+    <!-- jquery Ui JS -->
+    <script src="js/jquery-ui.min.js"></script>
+    <!-- Easing JS -->
+    <script src="js/easing.js"></script>
+    <!-- Color JS -->
+    <script src="js/colors.js"></script>
+    <!-- Popper JS -->
+    <script src="js/popper.min.js"></script>
+    <!-- Bootstrap Datepicker JS -->
+    <script src="js/bootstrap-datepicker.js"></script>
+    <!-- Jquery Nav JS -->
+    <script src="js/jquery.nav.js"></script>
+    <!-- Slicknav JS -->
+    <script src="js/slicknav.min.js"></script>
+    <!-- ScrollUp JS -->
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <!-- Niceselect JS -->
+    <script src="js/niceselect.js"></script>
+    <!-- Tilt Jquery JS -->
+    <script src="js/tilt.jquery.min.js"></script>
+    <!-- Owl Carousel JS -->
+    <script src="js/owl-carousel.js"></script>
+    <!-- counterup JS -->
+    <script src="js/jquery.counterup.min.js"></script>
+    <!-- Steller JS -->
+    <script src="js/steller.js"></script>
+    <!-- Wow JS -->
+    <script src="js/wow.min.js"></script>
+    <!-- Magnific Popup JS -->
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <!-- Counter Up CDN JS -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+    <!-- Advice JS -->
+    <script src="js/advice.js"></script>
+</body>
+
+</html>
