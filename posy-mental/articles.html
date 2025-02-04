@@ -117,19 +117,100 @@
         
         .search-container {
             margin-bottom: 30px;
+            position: relative;
+            display: flex;
+            gap: 10px;
         }
         
         .search-input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ddd;
+            border: 3px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
+            transition: all 0.3s ease;
         }
         
         .search-input:focus {
             border-color: #1A76D1;
             outline: none;
+            box-shadow: 0 0 5px rgba(26, 118, 209, 0.3);
+        }
+        
+        .clear-search {
+            padding: 0 15px;
+            background: #1A76D1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .clear-search:hover {
+            background-color: #1861b3;
+        }
+        
+        .clear-search:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .search-results.active {
+            display: block;
+        }
+        
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(26, 118, 209, 0.1);
+            color: #1A76D1;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-title {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .search-result-meta {
+            font-size: 0.8em;
+            color: #666;
+        }
+        
+        .search-result-item:hover .search-result-title {
+            color: #1A76D1;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
     </style>
 </head>
@@ -198,12 +279,8 @@
             <div class="bread-inner">
                 <div class="row">
                     <div class="col-12">
-                        <h2>Psychology Articles</h2>
-                        <ul class="bread-list">
-                            <li><a href="index.html">Home</a></li>
-                            <li><i class="icofont-simple-right"></i></li>
-                            <li class="active">Articles</li>
-                        </ul>
+                        <h2>Crawled Articles</h2>
+                        <h3 style="color: white;">These posts are crawled from other web</h3>
                     </div>
                 </div>
             </div>
@@ -219,6 +296,8 @@
                     <!-- Search -->
                     <div class="search-container">
                         <input type="text" class="search-input" placeholder="Search articles..." id="searchInput">
+                        <button class="clear-search" id="clearSearch" disabled>Clear</button>
+                        <div class="search-results" id="searchResults"></div>
                     </div>
 
                     <!-- Categories -->
@@ -427,9 +506,35 @@
             }
         }
 
+        // Function to display search results dropdown
+        function displaySearchResults(articles, query) {
+            const searchResults = document.getElementById('searchResults');
+            
+            if (!articles || articles.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item">No matching articles found</div>';
+                return;
+            }
+
+            searchResults.innerHTML = articles.slice(0, 5).map(article => {
+                const isRegularArticle = 'id' in article;
+                const id = isRegularArticle ? article.id : article._id;
+                const date = isRegularArticle ? article.date : new Date(article.createdAt).toLocaleDateString();
+                
+                return `
+                    <div class="search-result-item" onclick="viewArticle('${id}', '${isRegularArticle ? 'article' : 'post'}')">
+                        <div class="search-result-title">${article.title}</div>
+                        <div class="search-result-meta">
+                            By ${article.author || 'Unknown'} | ${date}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         // Function to search articles
         async function searchArticles(query) {
             const grid = document.getElementById('articlesGrid');
+            const searchResults = document.getElementById('searchResults');
             const searchTerm = query.toLowerCase();
 
             try {
@@ -439,15 +544,51 @@
                     (article.excerpt || article.content).toLowerCase().includes(searchTerm) ||
                     (article.category || 'General').toLowerCase().includes(searchTerm)
                 );
-                grid.innerHTML = filteredArticles.map(createArticleCard).join('');
+
+                if (query.trim()) {
+                    searchResults.classList.add('active');
+                    displaySearchResults(filteredArticles, query);
+                } else {
+                    searchResults.classList.remove('active');
+                }
+
+                if (filteredArticles.length === 0) {
+                    grid.innerHTML = `
+                        <div class="col-12">
+                            <div class="no-results">
+                                <h3>No matching articles found</h3>
+                                <p>Try different search terms or browse all articles</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    grid.innerHTML = filteredArticles.map(createArticleCard).join('');
+                }
             } catch (error) {
                 console.error('Error searching articles:', error);
-                alert('Failed to search articles: ' + error.message);
+                grid.innerHTML = `
+                    <div class="col-12">
+                        <div class="no-results">
+                            <h3>Error searching articles</h3>
+                            <p>Please try again later</p>
+                        </div>
+                    </div>
+                `;
             }
+        }
+
+        // Function to view article
+        function viewArticle(id, type) {
+            window.location.href = `article-single.html?id=${id}&type=${type}`;
         }
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            const clearSearchBtn = document.getElementById('clearSearch');
+            let searchTimeout;
+
             // Category filter buttons
             const categoryBtns = document.querySelectorAll('.category-btn');
             categoryBtns.forEach(btn => {
@@ -458,12 +599,41 @@
                 });
             });
 
-            // Search input with debounce
-            const searchInput = document.getElementById('searchInput');
-            let searchTimeout;
+            // Search input events
             searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                clearSearchBtn.disabled = !query;
+
                 clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => searchArticles(this.value), 300);
+                searchTimeout = setTimeout(() => searchArticles(query), 300);
+            });
+
+            // Enter key for immediate search
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    clearTimeout(searchTimeout);
+                    const query = this.value.trim();
+                    if (query) {
+                        searchArticles(query);
+                        searchResults.classList.remove('active');
+                    }
+                }
+            });
+
+            // Clear search button
+            clearSearchBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                clearSearchBtn.disabled = true;
+                searchResults.classList.remove('active');
+                filterArticles('all');
+            });
+
+            // Close search results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                    searchResults.classList.remove('active');
+                }
             });
 
             // Load initial articles

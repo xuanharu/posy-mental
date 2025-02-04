@@ -573,58 +573,69 @@
                     const searchInput = document.getElementById('searchInput');
                     const searchResults = document.getElementById('searchResults');
                     const clearSearchBtn = document.getElementById('clearSearch');
-
-                    searchInput.addEventListener('input', function() {
-                        clearSearchBtn.disabled = !this.value.trim();
-                    });
-
-                    clearSearchBtn.addEventListener('click', function() {
-                        searchInput.value = '';
-                        clearSearchBtn.disabled = true;
-                        currentSearchResults = null;
-                        displayPosts(allPosts);
-                        searchResults.classList.remove('active');
-                    });
-
                     let searchTimeout;
+
+                    // Search input events
                     searchInput.addEventListener('input', function() {
-                        const searchTerm = this.value.trim();
+                        const query = this.value.trim();
+                        clearSearchBtn.disabled = !query;
 
                         clearTimeout(searchTimeout);
 
-                        if (searchTerm.length > 0) {
+                        if (query.length > 0) {
                             searchResults.innerHTML = '<div class="search-result-item">Searching...</div>';
                             searchResults.classList.add('active');
 
                             searchTimeout = setTimeout(async() => {
                                 try {
-                                    const results = await searchPosts(searchTerm);
-                                    displaySearchResults(results);
+                                    const results = await searchPosts(query);
+                                    if (results && results.length > 0) {
+                                        displaySearchResults(results);
+                                        currentSearchResults = results;
+                                        displayPosts(results);
+                                    } else {
+                                        searchResults.innerHTML = '<div class="search-result-item">No matching posts found</div>';
+                                        displayError(
+                                            "No matching posts found",
+                                            "Try different search terms or browse all posts"
+                                        );
+                                    }
                                 } catch (error) {
                                     console.error('Search error:', error);
                                     searchResults.innerHTML = '<div class="search-result-item">Error searching posts</div>';
+                                    displayError('Search Error', 'Failed to search posts. Please try again.');
                                 }
                             }, 300);
                         } else {
                             searchResults.classList.remove('active');
+                            currentSearchResults = null;
+                            displayPosts(allPosts);
                         }
                     });
 
+                    // Enter key for immediate search
                     searchInput.addEventListener('keydown', async function(e) {
                         if (e.key === 'Enter') {
                             e.preventDefault();
-                            const searchTerm = this.value.trim();
+                            clearTimeout(searchTimeout);
+                            const query = this.value.trim();
 
-                            if (searchTerm) {
+                            if (query) {
                                 try {
-                                    const results = await searchPosts(searchTerm);
+                                    const results = await searchPosts(query);
                                     currentSearchResults = results;
                                     displayPosts(results);
-                                    searchResults.classList.remove('active');
+
+                                    if (results && results.length > 0) {
+                                        displaySearchResults(results);
+                                    } else {
+                                        searchResults.innerHTML = '<div class="search-result-item">No matching posts found</div>';
+                                    }
                                 } catch (error) {
                                     console.error('Search error:', error);
                                     displayError('Search Error', 'Failed to search posts. Please try again.');
                                 }
+                                searchResults.classList.remove('active');
                             } else {
                                 currentSearchResults = null;
                                 displayPosts(allPosts);
@@ -632,6 +643,16 @@
                         }
                     });
 
+                    // Clear search button
+                    clearSearchBtn.addEventListener('click', function() {
+                        searchInput.value = '';
+                        clearSearchBtn.disabled = true;
+                        searchResults.classList.remove('active');
+                        currentSearchResults = null;
+                        displayPosts(allPosts);
+                    });
+
+                    // Close search results when clicking outside
                     document.addEventListener('click', function(e) {
                         if (!searchResults.contains(e.target) && e.target !== searchInput) {
                             searchResults.classList.remove('active');
@@ -808,7 +829,7 @@
                     return;
                 }
 
-                searchResults.innerHTML = posts.map(post => `
+                searchResults.innerHTML = posts.slice(0, 5).map(post => `
                     <div class="search-result-item" onclick="scrollToPost('${post._id}')">
                         <div class="search-result-title">${post.title}</div>
                         <div class="search-result-meta">
