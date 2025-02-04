@@ -119,7 +119,7 @@ SYMPTOM_QUESTIONS = {
     ]
 }
 
-async def get_questions_for_symptoms(symptoms: List[str]) -> List[Dict]:
+def get_questions_for_symptoms(symptoms: List[str]) -> List[Dict]:
     """
     Generate relevant questions based on selected symptoms
     """
@@ -135,7 +135,7 @@ async def get_questions_for_symptoms(symptoms: List[str]) -> List[Dict]:
         else:
             # Generate dynamic questions for symptoms not in template
             prompt = f"Generate a multiple-choice question to assess the severity of {symptom} in mental health context."
-            response = await run_llm_structure_output(
+            response = run_llm_structure_output(
                 system="You are a mental health assessment expert. Generate a multiple choice question to assess symptom severity.",
                 user_input=prompt,
                 response_format={
@@ -153,7 +153,7 @@ async def get_questions_for_symptoms(symptoms: List[str]) -> List[Dict]:
             })
     return questions
 
-async def generate_mental_health_advice(symptoms: List[str], answers: Dict[str, str]) -> Dict:
+def generate_mental_health_advice(symptoms: List[str], answers: Dict[str, str]) -> Dict:
     """
     Generate personalized mental health advice based on symptoms and answers
     """
@@ -168,7 +168,7 @@ async def generate_mental_health_advice(symptoms: List[str], answers: Dict[str, 
     
     prompt = f"{context}\n\nProvide a response with:\n1. assessment: A brief assessment of potential mental health status\n2. advice: Personalized advice and coping strategies\n3. professional_help: Recommended professional help if needed\n4. related_keywords: A list of keywords for related articles\n\nEnsure the response is properly formatted as JSON with these exact field names."
     
-    response = await run_llm_structure_output(
+    response = run_llm_structure_output(
         system="You are a mental health advisor. Analyze symptoms and provide personalized advice.",
         user_input=prompt,
         response_format={

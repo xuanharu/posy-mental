@@ -5,6 +5,8 @@ router = APIRouter()
 
 @router.post("/crawl")
 def crawl(url: str):
+    result = crawl_service.crawl_and_parse(url)
+    return result
     try:
         result = crawl_service.crawl_and_parse(url)
         return result

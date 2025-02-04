@@ -16,23 +16,23 @@ class AnswersRequest(BaseModel):
     answers: Dict[str, str]
 
 @router.post("/get_questions")
-async def get_questions(request: SymptomsRequest):
+def get_questions(request: SymptomsRequest):
     """
     Generate questions based on selected symptoms
     """
     try:
-        questions = await get_questions_for_symptoms(request.symptoms)
+        questions = get_questions_for_symptoms(request.symptoms)
         return {"questions": questions}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/get_advice")
-async def get_advice(request: AnswersRequest):
+def get_advice(request: AnswersRequest):
     """
     Generate personalized mental health advice based on symptoms and answers
     """
     try:
-        advice = await generate_mental_health_advice(request.symptoms, request.answers)
+        advice = generate_mental_health_advice(request.symptoms, request.answers)
         return advice
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

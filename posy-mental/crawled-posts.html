@@ -479,6 +479,7 @@
 
                 alert('Post crawled and saved successfully!');
                 urlInput.value = ''; // Clear the input
+                window.location.reload();
             } catch (error) {
                 console.error('Error crawling post:', error);
                 alert('Failed to crawl post: ' + error.message);
