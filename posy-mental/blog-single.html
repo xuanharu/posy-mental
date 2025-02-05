@@ -671,13 +671,19 @@
             return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
         }
 
+        // Get random user icon
+        function getRandomUserIcon() {
+            const randomNum = Math.floor(Math.random() * 7) + 1;
+            return `user_icon/user_${randomNum}.jpg`;
+        }
+
         // Format single comment HTML
         function formatComment(comment) {
             return `
                 <div class="single-comments">
                     <div class="main">
                         <div class="head">
-                            <img src="img/author1.jpg" alt="#" />
+                            <img src="${comment.userIcon || getRandomUserIcon()}" alt="#" />
                         </div>
                         <div class="body">
                             <h4>${comment.author}</h4>
@@ -723,7 +729,8 @@
             const content = document.getElementById('commentContent').value;
 
             try {
-                await addComment(postId, author, content);
+                const userIcon = getRandomUserIcon();
+                await addComment(postId, author, content, userIcon);
 
                 // Clear form
                 document.getElementById('commentAuthor').value = '';

@@ -128,11 +128,12 @@
  }
 
  // Add a comment to a post
- async function addComment(postId, author, content) {
+ async function addComment(postId, author, content, userIcon) {
      try {
          const params = new URLSearchParams({
              author: author,
-             content: content
+             content: content,
+             userIcon: userIcon
          });
 
          const response = await fetch(`${BASE_URL}/post/${postId}/comment?${params.toString()}`, {
