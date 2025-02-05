@@ -330,11 +330,11 @@
                 </div>
                 <div class="col-lg-4 col-12">
                     <div class="main-sidebar">
-                        <!-- Related Articles -->
+                        <!-- Latest Posts -->
                         <div class="single-widget">
-                            <h3>Related Articles</h3>
+                            <h3>Latest Posts</h3>
                             <div id="relatedArticles">
-                                <!-- Related articles will be loaded here -->
+                                <!-- Latest posts will be loaded here -->
                             </div>
                         </div>
                     </div>
@@ -518,50 +518,36 @@
             }
         }
 
-        // Function to load related articles
+        // Function to load latest posts
         async function loadRelatedArticles(currentArticle, type) {
             const relatedContainer = document.getElementById('relatedArticles');
 
             try {
-                let relatedArticles = [];
-                const category = currentArticle.category || 'General';
-
-                // Get articles from both sources
-                const regularArticles = (window.articles || [])
-                    .filter(article => 
-                        (type === 'post' || article.id !== currentArticle.id) &&
-                        article.category === category
-                    );
-
+                // Get latest crawled posts
                 const crawledPosts = await getCrawledPosts();
-                const relatedPosts = crawledPosts
-                    .filter(post => 
-                        (type === 'article' || post._id !== currentArticle._id) &&
-                        (post.category === category)
-                    );
+                
+                // Get the latest 5 posts, excluding the current post if it's a crawled post
+                const latestPosts = crawledPosts
+                    .filter(post => type === 'article' || post._id !== currentArticle._id)
+                    .slice(0, 5);
 
-                // Combine and limit to 3 related items
-                relatedArticles = [...regularArticles, ...relatedPosts]
-                    .slice(0, 3);
-
-                if (relatedArticles.length === 0) {
-                    relatedContainer.innerHTML = '<p>No related articles found</p>';
+                if (latestPosts.length === 0) {
+                    relatedContainer.innerHTML = '<p>No latest posts found</p>';
                     return;
                 }
 
-                relatedContainer.innerHTML = relatedArticles
+                relatedContainer.innerHTML = latestPosts
                     .map(article => {
-                        const isRegularArticle = 'id' in article;
-                        const id = isRegularArticle ? article.id : article._id;
-                        const image = isRegularArticle ? article.image : (article.imageUrl || 'images/chatting_boy.jpeg');
-                        const date = isRegularArticle ? article.date : new Date(article.createdAt).toLocaleDateString();
+                        const id = article._id;
+                        const image = article.imageUrl || 'images/chatting_boy.jpeg';
+                        const date = new Date(article.createdAt).toLocaleDateString();
 
                         return `
                             <div class="related-article-card">
                                 <img src="${image}" alt="${article.title}" class="related-article-image">
                                 <div class="related-article-content">
                                     <h4 class="related-article-title">
-                                        <a href="article-single.html?id=${id}&type=${isRegularArticle ? 'article' : 'post'}">${article.title}</a>
+                                        <a href="article-single.html?id=${id}&type=post">${article.title}</a>
                                     </h4>
                                     <div class="related-article-meta">
                                         <span><i class="fa fa-calendar"></i>${date}</span>
