@@ -326,7 +326,8 @@
 
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
-                const role = document.getElementById('role').value;
+                // We don't have a role selector in the form, so we'll let the backend determine the role
+                // based on the user's credentials
 
                 try {
                     const response = await fetch('http://localhost:8000/auth/login', {
@@ -336,8 +337,7 @@
                         },
                         body: JSON.stringify({
                             email: email,
-                            password: password,
-                            role: role
+                            password: password
                         })
                     });
 
