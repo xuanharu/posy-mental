@@ -30,7 +30,7 @@ def authenticate_user(email: str, password: str):
         return False
     return user
 
-def create_user(email: str, password: str):
+def create_user(email: str, password: str, role: str = "user", **kwargs):
     # Check if user already exists
     if db_mongodb.users.find_one({"email": email}):
         return None
@@ -40,8 +40,17 @@ def create_user(email: str, password: str):
     user = {
         "email": email,
         "password": hashed_password,
+        "role": role,
         "created_at": datetime.utcnow()
     }
+    
+    # Add additional fields based on role
+    if role == "psychiatrist":
+        user["name"] = kwargs.get("name", "")
+        user["license"] = kwargs.get("license", "")
+        user["specialization"] = kwargs.get("specialization", "")
+        user["experience"] = kwargs.get("experience", 0)
+    
     result = db_mongodb.users.insert_one(user)
     user["_id"] = result.inserted_id
     return user

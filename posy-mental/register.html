@@ -56,23 +56,23 @@
             max-width: 1000px;
         }
         
-        .signin-content {
+        .signup-content {
             display: flex;
             padding: 50px 0;
             align-items: center;
         }
         
-        .signin-image,
-        .signin-form {
+        .signup-image,
+        .signup-form {
             width: 50%;
             padding: 0 40px;
         }
         
-        .signin-image figure {
+        .signup-image figure {
             margin-bottom: 20px;
         }
         
-        .signin-image img {
+        .signup-image img {
             max-width: 100%;
             border-radius: 10px;
         }
@@ -129,66 +129,33 @@
             color: #fff;
         }
         
-        .social-login {
-            text-align: center;
-            margin-top: 30px;
-        }
-        
-        .social-label {
-            display: block;
-            margin-bottom: 15px;
-            color: #666;
-        }
-        
-        .socials {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            list-style: none;
-            padding: 0;
-        }
-        
-        .socials li a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            border-radius: 50%;
-            color: #fff;
-            transition: transform 0.3s ease;
-        }
-        
-        .socials li a:hover {
-            transform: translateY(-3px);
-        }
-        
-        .signup-image-link {
+        .signin-image-link {
             color: #6dabe4;
             text-decoration: none;
             display: block;
             text-align: center;
+            margin-top: 20px;
             transition: color 0.3s ease;
         }
         
-        .signup-image-link:hover {
+        .signin-image-link:hover {
             color: #4292dc;
         }
         
         @media (max-width: 768px) {
-            .signin-content {
+            .signup-content {
                 flex-direction: column;
             }
-            .signin-image,
-            .signin-form {
+            .signup-image,
+            .signup-form {
                 width: 100%;
                 padding: 0 20px;
             }
-            .signin-image {
+            .signup-image {
                 order: 2;
                 margin-top: 30px;
             }
-            .signin-form {
+            .signup-form {
                 order: 1;
             }
         }
@@ -249,16 +216,16 @@
 
         <!-- Main Content -->
         <div class="main">
-            <section class="sign-in">
+            <section class="sign-up">
                 <div class="container">
-                    <div class="signin-content">
-                        <div class="signin-image">
-                            <figure><img src="images/chatting_bot.jpg" alt="Mental Health Support"></figure>
-                        </div>
-
-                        <div class="signin-form">
-                            <h2 class="form-title">Welcome Back!</h2>
-                            <form class="register-form" id="login-form" onsubmit="handleLogin(event)">
+                    <div class="signup-content">
+                        <div class="signup-form">
+                            <h2 class="form-title">Create Account</h2>
+                            <form class="register-form" id="register-form" onsubmit="handleRegister(event)">
+                                <div class="form-group">
+                                    <label for="name"><i class="icofont-user"></i></label>
+                                    <input type="text" name="name" id="name" placeholder="Full Name" required />
+                                </div>
                                 <div class="form-group">
                                     <label for="email"><i class="icofont-email"></i></label>
                                     <input type="email" name="email" id="email" placeholder="Email Address" required />
@@ -267,13 +234,32 @@
                                     <label for="password"><i class="icofont-lock"></i></label>
                                     <input type="password" name="password" id="password" placeholder="Password" required />
                                 </div>
-                                <div class="form-group form-button">
-                                    <input type="submit" name="signin" id="signin" class="form-submit" value="Log in" />
-                                </div>
                                 <div class="form-group">
-                                    <p>Don't have an account? <a href="register.html" class="signup-image-link">Register here</a></p>
+                                    <label for="confirm-password"><i class="icofont-lock"></i></label>
+                                    <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirm Password" required />
+                                </div>
+                                <div id="psychiatrist-fields" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="license"><i class="icofont-certificate"></i></label>
+                                        <input type="text" name="license" id="license" placeholder="License Number" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="specialization"><i class="icofont-medical"></i></label>
+                                        <input type="text" name="specialization" id="specialization" placeholder="Specialization" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="experience"><i class="icofont-calendar"></i></label>
+                                        <input type="number" name="experience" id="experience" placeholder="Years of Experience" min="0" />
+                                    </div>
+                                </div>
+                                <div class="form-group form-button">
+                                    <input type="submit" name="signup" id="signup" class="form-submit" value="Register" />
                                 </div>
                             </form>
+                            <p>Already have an account? <a href="login.html" class="signin-image-link">Login here</a></p>
+                        </div>
+                        <div class="signup-image">
+                            <figure><img src="images/doctor_cbg.png" alt="Mental Health Professional"></figure>
                         </div>
                     </div>
                 </div>
@@ -321,50 +307,80 @@
         <!-- Main JS -->
         <script src="js/main.js"></script>
         <script>
-            async function handleLogin(event) {
+            // Since all registrations from this page are for psychiatrists,
+            // show the psychiatrist fields by default
+            document.addEventListener('DOMContentLoaded', function() {
+                const psychiatristFields = document.getElementById('psychiatrist-fields');
+                psychiatristFields.style.display = 'block';
+            });
+
+            async function handleRegister(event) {
                 event.preventDefault();
 
+                const name = document.getElementById('name').value;
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
-                const role = document.getElementById('role').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+                // Set role as 'psychiatrist' for all registrations from this page
+                const role = 'psychiatrist';
+
+                // Validate passwords match
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+
+                // Create registration data
+                const userData = {
+                    name: name,
+                    email: email,
+                    password: password,
+                    role: role
+                };
+
+                // Add psychiatrist-specific fields if role is psychiatrist
+                if (role === 'psychiatrist') {
+                    userData.license = document.getElementById('license').value;
+                    userData.specialization = document.getElementById('specialization').value;
+                    userData.experience = document.getElementById('experience').value;
+                }
 
                 try {
-                    const response = await fetch('http://localhost:8000/auth/login', {
+                    const response = await fetch('http://localhost:8000/auth/register', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({
-                            email: email,
-                            password: password,
-                            role: role
-                        })
+                        body: JSON.stringify(userData)
                     });
 
                     const data = await response.json();
 
                     if (response.ok) {
-                        // Store the token and user role
-                        localStorage.setItem('token', data.access_token);
-                        localStorage.setItem('userRole', data.role);
-
-                        // Redirect based on role
-                        if (data.role === 'psychiatrist') {
-                            window.location.href = 'psychiatrist-dashboard.html';
-                        } else {
-                            window.location.href = 'admin.html';
-                        }
+                        alert('Registration successful! Please login.');
+                        window.location.href = 'login.html';
                     } else {
-                        alert('Login failed: ' + data.detail);
+                        // Handle error response properly
+                        let errorMessage = 'Registration failed';
+                        if (data && typeof data === 'object') {
+                            // If data.detail exists, use it as the error message
+                            if (data.detail) {
+                                errorMessage += ': ' + data.detail;
+                            } else if (data.message) {
+                                errorMessage += ': ' + data.message;
+                            } else {
+                                // If no specific error message, stringify the entire object
+                                errorMessage += ': ' + JSON.stringify(data);
+                            }
+                        }
+                        alert(errorMessage);
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('An error occurred during login. Please try again.');
+                    alert('An error occurred during registration. Please try again.');
                 }
             }
         </script>
     </body>
-
-</html>
 
 </html>

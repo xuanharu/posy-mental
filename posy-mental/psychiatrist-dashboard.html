@@ -1,0 +1,976 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="Site keywords here">
+    <meta name="description" content="">
+    <meta name='copyright' content=''>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Title -->
+    <title>Posy - Psychiatrist Dashboard</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Nice Select CSS -->
+    <link rel="stylesheet" href="css/nice-select.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- icofont CSS -->
+    <link rel="stylesheet" href="css/icofont.css">
+    <!-- Slicknav -->
+    <link rel="stylesheet" href="css/slicknav.min.css">
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="css/owl-carousel.css">
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="css/datepicker.css">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="css/animate.min.css">
+    <!-- Magnific Popup CSS -->
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <!-- Medipro CSS -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <style>
+        .dashboard-container {
+            padding: 40px 0;
+        }
+        
+        .dashboard-header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .dashboard-header h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .profile-section {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .profile-info p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .profile-details {
+            margin-top: 20px;
+        }
+        
+        .profile-details h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .profile-details p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .edit-profile-btn {
+            background-color: #e6f0ff;
+            color: #2074d4;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+        
+        .edit-profile-btn:hover {
+            background-color: #d1e3ff;
+        }
+        
+        .dashboard-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card h3 {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2074d4;
+        }
+        
+        .post-section {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .post-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .create-post-btn {
+            background-color: #2074d4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .create-post-btn:hover {
+            background-color: #1a65c0;
+        }
+        
+        .post-list {
+            width: 100%;
+        }
+        
+        .post-list th {
+            text-align: left;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .post-list td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .post-list tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .post-list tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .patient-list {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .patient-list h3 {
+            margin-bottom: 20px;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .patient-table {
+            width: 100%;
+        }
+        
+        .patient-table th {
+            text-align: left;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .patient-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .patient-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .patient-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #e6f7e6;
+            color: #28a745;
+        }
+        
+        .status-inactive {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .action-btn {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-decoration: none;
+            margin-right: 5px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .view-btn {
+            background-color: #e6f0ff;
+            color: #2074d4;
+        }
+        
+        .view-btn:hover {
+            background-color: #d1e3ff;
+            color: #2074d4;
+        }
+        
+        .edit-btn {
+            background-color: #e6f7e6;
+            color: #28a745;
+        }
+        
+        .edit-btn:hover {
+            background-color: #d1f0d1;
+            color: #28a745;
+        }
+        
+        .delete-btn {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+        
+        .delete-btn:hover {
+            background-color: #f5c6cb;
+            color: #dc3545;
+        }
+        
+        .logout-btn {
+            background-color: #f8d7da;
+            color: #dc3545;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background-color: #f5c6cb;
+        }
+        /* Post form styles */
+        
+        .post-form {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .post-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .form-control:focus {
+            border-color: #2074d4;
+            outline: none;
+        }
+        
+        .image-preview {
+            max-width: 300px;
+            margin: 10px 0;
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        
+        .btn-group-toggle label {
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader-outter"></div>
+            <div class="loader-inner"></div>
+
+            <div class="indicator">
+                <svg width="16px" height="12px">
+                    <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                    <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <!-- End Preloader -->
+
+    <!-- Header Area -->
+    <header class="header">
+        <!-- Header Inner -->
+        <div class="header-inner">
+            <div class="container">
+                <div class="inner">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-12">
+                            <!-- Start Logo -->
+                            <div class="logo">
+                                <a href="index.html"><img src="images/logo_cbg.png" alt="Posy"></a>
+                            </div>
+                            <!-- End Logo -->
+                            <!-- Mobile Nav -->
+                            <div class="mobile-nav"></div>
+                            <!-- End Mobile Nav -->
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-12">
+                            <!-- Main Menu -->
+                            <div class="main-menu">
+                                <nav class="navigation">
+                                    <ul class="nav menu">
+                                        <li><a href="psychiatrist-dashboard.html">Dashboard</a></li>
+                                        <li><a href="#">Patients</a></li>
+                                        <li><a href="#">Appointments</a></li>
+                                        <li><a href="#">Resources</a></li>
+                                        <li><a href="#">Profile</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <!--/ End Main Menu -->
+                        </div>
+                        <div class="col-lg-2 col-12">
+                            <div class="get-quote">
+                                <button onclick="handleLogout()" class="logout-btn">Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ End Header Inner -->
+    </header>
+    <!-- End Header Area -->
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Psychiatrist Dashboard</h2>
+                <p>Welcome, <span id="psychiatrist-name">Dr. Smith</span>!</p>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <h3>My Profile</h3>
+                <div class="profile-header">
+                    <div class="profile-image">
+                        <img id="profile-img" src="images/doctor_cbg.png" alt="Psychiatrist Profile">
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="profile-name">Dr. Sarah Johnson</h3>
+                        <p id="profile-position">Senior Psychiatrist</p>
+                        <p id="profile-location">Central Health Medical Center</p>
+                        <button class="edit-profile-btn">Edit Profile</button>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <h4>About Me</h4>
+                    <p id="profile-description">Experienced psychiatrist specializing in anxiety disorders and depression. Over 10 years of clinical experience helping patients overcome mental health challenges through evidence-based therapeutic approaches.</p>
+                </div>
+            </div>
+
+            <!-- Post Management Section -->
+            <div class="post-section">
+                <h3>My Posts</h3>
+                <button class="create-post-btn" id="toggle-post-form">Create New Post</button>
+
+                <!-- Post Form (Hidden by Default) -->
+                <div class="post-form" id="post-form">
+                    <form id="create-post-form">
+                        <div class="form-group">
+                            <label for="post-title">Title</label>
+                            <input type="text" class="form-control" id="post-title" placeholder="Enter post title" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="post-image">Featured Image</label>
+                            <input type="file" class="form-control" id="post-image" accept="image/*" onchange="previewImage(this)">
+                            <div class="image-preview" id="image-preview">
+                                <!-- Image preview will be shown here -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="post-content">Content</label>
+                            <textarea class="form-control" id="post-content" rows="6" placeholder="Write your post content here..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tags</label>
+                            <div id="tag-groups">
+                                <div class="mb-3">
+                                    <h6>POST TYPE (Required)</h6>
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="post_type" value="Advice"> Advice
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="post_type" value="Information"> Information
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="post_type" value="News"> News
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="post_type" value="Review"> Review
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h6>MENTAL HEALTH</h6>
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Anxiety"> Anxiety
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Depression"> Depression
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="ADHD"> ADHD
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Bipolar Disorder"> Bipolar Disorder
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn create-post-btn">Publish Post</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-post">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Posts List -->
+                <table class="post-list">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="posts-table-body">
+                        <!-- Post data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Total Patients</h3>
+                    <div class="number">24</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Sessions</h3>
+                    <div class="number">8</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Upcoming Appointments</h3>
+                    <div class="number">5</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Completed Sessions</h3>
+                    <div class="number">42</div>
+                </div>
+            </div>
+
+            <!-- Patient List Section -->
+            <div class="patient-list">
+                <h3>Recent Patients</h3>
+                <table class="patient-table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Last Session</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patient-table-body">
+                        <!-- Patient data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- jquery Min JS -->
+    <script src="js/jquery.min.js"></script>
+    <!-- jquery Migrate JS -->
+    <script src="js/jquery-migrate-3.0.0.js"></script>
+    <!-- jquery Ui JS -->
+    <script src="js/jquery-ui.min.js"></script>
+    <!-- Easing JS -->
+    <script src="js/easing.js"></script>
+    <!-- Color JS -->
+    <script src="js/colors.js"></script>
+    <!-- Popper JS -->
+    <script src="js/popper.min.js"></script>
+    <!-- Bootstrap Datepicker JS -->
+    <script src="js/bootstrap-datepicker.js"></script>
+    <!-- Jquery Nav JS -->
+    <script src="js/jquery.nav.js"></script>
+    <!-- Slicknav JS -->
+    <script src="js/slicknav.min.js"></script>
+    <!-- ScrollUp JS -->
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <!-- Niceselect JS -->
+    <script src="js/niceselect.js"></script>
+    <!-- Tilt Jquery JS -->
+    <script src="js/tilt.jquery.min.js"></script>
+    <!-- Owl Carousel JS -->
+    <script src="js/owl-carousel.js"></script>
+    <!-- counterup JS -->
+    <script src="js/jquery.counterup.min.js"></script>
+    <!-- Steller JS -->
+    <script src="js/steller.js"></script>
+    <!-- Wow JS -->
+    <script src="js/wow.min.js"></script>
+    <!-- Magnific Popup JS -->
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+    <script>
+        // Sample patient data - in a real app, this would come from an API
+        const samplePatients = [{
+            id: 1,
+            name: "John Doe",
+            lastSession: "2025-02-20",
+            status: "active"
+        }, {
+            id: 2,
+            name: "Jane Smith",
+            lastSession: "2025-02-18",
+            status: "active"
+        }, {
+            id: 3,
+            name: "Robert Johnson",
+            lastSession: "2025-02-15",
+            status: "inactive"
+        }, {
+            id: 4,
+            name: "Emily Davis",
+            lastSession: "2025-02-10",
+            status: "active"
+        }, {
+            id: 5,
+            name: "Michael Wilson",
+            lastSession: "2025-02-05",
+            status: "inactive"
+        }];
+
+        // Sample posts data - in a real app, this would come from an API
+        const samplePosts = [{
+            id: 1,
+            title: "Understanding Anxiety Disorders",
+            date: "2025-02-22",
+            status: "published",
+            imageUrl: "images/worry_cbg.png"
+        }, {
+            id: 2,
+            title: "Coping Strategies for Depression",
+            date: "2025-02-15",
+            status: "published",
+            imageUrl: "images/chatting_boy_cbg.png"
+        }, {
+            id: 3,
+            title: "The Impact of Sleep on Mental Health",
+            date: "2025-02-10",
+            status: "draft",
+            imageUrl: "images/doctor_cbg.png"
+        }];
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and is a psychiatrist
+            const token = localStorage.getItem('token');
+            const userRole = localStorage.getItem('userRole');
+
+            if (!token || userRole !== 'psychiatrist') {
+                // Redirect to login if not authenticated or not a psychiatrist
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load psychiatrist data
+            loadPsychiatristData();
+
+            // Load posts data
+            loadPostsData();
+
+            // Load patient data
+            loadPatientData();
+
+            // Set up post form toggle
+            setupPostForm();
+
+            // Set up tag buttons
+            setupTagButtons();
+        });
+
+        // Function to load psychiatrist data
+        async function loadPsychiatristData() {
+            try {
+                // In a real app, you would fetch this data from your API
+                // For now, we'll use placeholder data
+                const psychiatristData = {
+                    name: "Dr. Sarah Johnson",
+                    position: "Senior Psychiatrist",
+                    location: "Central Health Medical Center",
+                    description: "Experienced psychiatrist specializing in anxiety disorders and depression. Over 10 years of clinical experience helping patients overcome mental health challenges through evidence-based therapeutic approaches.",
+                    imageUrl: "images/doctor_cbg.png"
+                };
+
+                // Update the dashboard header
+                document.getElementById('psychiatrist-name').textContent = psychiatristData.name;
+
+                // Update the profile section
+                document.getElementById('profile-name').textContent = psychiatristData.name;
+                document.getElementById('profile-position').textContent = psychiatristData.position;
+                document.getElementById('profile-location').textContent = psychiatristData.location;
+                document.getElementById('profile-description').textContent = psychiatristData.description;
+                document.getElementById('profile-img').src = psychiatristData.imageUrl;
+            } catch (error) {
+                console.error('Error loading psychiatrist data:', error);
+            }
+        }
+
+        // Function to load posts data
+        function loadPostsData() {
+            const tableBody = document.getElementById('posts-table-body');
+            tableBody.innerHTML = '';
+
+            // In a real app, you would fetch this data from your API
+            // For now, we'll use the sample data
+            samplePosts.forEach(post => {
+                const row = document.createElement('tr');
+
+                const statusClass = post.status === 'published' ? 'status-active' : 'status-inactive';
+                const statusText = post.status.charAt(0).toUpperCase() + post.status.slice(1);
+
+                row.innerHTML = `
+                    <td>${post.title}</td>
+                    <td>${post.date}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <a href="#" class="action-btn view-btn" data-id="${post.id}">View</a>
+                        <a href="#" class="action-btn edit-btn" data-id="${post.id}">Edit</a>
+                        <a href="#" class="action-btn delete-btn" data-id="${post.id}">Delete</a>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+
+            // Add event listeners to action buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const postId = this.getAttribute('data-id');
+                    // In a real app, this would navigate to the post detail page
+                    window.location.href = `blog-single.html?id=${postId}`;
+                });
+            });
+
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const postId = this.getAttribute('data-id');
+                    // In a real app, this would navigate to the edit post page
+                    window.location.href = `edit-post.html?mode=edit&id=${postId}`;
+                });
+            });
+
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const postId = this.getAttribute('data-id');
+                    if (confirm('Are you sure you want to delete this post?')) {
+                        // In a real app, this would call an API to delete the post
+                        alert(`Post with ID ${postId} would be deleted`);
+                        // Then refresh the posts list
+                        loadPostsData();
+                    }
+                });
+            });
+        }
+
+        // Function to load patient data
+        function loadPatientData() {
+            const tableBody = document.getElementById('patient-table-body');
+            tableBody.innerHTML = '';
+
+            // In a real app, you would fetch this data from your API
+            // For now, we'll use the sample data
+            samplePatients.forEach(patient => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${patient.name}</td>
+                    <td>${patient.lastSession}</td>
+                    <td><span class="status-badge status-${patient.status}">${patient.status.charAt(0).toUpperCase() + patient.status.slice(1)}</span></td>
+                    <td>
+                        <a href="#" class="action-btn view-btn" data-id="${patient.id}">View Details</a>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+
+            // Add event listeners to view buttons
+            document.querySelectorAll('.patient-table .view-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const patientId = this.getAttribute('data-id');
+                    // In a real app, this would navigate to a patient detail page
+                    alert(`View patient details for ID: ${patientId}`);
+                });
+            });
+        }
+
+        // Set up post form toggle and submission
+        function setupPostForm() {
+            const toggleButton = document.getElementById('toggle-post-form');
+            const postForm = document.getElementById('post-form');
+            const cancelButton = document.getElementById('cancel-post');
+            const createPostForm = document.getElementById('create-post-form');
+
+            // Toggle form visibility
+            toggleButton.addEventListener('click', function() {
+                postForm.classList.toggle('active');
+                if (postForm.classList.contains('active')) {
+                    toggleButton.textContent = 'Hide Form';
+                } else {
+                    toggleButton.textContent = 'Create New Post';
+                }
+            });
+
+            // Cancel button
+            cancelButton.addEventListener('click', function() {
+                postForm.classList.remove('active');
+                toggleButton.textContent = 'Create New Post';
+                createPostForm.reset();
+                document.getElementById('image-preview').innerHTML = '';
+            });
+
+            // Form submission
+            createPostForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Get form values
+                const title = document.getElementById('post-title').value;
+                const content = document.getElementById('post-content').value;
+                const imageFile = document.getElementById('post-image').files[0];
+
+                // Get selected post types
+                const selectedPostTypes = Array.from(document.querySelectorAll('input[name="post_type"]:checked'))
+                    .map(checkbox => checkbox.value);
+
+                // Get selected tags
+                const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
+                    .map(checkbox => checkbox.value);
+
+                // Validate required fields
+                if (!title || !content) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                // Validate at least one post type is selected
+                if (selectedPostTypes.length === 0) {
+                    alert('Please select at least one post type');
+                    return;
+                }
+
+                // In a real app, you would send this data to your API
+                console.log('Creating post:', {
+                    title,
+                    content,
+                    imageFile: imageFile ? imageFile.name : null,
+                    postTypes: selectedPostTypes,
+                    tags: selectedTags
+                });
+
+                // Show success message
+                alert('Post created successfully!');
+
+                // Reset form and hide it
+                createPostForm.reset();
+                postForm.classList.remove('active');
+                toggleButton.textContent = 'Create New Post';
+                document.getElementById('image-preview').innerHTML = '';
+
+                // Refresh posts list (in a real app, this would show the new post)
+                loadPostsData();
+            });
+        }
+
+        // Set up tag buttons
+        function setupTagButtons() {
+            const tagLabels = document.querySelectorAll('.btn-group-toggle label');
+
+            tagLabels.forEach(label => {
+                label.addEventListener('click', function(e) {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked; // Toggle checkbox state
+
+                    // Toggle active class based on new checkbox state
+                    if (checkbox.checked) {
+                        this.classList.add('active');
+                    } else {
+                        this.classList.remove('active');
+                    }
+
+                    // Prevent the default bootstrap toggle behavior
+                    e.preventDefault();
+                });
+            });
+        }
+
+        // Image preview functionality
+        function previewImage(input) {
+            const preview = document.getElementById('image-preview');
+            preview.innerHTML = '';
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Handle logout
+        function handleLogout() {
+            // Clear local storage
+            localStorage.removeItem('token');
+            localStorage.removeItem('userRole');
+
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>
