@@ -1,0 +1,847 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="Mental health advice, therapy resources, self-help, wellness tips">
+    <meta name="description" content="Explore mental health advice articles and resources to support your wellbeing journey">
+    <meta name='copyright' content=''>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Title -->
+    <title>Posy - Mental Health Advice Articles</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.png">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Nice Select CSS -->
+    <link rel="stylesheet" href="css/nice-select.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- icofont CSS -->
+    <link rel="stylesheet" href="css/icofont.css">
+    <!-- Slicknav -->
+    <link rel="stylesheet" href="css/slicknav.min.css">
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="css/owl-carousel.css">
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="css/datepicker.css">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="css/animate.min.css">
+    <!-- Magnific Popup CSS -->
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <!-- Medipro CSS -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <style>
+        /* Advice Articles Styles */
+        
+        .advice-hero {
+            background: linear-gradient(rgba(26, 118, 209, 0.8), rgba(26, 118, 209, 0.9)), url('img/bread-bg.jpg');
+            background-size: cover;
+            padding: 80px 0;
+            color: #fff;
+            text-align: center;
+        }
+        
+        .advice-hero h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+        
+        .advice-hero p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .search-container {
+            max-width: 600px;
+            margin: 30px auto 0;
+            position: relative;
+        }
+        
+        .search-container input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: none;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-container button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: #1A76D1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-container button:hover {
+            background: #1557a0;
+        }
+        
+        .categories-container {
+            padding: 50px 0;
+            background: #f9f9f9;
+        }
+        
+        .category-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            cursor: pointer;
+            height: 100%;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-card i {
+            font-size: 40px;
+            color: #1A76D1;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .category-card h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .category-card p {
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .articles-container {
+            padding: 50px 0;
+        }
+        
+        .article-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .article-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .article-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .article-card:hover .article-image img {
+            transform: scale(1.05);
+        }
+        
+        .article-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .article-category {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1A76D1;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .article-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .article-excerpt {
+            color: #666;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #888;
+            margin-top: auto;
+        }
+        
+        .article-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .article-author img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .article-date {
+            font-style: italic;
+        }
+        
+        .read-more {
+            display: inline-block;
+            color: #1A76D1;
+            font-weight: 500;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .read-more:hover {
+            color: #1557a0;
+            text-decoration: underline;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        
+        .pagination a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+            border-radius: 5px;
+            background: #f5f5f5;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination a:hover,
+        .pagination a.active {
+            background: #1A76D1;
+            color: #fff;
+        }
+        
+        .newsletter-section {
+            background: linear-gradient(rgba(26, 118, 209, 0.9), rgba(26, 118, 209, 0.9)), url('img/call-bg.jpg');
+            background-size: cover;
+            padding: 80px 0;
+            color: #fff;
+            text-align: center;
+        }
+        
+        .newsletter-section h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .newsletter-section p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .newsletter-form input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .newsletter-form button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: #1A76D1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-form button:hover {
+            background: #0d47a1;
+        }
+        /* Filter tags */
+        
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .filter-tag {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px;
+            background: #fff;
+            border: 2px solid #1A76D1;
+            border-radius: 20px;
+            color: #1A76D1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tag.active {
+            background: #1A76D1;
+            color: #fff;
+        }
+        
+        .filter-tag:hover {
+            background: #e3f2fd;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Area -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="container">
+                <div class="inner">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-12">
+                            <div class="logo">
+                                <a href="index.html"><img src="images/logo_cbg.png" alt="Posy"></a>
+                            </div>
+                            <div class="mobile-nav"></div>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-12">
+                            <div class="main-menu">
+                                <nav class="navigation">
+                                    <ul class="nav menu">
+                                        <li><a href="index.html">Home</a></li>
+                                        <li>
+                                            <a href="#">News<i class="icofont-rounded-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li><a href="newsfeed.html">Admin Posts</a></li>
+                                                <li><a href="articles.html">Featured Articles</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="chat.html">AI Chatbot</a></li>
+                                        <li class="active"><a href="advice.html">Mental Health Advice</a></li>
+                                        <li><a href="#">Help<i class="icofont-rounded-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li>
+                                                    <a href="portfolio-details.html">Services</a>
+                                                    <a href="contact.html">Contact</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-12">
+                            <div class="get-quote">
+                                <a href="login.html" class="btn">Get Started</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Header Area -->
+
+    <!-- Hero Section -->
+    <section class="advice-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Mental Health Advice & Resources</h1>
+                    <p>Explore expert-written articles on mental health topics to help you understand, manage, and improve your wellbeing.</p>
+
+                    <div class="search-container">
+                        <input type="text" placeholder="Search for advice on anxiety, depression, relationships...">
+                        <button type="submit"><i class="fa fa-search"></i> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Hero Section -->
+
+    <!-- Categories Section -->
+    <section class="categories-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title">
+                        <h2>Browse By Category</h2>
+                        <p>Find advice on specific mental health topics that matter to you</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="category-card">
+                        <i class="icofont-brain-alt"></i>
+                        <h4>Anxiety</h4>
+                        <p>Understanding anxiety disorders and coping strategies</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="category-card">
+                        <i class="icofont-heart-beat-alt"></i>
+                        <h4>Depression</h4>
+                        <p>Insights on depression, treatment options, and recovery</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="category-card">
+                        <i class="icofont-users-alt-5"></i>
+                        <h4>Relationships</h4>
+                        <p>Building healthy connections and communication skills</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="category-card">
+                        <i class="icofont-gym-alt-3"></i>
+                        <h4>Self-Care</h4>
+                        <p>Practical self-care routines and wellness practices</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="category-card">
+                        <i class="icofont-stress"></i>
+                        <h4>Stress Management</h4>
+                        <p>Techniques to reduce stress and build resilience</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="category-card">
+                        <i class="icofont-sleeping"></i>
+                        <h4>Sleep</h4>
+                        <p>Improving sleep quality and addressing sleep disorders</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="category-card">
+                        <i class="icofont-briefcase"></i>
+                        <h4>Work & Career</h4>
+                        <p>Managing workplace stress and finding balance</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="category-card">
+                        <i class="icofont-compass"></i>
+                        <h4>Therapy Guide</h4>
+                        <p>Understanding therapy options and finding the right help</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Categories Section -->
+
+    <!-- Articles Section -->
+    <section class="articles-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title">
+                        <h2>Featured Advice Articles</h2>
+                        <p>Expert insights to support your mental health journey</p>
+                    </div>
+
+                    <div class="filter-tags">
+                        <span class="filter-tag active">All</span>
+                        <span class="filter-tag">Most Recent</span>
+                        <span class="filter-tag">Popular</span>
+                        <span class="filter-tag">Anxiety</span>
+                        <span class="filter-tag">Depression</span>
+                        <span class="filter-tag">Relationships</span>
+                        <span class="filter-tag">Self-Care</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Article 1 -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="article-card">
+                        <div class="article-image">
+                            <img src="img/blog1.jpg" alt="Understanding Anxiety">
+                        </div>
+                        <div class="article-content">
+                            <span class="article-category">Anxiety</span>
+                            <h3 class="article-title">Understanding Anxiety: Types, Symptoms, and When to Seek Help</h3>
+                            <p class="article-excerpt">Learn about different types of anxiety disorders, common symptoms, and when professional help might be beneficial for managing anxiety.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <img src="user_icon/user_1.jpg" alt="Author">
+                                    <span>Dr. Sarah Johnson</span>
+                                </div>
+                                <div class="article-date">May 15, 2024</div>
+                            </div>
+                            <a href="advice-single.html" class="read-more">Read Article <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article 2 -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="article-card">
+                        <div class="article-image">
+                            <img src="img/blog2.jpg" alt="Depression Signs">
+                        </div>
+                        <div class="article-content">
+                            <span class="article-category">Depression</span>
+                            <h3 class="article-title">10 Signs of Depression You Shouldn't Ignore</h3>
+                            <p class="article-excerpt">Depression can manifest in various ways beyond just feeling sad. Learn about the less obvious signs that might indicate you're experiencing depression.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <img src="user_icon/user_2.jpg" alt="Author">
+                                    <span>Dr. Michael Chen</span>
+                                </div>
+                                <div class="article-date">April 28, 2024</div>
+                            </div>
+                            <a href="advice-single.html" class="read-more">Read Article <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article 3 -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="article-card">
+                        <div class="article-image">
+                            <img src="img/blog3.jpg" alt="Mindfulness Practices">
+                        </div>
+                        <div class="article-content">
+                            <span class="article-category">Self-Care</span>
+                            <h3 class="article-title">5 Mindfulness Practices for Daily Mental Wellness</h3>
+                            <p class="article-excerpt">Incorporate these simple mindfulness techniques into your daily routine to reduce stress, improve focus, and enhance your overall mental wellbeing.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <img src="user_icon/user_3.jpg" alt="Author">
+                                    <span>Emma Rodriguez</span>
+                                </div>
+                                <div class="article-date">May 3, 2024</div>
+                            </div>
+                            <a href="advice-single.html" class="read-more">Read Article <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article 4 -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="article-card">
+                        <div class="article-image">
+                            <img src="img/about-img.jpg" alt="Healthy Relationships">
+                        </div>
+                        <div class="article-content">
+                            <span class="article-category">Relationships</span>
+                            <h3 class="article-title">Building Healthy Boundaries in Relationships</h3>
+                            <p class="article-excerpt">Learn how to establish and maintain healthy boundaries in your relationships to protect your mental health and foster more fulfilling connections.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <img src="user_icon/user_4.jpg" alt="Author">
+                                    <span>Dr. James Wilson</span>
+                                </div>
+                                <div class="article-date">April 19, 2024</div>
+                            </div>
+                            <a href="advice-single.html" class="read-more">Read Article <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article 5 -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="article-card">
+                        <div class="article-image">
+                            <img src="img/mission-img.jpg" alt="Sleep and Mental Health">
+                        </div>
+                        <div class="article-content">
+                            <span class="article-category">Sleep</span>
+                            <h3 class="article-title">The Connection Between Sleep and Mental Health</h3>
+                            <p class="article-excerpt">Explore the crucial relationship between sleep quality and mental health, and discover practical strategies for improving your sleep habits.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <img src="user_icon/user_5.jpg" alt="Author">
+                                    <span>Dr. Lisa Thompson</span>
+                                </div>
+                                <div class="article-date">May 10, 2024</div>
+                            </div>
+                            <a href="advice-single.html" class="read-more">Read Article <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article 6 -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="article-card">
+                        <div class="article-image">
+                            <img src="img/fun-bg.jpg" alt="Workplace Stress">
+                        </div>
+                        <div class="article-content">
+                            <span class="article-category">Work & Career</span>
+                            <h3 class="article-title">Managing Workplace Stress: Strategies for Better Balance</h3>
+                            <p class="article-excerpt">Discover effective techniques to manage workplace stress, set boundaries, and create a healthier work-life balance for improved mental wellbeing.</p>
+                            <div class="article-meta">
+                                <div class="article-author">
+                                    <img src="user_icon/user_1.jpg" alt="Author">
+                                    <span>Dr. Robert Kim</span>
+                                </div>
+                                <div class="article-date">April 22, 2024</div>
+                            </div>
+                            <a href="advice-single.html" class="read-more">Read Article <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#"><i class="fa fa-angle-right"></i></a>
+            </div>
+        </div>
+    </section>
+    <!-- End Articles Section -->
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Subscribe to Our Mental Health Newsletter</h3>
+                    <p>Get the latest advice articles, resources, and tips delivered directly to your inbox to support your mental health journey.</p>
+
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Enter your email address">
+                        <button type="submit">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Newsletter Section -->
+
+    <!-- Footer Area -->
+    <footer id="footer" class="footer">
+        <!-- Footer Top -->
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
+                            <h2>About Us</h2>
+                            <p>Posy is a safe and supportive online space dedicated to promoting mental well-being. Explore our newsfeed, connect with our community, or chat with our AI companion.</p>
+                            <ul class="social">
+                                <li><a href="#"><i class="icofont-facebook"></i></a></li>
+                                <li><a href="#"><i class="icofont-google-plus"></i></a></li>
+                                <li><a href="#"><i class="icofont-twitter"></i></a></li>
+                                <li><a href="#"><i class="icofont-vimeo"></i></a></li>
+                                <li><a href="#"><i class="icofont-pinterest"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer f-link">
+                            <h2>Quick Links</h2>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <ul>
+                                        <li><a href="index.html"><i class="fa fa-caret-right"></i>Home</a></li>
+                                        <li><a href="blog-single.html"><i class="fa fa-caret-right"></i>News</a></li>
+                                        <li><a href="chat.html"><i class="fa fa-caret-right"></i>AI chatbot</a></li>
+                                        <li><a href="portfolio-details.html"><i class="fa fa-caret-right"></i>Services</a></li>
+                                        <li><a href="contact.html"><i class="fa fa-caret-right"></i>Contact Us</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
+                            <h2>Newsletter</h2>
+                            <p>Subscribe to our newsletter to get informed news in your inbox & highlight our recent blog post or article on a specific mental health topic</p>
+                            <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
+                                <input name="email" placeholder="Email Address" class="common-input" onfocus="this.placeholder=''" onblur="this.placeholder='Your email address'" required="" type="email">
+                                <button class="button"><i class="icofont icofont-paper-plane"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer">
+                            <h2>Contact Us</h2>
+                            <ul class="top-contact" style="color: white;">
+                                <li><i class="fa fa-phone"></i>+89 123 456 789</li>
+                                <li><i class="fa fa-envelope"></i><a href="mailto:support@posy.com">support@posy.com.vn</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ End Footer Top -->
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-12">
+                        <div class="copyright-content">
+                            <p>© Copyright 2024 | All Rights Reserved by Xuan Nguyen</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ End Copyright -->
+    </footer>
+    <!--/ End Footer Area -->
+
+    <!-- jquery Min JS -->
+    <script src="js/jquery.min.js"></script>
+    <!-- jquery Migrate JS -->
+    <script src="js/jquery-migrate-3.0.0.js"></script>
+    <!-- jquery Ui JS -->
+    <script src="js/jquery-ui.min.js"></script>
+    <!-- Easing JS -->
+    <script src="js/easing.js"></script>
+    <!-- Color JS -->
+    <script src="js/colors.js"></script>
+    <!-- Popper JS -->
+    <script src="js/popper.min.js"></script>
+    <!-- Bootstrap Datepicker JS -->
+    <script src="js/bootstrap-datepicker.js"></script>
+    <!-- Jquery Nav JS -->
+    <script src="js/jquery.nav.js"></script>
+    <!-- Slicknav JS -->
+    <script src="js/slicknav.min.js"></script>
+    <!-- ScrollUp JS -->
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <!-- Niceselect JS -->
+    <script src="js/niceselect.js"></script>
+    <!-- Tilt Jquery JS -->
+    <script src="js/tilt.jquery.min.js"></script>
+    <!-- Owl Carousel JS -->
+    <script src="js/owl-carousel.js"></script>
+    <!-- counterup JS -->
+    <script src="js/jquery.counterup.min.js"></script>
+    <!-- Steller JS -->
+    <script src="js/steller.js"></script>
+    <!-- Wow JS -->
+    <script src="js/wow.min.js"></script>
+    <!-- Magnific Popup JS -->
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <!-- Counter Up CDN JS -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+
+    <!-- Advice Articles JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter tags functionality
+            const filterTags = document.querySelectorAll('.filter-tag');
+
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // Remove active class from all tags
+                    filterTags.forEach(t => t.classList.remove('active'));
+
+                    // Add active class to clicked tag
+                    this.classList.add('active');
+
+                    // Here you would typically filter the articles based on the selected tag
+                    // For demonstration purposes, we're just showing the UI interaction
+                });
+            });
+
+            // Category cards click functionality
+            const categoryCards = document.querySelectorAll('.category-card');
+
+            categoryCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const category = this.querySelector('h4').textContent;
+
+                    // Find the corresponding filter tag and click it
+                    filterTags.forEach(tag => {
+                        if (tag.textContent === category) {
+                            tag.click();
+                        }
+                    });
+
+                    // Scroll to articles section
+                    document.querySelector('.articles-container').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Search functionality
+            const searchForm = document.querySelector('.search-container');
+            const searchInput = searchForm.querySelector('input');
+
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const searchTerm = searchInput.value.trim();
+
+                if (searchTerm) {
+                    // Here you would typically perform a search with the search term
+                    // For demonstration purposes, we're just showing an alert
+                    alert('Searching for: ' + searchTerm);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
