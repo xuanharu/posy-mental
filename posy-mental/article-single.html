@@ -198,6 +198,7 @@
             margin-bottom: 20px;
             transition: transform 0.3s ease;
             overflow: hidden;
+            width: 100%;
         }
         
         .related-article-card:hover {
@@ -549,10 +550,6 @@
                                     <h4 class="related-article-title">
                                         <a href="article-single.html?id=${id}&type=post">${article.title}</a>
                                     </h4>
-                                    <div class="related-article-meta">
-                                        <span><i class="fa fa-calendar"></i>${date}</span>
-                                        ${article.sourceUrl ? '<span><i class="fa fa-link"></i>Crawled</span>' : ''}
-                                    </div>
                                 </div>
                             </div>
                         `;
