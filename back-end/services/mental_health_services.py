@@ -1,5 +1,8 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 from services.llm_services import run_llm_structure_output
+from database import db_mongodb
+from bson import ObjectId
+from datetime import datetime
 
 # Common mental health symptoms
 SYMPTOMS = [
@@ -188,3 +191,48 @@ def generate_mental_health_advice(symptoms: List[str], answers: Dict[str, str]) 
         "professional_help": response["professional_help"],
         "related_keywords": response["related_keywords"]
     }
+
+# Mental Health Centers functions
+def get_all_centers():
+    """
+    Get all mental health centers from the database
+    """
+    centers = list(db_mongodb['centers'].find())
+    for center in centers:
+        center['_id'] = str(center['_id'])
+    return centers
+
+def get_center_by_id(center_id: str):
+    """
+    Get a mental health center by ID
+    """
+    center = db_mongodb['centers'].find_one({'_id': ObjectId(center_id)})
+    if center:
+        center['_id'] = str(center['_id'])
+    return center
+
+def create_center(center_data: Dict):
+    """
+    Create a new mental health center
+    """
+    center_data['created_at'] = datetime.now()
+    result = db_mongodb['centers'].insert_one(center_data)
+    return str(result.inserted_id)
+
+def update_center(center_id: str, center_data: Dict):
+    """
+    Update an existing mental health center
+    """
+    center_data['updated_at'] = datetime.now()
+    db_mongodb['centers'].update_one(
+        {'_id': ObjectId(center_id)},
+        {'$set': center_data}
+    )
+    return get_center_by_id(center_id)
+
+def delete_center(center_id: str):
+    """
+    Delete a mental health center
+    """
+    result = db_mongodb['centers'].delete_one({'_id': ObjectId(center_id)})
+    return result.deleted_count > 0
