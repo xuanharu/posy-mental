@@ -273,6 +273,92 @@
             font-size: 12px;
             color: #888;
         }
+        /* Comment pagination styles */
+        
+        .comment-pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .pagination-button {
+            padding: 8px 16px;
+            background: #fff;
+            border: 2px solid #2074d4;
+            border-radius: 4px;
+            color: #2074d4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-button:hover {
+            background: #2074d4;
+            color: #fff;
+        }
+        
+        .pagination-button:disabled {
+            background: #f0f0f0;
+            border-color: #ccc;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .page-numbers {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            margin: 0 10px;
+        }
+        
+        .page-number {
+            padding: 5px 10px;
+            margin: 0 2px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        .page-number:hover {
+            background: rgba(32, 116, 212, 0.1);
+        }
+        
+        .page-number.active {
+            background: #2074d4;
+            color: #fff;
+            border-color: #2074d4;
+        }
+        /* Post navigation styles */
+        
+        .prev-next {
+            display: flex;
+            justify-content: space-between;
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        
+        .prev-next li a {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #fff;
+            border: 2px solid #2074d4;
+            border-radius: 4px;
+            color: #2074d4;
+            transition: all 0.3s ease;
+        }
+        
+        .prev-next li a:hover {
+            background: #2074d4;
+            color: #fff;
+        }
+        
+        .prev-next li.disabled a {
+            background: #f0f0f0;
+            border-color: #ccc;
+            color: #999;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
     </style>
 </head>
 
@@ -374,8 +460,8 @@
                                 <div class="blog-bottom">
                                     <!-- Next Prev -->
                                     <ul class="prev-next">
-                                        <li class="prev"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                                        <li class="next"><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
+                                        <li class="prev"><a href="#" id="prevPostLink"><i class="fa fa-angle-double-left"></i></a></li>
+                                        <li class="next"><a href="#" id="nextPostLink"><i class="fa fa-angle-double-right"></i></a></li>
                                     </ul>
                                     <!--/ End Next Prev -->
                                 </div>
@@ -386,6 +472,12 @@
                                 <h2>All Comments</h2>
                                 <div class="comments-body" id="commentsContainer">
                                     <!-- Comments will be dynamically loaded here -->
+                                </div>
+                                <!-- Comment Pagination -->
+                                <div class="comment-pagination-container">
+                                    <button class="pagination-button" id="prevCommentPage" disabled>Previous</button>
+                                    <div class="page-numbers" id="commentPageNumbers"></div>
+                                    <button class="pagination-button" id="nextCommentPage" disabled>Next</button>
                                 </div>
                             </div>
                         </div>
@@ -533,6 +625,10 @@
     <!-- Post APIs -->
     <script src="post_apis.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Comment Pagination JS -->
+    <script src="js/comment-pagination.js"></script>
+    <!-- Post Navigation JS -->
+    <script src="js/post-navigation.js"></script>
     <script>
         // Setup search functionality
         const searchInput = document.getElementById('searchInput');
@@ -690,100 +786,15 @@
                     relatedPostsContainer.innerHTML = '<div class="no-posts">No related posts available</div>';
                 }
 
+                // Setup post navigation (previous/next buttons)
+                setupPostNavigation(allPosts, postId);
+
             } catch (error) {
                 console.error('Error loading post:', error);
                 // Redirect to newsfeed if there's an error
                 window.location.href = 'newsfeed.html';
             }
         }
-
-        // Format comment date
-        function formatCommentDate(dateString) {
-            const date = new Date(dateString);
-            return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-        }
-
-        // Get random user icon
-        function getRandomUserIcon() {
-            const randomNum = Math.floor(Math.random() * 7) + 1;
-            return `user_icon/user_${randomNum}.jpg`;
-        }
-
-        // Format single comment HTML
-        function formatComment(comment) {
-            return `
-                <div class="single-comments">
-                    <div class="main">
-                        <div class="head">
-                            <img src="${comment.userIcon || getRandomUserIcon()}" alt="#" />
-                        </div>
-                        <div class="body">
-                            <h4>${comment.author}</h4>
-                            <div class="comment-meta">
-                                <span class="meta"><i class="fa fa-calendar"></i>${formatCommentDate(comment.createdAt)}</span>
-                            </div>
-                            <p>${comment.content}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Load and display comments
-        async function loadComments(postId) {
-            try {
-                const comments = await getComments(postId);
-                const commentsContainer = document.getElementById('commentsContainer');
-
-                if (comments.length === 0) {
-                    commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
-                    return;
-                }
-
-                commentsContainer.innerHTML = comments.map(formatComment).join('');
-
-                // Update comment count
-                const count = await getCommentCount(postId);
-                document.getElementById('commentCount').textContent = count;
-            } catch (error) {
-                console.error('Error loading comments:', error);
-                document.getElementById('commentsContainer').innerHTML =
-                    '<p>Error loading comments. Please try again later.</p>';
-            }
-        }
-
-        // Handle comment form submission
-        document.getElementById('commentForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const postId = getUrlParam('id');
-            const author = document.getElementById('commentAuthor').value;
-            const content = document.getElementById('commentContent').value;
-
-            try {
-                const userIcon = getRandomUserIcon();
-                await addComment(postId, author, content, userIcon);
-
-                // Clear form
-                document.getElementById('commentAuthor').value = '';
-                document.getElementById('commentContent').value = '';
-
-                // Reload comments to show the new comment
-                await loadComments(postId);
-            } catch (error) {
-                console.error('Error adding comment:', error);
-                alert('Error adding comment. Please try again.');
-            }
-        });
-
-        // Load post and comments when page loads
-        document.addEventListener('DOMContentLoaded', async function() {
-            await loadPost();
-            const postId = getUrlParam('id');
-            if (postId) {
-                await loadComments(postId);
-            }
-        });
     </script>
     <!-- jquery Ui JS -->
     <script src="js/jquery-ui.min.js"></script>
@@ -805,22 +816,3 @@
     <script src="js/niceselect.js"></script>
     <!-- Tilt Jquery JS -->
     <script src="js/tilt.jquery.min.js"></script>
-    <!-- Owl Carousel JS -->
-    <script src="js/owl-carousel.js"></script>
-    <!-- counterup JS -->
-    <script src="js/jquery.counterup.min.js"></script>
-    <!-- Steller JS -->
-    <script src="js/steller.js"></script>
-    <!-- Wow JS -->
-    <script src="js/wow.min.js"></script>
-    <!-- Magnific Popup JS -->
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <!-- Counter Up CDN JS -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- Main JS -->
-    <script src="js/main.js"></script>
-</body>
-
-</html>
