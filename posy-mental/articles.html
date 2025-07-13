@@ -445,11 +445,24 @@
     <script src="articles_data.js"></script>
     <script src="post_apis.js"></script>
     <script>
+        // Array of images from the img directory to use as fallbacks
+        const fallbackImages = [
+            'img/blog1.jpg',
+            'img/blog2.jpg',
+            'img/blog3.jpg'
+        ];
+
+        // Function to get a random image from the fallback images array
+        function getRandomFallbackImage() {
+            const randomIndex = Math.floor(Math.random() * fallbackImages.length);
+            return fallbackImages[randomIndex];
+        }
+
         // Function to create article card HTML
         function createArticleCard(article) {
             const isRegularArticle = 'id' in article;
             const id = isRegularArticle ? article.id : article._id;
-            const image = isRegularArticle ? article.image : (article.imageUrl || 'images/chatting_boy.jpeg');
+            const image = isRegularArticle ? (article.image || getRandomFallbackImage()) : (article.imageUrl || getRandomFallbackImage());
             const excerpt = isRegularArticle ? article.excerpt : article.content.substring(0, 150) + '...';
             const date = isRegularArticle ? article.date : new Date(article.createdAt).toLocaleDateString();
             const category = article.category || 'General';

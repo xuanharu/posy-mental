@@ -456,6 +456,19 @@
     <script src="articles_data.js"></script>
     <script src="post_apis.js"></script>
     <script>
+        // Array of images from the img directory to use as fallbacks
+        const fallbackImages = [
+            'img/blog1.jpg',
+            'img/blog2.jpg',
+            'img/blog3.jpg'
+        ];
+
+        // Function to get a random image from the fallback images array
+        function getRandomFallbackImage() {
+            const randomIndex = Math.floor(Math.random() * fallbackImages.length);
+            return fallbackImages[randomIndex];
+        }
+
         // Function to get URL parameters
         function getUrlParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -492,7 +505,7 @@
                 // Update page content
                 document.title = `${article.title} - Posy Mental Health`;
                 document.getElementById('articleTitle').textContent = article.title;
-                document.getElementById('articleImage').src = type === 'article' ? article.image : (article.imageUrl || 'images/chatting_boy.jpeg');
+                document.getElementById('articleImage').src = type === 'article' ? (article.image || getRandomFallbackImage()) : (article.imageUrl || getRandomFallbackImage());
                 document.getElementById('articleAuthor').textContent = article.author || 'Unknown';
                 document.getElementById('articleDate').textContent = type === 'article' ? article.date : new Date(article.createdAt).toLocaleDateString();
                 document.getElementById('articleCategory').textContent = article.category || 'General';
@@ -540,7 +553,7 @@
                 relatedContainer.innerHTML = latestPosts
                     .map(article => {
                         const id = article._id;
-                        const image = article.imageUrl || 'images/chatting_boy.jpeg';
+                        const image = article.imageUrl || getRandomFallbackImage();
                         const date = new Date(article.createdAt).toLocaleDateString();
 
                         return `

@@ -389,6 +389,26 @@
     <script src="post_apis.js"></script>
 
     <script>
+        // Array of images from the img directory to use as fallbacks
+        const fallbackImages = [
+            'img/blog1.jpg',
+            'img/blog2.jpg',
+            'img/blog3.jpg',
+            'img/author1.jpg',
+            'img/author2.jpg',
+            'img/author3.jpg',
+            'img/pf1.jpg',
+            'img/pf2.jpg',
+            'img/pf3.jpg',
+            'img/pf4.jpg'
+        ];
+
+        // Function to get a random image from the fallback images array
+        function getRandomFallbackImage() {
+            const randomIndex = Math.floor(Math.random() * fallbackImages.length);
+            return fallbackImages[randomIndex];
+        }
+
         // Load posts from API when page loads
         window.addEventListener('DOMContentLoaded', loadPosts);
 
@@ -421,7 +441,7 @@
             div.innerHTML = `
                 <input type="checkbox" class="post-checkbox" data-post-id="${post._id}">
                 <div class="post-image">
-                    <img src="${post.imageUrl || 'images/chatting_boy.jpeg'}" alt="Post image">
+                    <img src="${post.imageUrl || getRandomFallbackImage()}" alt="Post image">
                 </div>
                 <div class="post-content-wrapper">
                     <div class="post-title">${post.title}</div>

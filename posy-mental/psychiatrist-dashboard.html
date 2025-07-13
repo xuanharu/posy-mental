@@ -727,27 +727,55 @@
         // Function to load psychiatrist data
         async function loadPsychiatristData() {
             try {
-                // In a real app, you would fetch this data from your API
-                // For now, we'll use placeholder data
-                const psychiatristData = {
-                    name: "Dr. Sarah Johnson",
-                    position: "Senior Psychiatrist",
-                    location: "Central Health Medical Center",
-                    description: "Experienced psychiatrist specializing in anxiety disorders and depression. Over 10 years of clinical experience helping patients overcome mental health challenges through evidence-based therapeutic approaches.",
-                    imageUrl: "images/doctor_cbg.png"
-                };
+                // Get the psychiatrist ID from localStorage
+                const psychiatristId = localStorage.getItem('userId');
+
+                if (!psychiatristId) {
+                    throw new Error('User ID not found. Please log in again.');
+                }
+
+                let psychiatristData;
+
+                // Check if we have cached data in localStorage
+                const cachedData = localStorage.getItem('psychiatristData');
+                if (cachedData) {
+                    psychiatristData = JSON.parse(cachedData);
+                } else {
+                    // Fetch psychiatrist data from the API
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('/api/psychiatrists/' + psychiatristId, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch psychiatrist data');
+                    }
+
+                    psychiatristData = await response.json();
+
+                    // Cache the data in localStorage for future use
+                    localStorage.setItem('psychiatristData', JSON.stringify(psychiatristData));
+                }
 
                 // Update the dashboard header
-                document.getElementById('psychiatrist-name').textContent = psychiatristData.name;
+                document.getElementById('psychiatrist-name').textContent = psychiatristData.name || 'Doctor';
 
                 // Update the profile section
-                document.getElementById('profile-name').textContent = psychiatristData.name;
-                document.getElementById('profile-position').textContent = psychiatristData.position;
-                document.getElementById('profile-location').textContent = psychiatristData.location;
-                document.getElementById('profile-description').textContent = psychiatristData.description;
-                document.getElementById('profile-img').src = psychiatristData.imageUrl;
+                document.getElementById('profile-name').textContent = psychiatristData.name || 'Doctor';
+                document.getElementById('profile-position').textContent = psychiatristData.position || 'Psychiatrist';
+                document.getElementById('profile-location').textContent = psychiatristData.location || 'Medical Center';
+                document.getElementById('profile-description').textContent = psychiatristData.description || 'No description available.';
+
+                // Set profile image if available
+                if (psychiatristData.imageUrl) {
+                    document.getElementById('profile-img').src = psychiatristData.imageUrl;
+                }
             } catch (error) {
                 console.error('Error loading psychiatrist data:', error);
+                alert('Error loading profile data: ' + error.message);
             }
         }
 

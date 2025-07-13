@@ -365,6 +365,19 @@
             }
         }
 
+        // Array of images from the img directory to use as fallbacks
+        const fallbackImages = [
+            'img/blog1.jpg',
+            'img/blog2.jpg',
+            'img/blog3.jpg'
+        ];
+
+        // Function to get a random image from the fallback images array
+        function getRandomFallbackImage() {
+            const randomIndex = Math.floor(Math.random() * fallbackImages.length);
+            return fallbackImages[randomIndex];
+        }
+
         function createPostElement(post) {
             const div = document.createElement('div');
             div.className = 'post';
@@ -373,10 +386,13 @@
             const date = new Date(post.createdAt);
             const formattedDate = date.toLocaleString();
 
+            // If post has no image, use a random image from the img directory
+            const imageUrl = post.imageUrl || getRandomFallbackImage();
+
             div.innerHTML = `
                 <input type="checkbox" class="post-checkbox" data-post-id="${post._id}">
                 <div class="post-image">
-                    <img src="${post.imageUrl || 'images/chatting_boy.jpeg'}" alt="${post.title}">
+                    <img src="${imageUrl}" alt="${post.title}">
                 </div>
                 <div class="post-content-wrapper">
                     <div class="post-title">${post.title}</div>
@@ -464,10 +480,13 @@
                 const crawlResult = await response.json();
 
                 // Create a new post from the crawled content
+                // Ensure we have an image URL, use fallback if none is provided
+                const imageUrl = crawlResult.imageUrl || getRandomFallbackImage();
+
                 const postResult = await createPost(
                     crawlResult.title,
                     crawlResult.content,
-                    crawlResult.imageUrl || 'images/chatting_boy.jpeg',
+                    imageUrl,
                     crawlResult.author || 'Crawled Content',
                     crawlResult.tags || [],
                     url // Pass the source URL

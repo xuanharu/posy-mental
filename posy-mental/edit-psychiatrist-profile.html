@@ -412,28 +412,59 @@
         // Function to load psychiatrist data
         async function loadPsychiatristData() {
             try {
-                // In a real app, you would fetch this data from your API
-                // For now, we'll use placeholder data
-                const psychiatristData = {
-                    name: "Dr. Sarah Johnson",
-                    position: "Senior Psychiatrist",
-                    location: "Central Health Medical Center",
-                    email: "sarah.johnson@example.com",
-                    phone: "+1 (555) 123-4567",
-                    description: "Experienced psychiatrist specializing in anxiety disorders and depression. Over 10 years of clinical experience helping patients overcome mental health challenges through evidence-based therapeutic approaches.",
-                    imageUrl: "images/doctor_cbg.png"
-                };
+                // Get the psychiatrist ID from localStorage
+                const psychiatristId = localStorage.getItem('userId');
+
+                if (!psychiatristId) {
+                    throw new Error('User ID not found. Please log in again.');
+                }
+
+                // Check if we have cached data in localStorage
+                const cachedData = localStorage.getItem('psychiatristData');
+                if (cachedData) {
+                    const psychiatristData = JSON.parse(cachedData);
+                    populateFormWithData(psychiatristData);
+                    return;
+                }
+
+                // Fetch psychiatrist data from the API
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/psychiatrists/' + psychiatristId, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch psychiatrist data');
+                }
+
+                const psychiatristData = await response.json();
+
+                // Cache the data in localStorage for future use
+                localStorage.setItem('psychiatristData', JSON.stringify(psychiatristData));
 
                 // Populate the form with the psychiatrist's data
-                document.getElementById('full-name').value = psychiatristData.name;
-                document.getElementById('position').value = psychiatristData.position;
-                document.getElementById('location').value = psychiatristData.location;
-                document.getElementById('email').value = psychiatristData.email;
-                document.getElementById('phone').value = psychiatristData.phone;
-                document.getElementById('about').value = psychiatristData.description;
-                document.getElementById('profile-img-preview').src = psychiatristData.imageUrl;
+                populateFormWithData(psychiatristData);
             } catch (error) {
                 console.error('Error loading psychiatrist data:', error);
+                alert('Error loading profile data: ' + error.message);
+            }
+        }
+
+        // Helper function to populate form with psychiatrist data
+        function populateFormWithData(psychiatristData) {
+            document.getElementById('full-name').value = psychiatristData.name || '';
+            document.getElementById('position').value = psychiatristData.position || '';
+            document.getElementById('location').value = psychiatristData.location || '';
+            document.getElementById('email').value = psychiatristData.email || '';
+            document.getElementById('phone').value = psychiatristData.phone || '';
+            document.getElementById('about').value = psychiatristData.description || '';
+
+            // Set profile image if available
+            if (psychiatristData.imageUrl) {
+                document.getElementById('profile-img-preview').src = psychiatristData.imageUrl;
             }
         }
 
@@ -474,66 +505,145 @@
         }
 
         // Handle personal info form submission
-        document.getElementById('personal-info-form').addEventListener('submit', function(e) {
+        document.getElementById('personal-info-form').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // Get form values
-            const name = document.getElementById('full-name').value;
-            const position = document.getElementById('position').value;
-            const location = document.getElementById('location').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const about = document.getElementById('about').value;
-            const imageFile = document.getElementById('profile-image').files[0];
+            try {
+                // Get form values
+                const name = document.getElementById('full-name').value;
+                const position = document.getElementById('position').value;
+                const location = document.getElementById('location').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const about = document.getElementById('about').value;
 
-            // In a real app, you would send this data to your API
-            console.log('Updating personal information:', {
-                name,
-                position,
-                location,
-                email,
-                phone,
-                about,
-                imageFile: imageFile ? imageFile.name : null
-            });
+                // Get the image file if one was selected
+                const imageFile = document.getElementById('profile-image').files[0];
+                let imageUrl = document.getElementById('profile-img-preview').src;
 
-            // Show success message
-            alert('Personal information updated successfully!');
+                // If a new image was uploaded, we need to handle it
+                if (imageFile) {
+                    // In a real app, you would upload the image to a server/cloud storage
+                    // and get back a URL. For now, we'll use a FileReader to get a data URL
+                    const reader = new FileReader();
 
-            // Redirect back to dashboard
-            window.location.href = 'psychiatrist-dashboard.html';
+                    // Create a promise to handle the async FileReader
+                    const imageDataPromise = new Promise((resolve) => {
+                        reader.onload = function(e) {
+                            resolve(e.target.result);
+                        };
+                    });
+
+                    reader.readAsDataURL(imageFile);
+                    imageUrl = await imageDataPromise;
+                }
+
+                // Get the psychiatrist ID from localStorage
+                const psychiatristId = localStorage.getItem('userId');
+
+                if (!psychiatristId) {
+                    throw new Error('User ID not found. Please log in again.');
+                }
+
+                // Prepare the data to send to the API
+                const updatedData = {
+                    name,
+                    position,
+                    location,
+                    email,
+                    phone,
+                    description: about,
+                    imageUrl
+                };
+
+                // Send the data to the backend API
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/psychiatrists/' + psychiatristId, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to update profile');
+                }
+
+                // Save updated data to localStorage for immediate use
+                localStorage.setItem('psychiatristData', JSON.stringify(updatedData));
+
+                // Show success message
+                alert('Personal information updated successfully!');
+
+                // Redirect back to dashboard
+                window.location.href = 'psychiatrist-dashboard.html';
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile: ' + error.message);
+            }
         });
 
         // Handle password form submission
-        document.getElementById('change-password-form').addEventListener('submit', function(e) {
+        document.getElementById('change-password-form').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // Get form values
-            const currentPassword = document.getElementById('current-password').value;
-            const newPassword = document.getElementById('new-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+            try {
+                // Get form values
+                const currentPassword = document.getElementById('current-password').value;
+                const newPassword = document.getElementById('new-password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
 
-            // Validate passwords match
-            if (newPassword !== confirmPassword) {
-                alert('New passwords do not match');
-                return;
+                // Validate passwords match
+                if (newPassword !== confirmPassword) {
+                    alert('New passwords do not match');
+                    return;
+                }
+
+                // Validate password requirements
+                const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+                if (!passwordRegex.test(newPassword)) {
+                    alert('New password does not meet the requirements');
+                    return;
+                }
+
+                // Get the psychiatrist ID from localStorage
+                const psychiatristId = localStorage.getItem('userId');
+
+                if (!psychiatristId) {
+                    throw new Error('User ID not found. Please log in again.');
+                }
+
+                // Send the password update request to the backend API
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/psychiatrists/' + psychiatristId + '/password', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        currentPassword,
+                        newPassword
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to update password');
+                }
+
+                // Show success message
+                alert('Password updated successfully!');
+
+                // Reset form
+                this.reset();
+            } catch (error) {
+                console.error('Error updating password:', error);
+                alert('Failed to update password: ' + error.message);
             }
-
-            // Validate password requirements
-            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-            if (!passwordRegex.test(newPassword)) {
-                alert('New password does not meet the requirements');
-                return;
-            }
-
-            // In a real app, you would send this data to your API
-            console.log('Updating password');
-
-            // Show success message
-            alert('Password updated successfully!');
-
-            // Reset form
-            this.reset();
         });
 
         // Handle logout
