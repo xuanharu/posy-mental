@@ -7,10 +7,12 @@ from services.chatbot_services.chatbot_crud import get_chat_history_by_id, updat
 from services.chatbot_services.chatbot_tools import tools_list, retrieve_sample_answers_by_question, recommend_expert
 from services import llm_services
 from openai.types.chat import ChatCompletionMessage
+from langsmith import traceable
 
 import markdown
 
 @helpers.iterable_handler
+@traceable
 def handle_new_message(chat_history_id, new_message: str):
     
     # get the chat history by id
