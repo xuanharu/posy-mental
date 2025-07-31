@@ -35,7 +35,7 @@ def recommend_expert(user_address: str)->str:
     
     return f"""
 You are given a list of psychiatrist centers as below.
-Try to pick the one the closest to the user's address and mention it only.
+Try to pick the one the closest to the user's address ({user_address}) and mention it only.
 Return in a paragraph, as in a conversation
 
 {all_centers_text}

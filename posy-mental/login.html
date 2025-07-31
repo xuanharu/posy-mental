@@ -347,6 +347,8 @@
                         // Store the token and user role
                         localStorage.setItem('token', data.access_token);
                         localStorage.setItem('userRole', data.role);
+                        localStorage.setItem('userId', data.user_id);
+
 
                         // Redirect based on role
                         if (data.role === 'psychiatrist') {

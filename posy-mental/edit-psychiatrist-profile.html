@@ -429,7 +429,7 @@
 
                 // Fetch psychiatrist data from the API
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/psychiatrists/' + psychiatristId, {
+                const response = await fetch('http://localhost:8000/psychiatrists/?psychiatrist_id=' + psychiatristId, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -558,7 +558,7 @@
 
                 // Send the data to the backend API
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/psychiatrists/' + psychiatristId, {
+                const response = await fetch('http://localhost:8000/psychiatrists/?psychiatrist_id=' + psychiatristId, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -618,7 +618,7 @@
 
                 // Send the password update request to the backend API
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/psychiatrists/' + psychiatristId + '/password', {
+                const response = await fetch('http://localhost:8000/psychiatrists/?psychiatrist_id=' + psychiatristId + '/password', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

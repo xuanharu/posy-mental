@@ -29,22 +29,15 @@ async def login(user_data: UserLogin):
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    # Check if the user has the role they're trying to log in with
     user_role = user.get("role", "user")
-    if user_data.role != "user" and user_data.role != user_role:
-        raise HTTPException(
-            status_code=403,
-            detail=f"User is not authorized as a {user_data.role}",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
     access_token = create_access_token(
         data={"sub": str(user["_id"])}
     )
     return {
         "access_token": access_token, 
         "token_type": "bearer",
-        "role": user_role
+        "role": user_role,
+        "user_id": str(user["_id"])
     }
 
 @router.post("/register")
