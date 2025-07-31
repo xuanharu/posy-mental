@@ -7,32 +7,6 @@
 
 Posy is a comprehensive mental health web application designed to provide personalized mental healthcare support. The platform combines AI-powered chatbot assistance, informative news feeds, and professional mental health services to create a safe and supportive online space for mental well-being.
 
-## ✨ Features
-
-### 🤖 AI Chatbot - "Posy"
-- **24/7 Availability**: Get instant support anytime you need it
-- **Confidential Space**: Share your thoughts and feelings without judgment
-- **Personalized Responses**: AI-powered conversations tailored to your needs
-- **Mental Health Tools**: Access to various assessment and coping tools
-
-### 📰 Informative News Feed
-- **Daily Mental Health Tips**: Expert-curated content for daily wellness
-- **Interactive Community**: Comment and engage with posts
-- **Featured Articles**: In-depth articles on mental health topics
-- **Admin Posts**: Professional insights and updates
-
-### 🏥 Professional Services
-- **Mental Health Assessment**: Comprehensive evaluation tools
-- **Emergency Help**: 24/7 crisis support and resources
-- **Evidence-based Techniques**: Scientifically backed therapeutic approaches
-- **Personalized Care Plans**: Tailored treatment recommendations
-
-### 👥 User Management
-- **Secure Authentication**: JWT-based user registration and login
-- **User Profiles**: Personalized dashboard and settings
-- **Psychiatrist Dashboard**: Professional interface for healthcare providers
-- **Admin Panel**: Content management and user administration
-
 ## 🛠️ Technology Stack
 
 ### Backend
