@@ -185,22 +185,6 @@ posy-mental/
 - **Input Validation**: Comprehensive data validation
 - **Environment Variables**: Secure configuration management
 
-## 🌐 Browser Support
-
-- Chrome (recommended)
-- Firefox
-- Safari
-- Edge
-- Mobile browsers (responsive design)
-
-## 📱 Mobile Compatibility
-
-The application is fully responsive and optimized for:
-- Smartphones (iOS/Android)
-- Tablets
-- Desktop computers
-- Various screen sizes and orientations
-
 ## 🤝 Contributing
 
 We welcome contributions to improve Posy! Please follow these steps:
@@ -211,16 +195,6 @@ We welcome contributions to improve Posy! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Contact & Support
-
-- **Email**: support@posy.com.vn
-- **Phone**: +89 123 456 789
-- **GitHub**: [xuanharu/posy-mental](https://github.com/xuanharu/posy-mental)
-
 ## 🙏 Acknowledgments
 
 - OpenAI for GPT integration
@@ -228,18 +202,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Bootstrap team for responsive design components
 - Mental health professionals who provided guidance
 
-## 📊 Statistics
-
-- **34** Collaborated centers
-- **557** VIP users
-- **4,379** Happy patients
-- **35** Days of experience
-
----
-
 **© Copyright 2024 | All Rights Reserved by Xuan Nguyen**
-
-*Empowering your journey to define yourself and enhance mental health through customized and personalized mental consulting for every client.*
 =======
 # Posy Mental - Mental Health Support Platform
 
@@ -288,11 +251,6 @@ From the project root directory, serve the frontend files using a simple Python 
 ```bash
 uv run python -m http.server 3000
 ```
-
-### LLM Tracing
-
-For LLM tracing, you can access the LangChain project dashboard here:
-[https://smith.langchain.com/o/45824a77-a245-5932-b33e-bae9a3643e88/projects/p/c52c5fbc-8390-42bd-9dbc-de7bde9d5fca?timeModel=%7B%22duration%22%3A%227d%22%7D](https://smith.langchain.com/o/45824a77-a245-5932-b33e-bae9a3643e88/projects/p/c52c5fbc-8390-42bd-9dbc-de7bde9d5fca?timeModel=%7B%22duration%22%3A%227d%22%7D)
 
 Once both the backend and frontend services are running, you can access the application in your web browser at `http://localhost:3000/posy-mental`.
 >>>>>>> 711988db4779512e29ad30d02dc3d27de2889aff
