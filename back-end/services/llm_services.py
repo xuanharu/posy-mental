@@ -18,7 +18,7 @@ def run_llm_chat_completion(system, messages, tools = []):
     ] + messages
     
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4.1",
         messages=all_messages,
         tools=tools,
     )
