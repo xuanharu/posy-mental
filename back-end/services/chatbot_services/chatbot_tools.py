@@ -1,7 +1,11 @@
 from services import (
     llm_services,
-    knowledge_base_services
+    knowledge_base_services,
 )
+
+from database import db_mongodb
+from utils.helpers import check_if_iterable
+import json
 
 from openai_function_calling.tool_helpers import ToolHelpers
 
@@ -23,7 +27,18 @@ def recommend_expert(user_address: str)->str:
     """This function will help to recommend expert to the user.
     Only trigger this function when the user is in need of professional help and share their address in the chat."""
     
-    return "Xuan Nguyen - Clinical Psychologist\nAddress: 123 Nguyen Van Linh, District 7, Ho Chi Minh City\nPhone: 0123456789"
+    # Find all the centers in the database:
+    all_centers = list(db_mongodb['centers'].find())
+    all_centers = check_if_iterable(all_centers)
+    all_centers_text = json.dumps(all_centers)
+    
+    return f"""
+You are given a list of psychiatrist centers as below.
+Try to pick the one the closest to the user's address and mention it only.
+Return in a paragraph, as in a conversation
+
+{all_centers_text}
+"""
 
 tools_list = ToolHelpers.infer_from_function_refs(
         [retrieve_sample_answers_by_question, 
