@@ -4,7 +4,7 @@ from utils import (
 )
 import json
 from services.chatbot_services.chatbot_crud import get_chat_history_by_id, update_chat_history, NewMessage
-from services.chatbot_services.chatbot_tools import tools_list, retrieve_sample_answers_by_question, recommend_expert
+from services.chatbot_services.chatbot_tools import tools_list, retrieve_sample_answers_by_question, recommend_expert, suggest_nearby_mental_health_centers
 from services import llm_services
 from openai.types.chat import ChatCompletionMessage
 from langsmith import traceable
@@ -40,6 +40,8 @@ def handle_new_message(chat_history_id, new_message: str):
             function_response = retrieve_sample_answers_by_question(function_args["new_message"])
         elif function_name == "recommend_expert":
             function_response = recommend_expert(function_args["user_address"])
+        elif function_name == "suggest_nearby_mental_health_centers":
+            function_response = suggest_nearby_mental_health_centers(function_args["user_message"])
         else:
             function_response = "The tool is not found"
         
@@ -61,10 +63,3 @@ def handle_new_message(chat_history_id, new_message: str):
     response_html = markdown.markdown(response.content)
     
     return response_html
-        
-        
-    
-    
-
-    
-    

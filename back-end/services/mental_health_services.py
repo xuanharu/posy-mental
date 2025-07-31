@@ -3,6 +3,8 @@ from services.llm_services import run_llm_structure_output
 from database import db_mongodb
 from bson import ObjectId
 from datetime import datetime
+import math
+import re
 
 # Common mental health symptoms
 SYMPTOMS = [
@@ -236,3 +238,150 @@ def delete_center(center_id: str):
     """
     result = db_mongodb['centers'].delete_one({'_id': ObjectId(center_id)})
     return result.deleted_count > 0
+
+def extract_location_from_text(text: str) -> Optional[str]:
+    """
+    Extract location information from user text using common patterns
+    """
+    # Common location patterns in Vietnamese and English
+    location_patterns = [
+        r'(?:ở|tại|gần|near|in|at)\s+([^,.\n]+)',
+        r'(?:quận|district)\s+(\d+)',
+        r'(?:thành phố|city)\s+([^,.\n]+)',
+        r'(?:tỉnh|province)\s+([^,.\n]+)',
+        r'(?:phường|ward)\s+([^,.\n]+)',
+        r'(?:đường|street)\s+([^,.\n]+)',
+    ]
+    
+    text_lower = text.lower()
+    for pattern in location_patterns:
+        matches = re.findall(pattern, text_lower, re.IGNORECASE)
+        if matches:
+            return matches[0].strip()
+    
+    # Check for common Vietnamese city names
+    vietnamese_cities = [
+        'hồ chí minh', 'ho chi minh', 'saigon', 'sài gòn',
+        'hà nội', 'hanoi', 'đà nẵng', 'da nang',
+        'cần thơ', 'can tho', 'hải phòng', 'hai phong',
+        'biên hòa', 'bien hoa', 'nha trang', 'vũng tàu', 'vung tau'
+    ]
+    
+    for city in vietnamese_cities:
+        if city in text_lower:
+            return city
+    
+    return None
+
+def calculate_distance_score(user_location: str, center_address: str) -> float:
+    """
+    Calculate a simple distance score based on text similarity and common location terms
+    Returns a score from 0 to 1, where 1 is closest match
+    """
+    if not user_location or not center_address:
+        return 0.0
+    
+    user_location = user_location.lower().strip()
+    center_address = center_address.lower().strip()
+    
+    # Exact match gets highest score
+    if user_location in center_address or center_address in user_location:
+        return 1.0
+    
+    # Check for district/ward matches
+    user_words = set(user_location.split())
+    center_words = set(center_address.split())
+    
+    # Common location keywords
+    location_keywords = {'quận', 'district', 'phường', 'ward', 'thành phố', 'city', 'tỉnh', 'province'}
+    
+    # Calculate word overlap, giving more weight to location-specific terms
+    common_words = user_words.intersection(center_words)
+    location_matches = common_words.intersection(location_keywords)
+    
+    if location_matches:
+        return 0.8  # High score for location keyword matches
+    elif common_words:
+        return len(common_words) / max(len(user_words), len(center_words))
+    
+    return 0.0
+
+def find_nearby_centers(user_location: str, limit: int = 3) -> List[Dict]:
+    """
+    Find mental health centers near the user's location
+    """
+    centers = get_all_centers()
+    
+    if not centers:
+        return []
+    
+    # Calculate distance scores for each center
+    scored_centers = []
+    for center in centers:
+        score = calculate_distance_score(user_location, center.get('address', ''))
+        if score > 0:  # Only include centers with some location match
+            center['distance_score'] = score
+            scored_centers.append(center)
+    
+    # Sort by distance score (highest first) and limit results
+    scored_centers.sort(key=lambda x: x['distance_score'], reverse=True)
+    
+    # Format the results for display
+    nearby_centers = []
+    for center in scored_centers[:limit]:
+        nearby_centers.append({
+            'name': center.get('name', 'Unknown Center'),
+            'address': center.get('address', 'Address not available'),
+            'contact': center.get('contact', 'Contact not available'),
+            'specialization': center.get('specialization', 'General mental health'),
+            'note': center.get('note', ''),
+            'distance_score': center['distance_score']
+        })
+    
+    return nearby_centers
+
+def suggest_nearby_centers(user_message: str) -> str:
+    """
+    Suggest nearby mental health centers based on user's message
+    """
+    # Extract location from user message
+    user_location = extract_location_from_text(user_message)
+    
+    if not user_location:
+        # If no specific location found, return general advice
+        centers = get_all_centers()[:3]  # Get first 3 centers as general suggestions
+        if not centers:
+            return "I'd recommend seeking professional help from a mental health center. Unfortunately, I don't have specific center information available right now."
+        
+        result = "Here are some mental health centers that might help:\n\n"
+        for center in centers:
+            result += f"**{center.get('name', 'Mental Health Center')}**\n"
+            result += f"📍 Address: {center.get('address', 'Address not available')}\n"
+            result += f"📞 Contact: {center.get('contact', 'Contact not available')}\n"
+            result += f"🏥 Specialization: {center.get('specialization', 'General mental health')}\n"
+            if center.get('note'):
+                result += f"ℹ️ Note: {center['note']}\n"
+            result += "\n"
+        
+        return result
+    
+    # Find nearby centers based on extracted location
+    nearby_centers = find_nearby_centers(user_location)
+    
+    if not nearby_centers:
+        return f"I couldn't find specific mental health centers near {user_location}. I'd recommend searching online for mental health services in your area or contacting your local healthcare provider for referrals."
+    
+    result = f"Based on your location ({user_location}), here are some nearby mental health centers:\n\n"
+    
+    for i, center in enumerate(nearby_centers, 1):
+        result += f"**{i}. {center['name']}**\n"
+        result += f"📍 Address: {center['address']}\n"
+        result += f"📞 Contact: {center['contact']}\n"
+        result += f"🏥 Specialization: {center['specialization']}\n"
+        if center['note']:
+            result += f"ℹ️ Note: {center['note']}\n"
+        result += "\n"
+    
+    result += "💡 **Tip**: I recommend calling ahead to check availability and whether they accept your insurance. Many centers also offer online consultations."
+    
+    return result

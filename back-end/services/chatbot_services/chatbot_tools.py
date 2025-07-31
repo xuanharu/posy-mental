@@ -1,6 +1,7 @@
 from services import (
     llm_services,
-    knowledge_base_services
+    knowledge_base_services,
+    mental_health_services
 )
 
 from openai_function_calling.tool_helpers import ToolHelpers
@@ -25,7 +26,15 @@ def recommend_expert(user_address: str)->str:
     
     return "Xuan Nguyen - Clinical Psychologist\nAddress: 123 Nguyen Van Linh, District 7, Ho Chi Minh City\nPhone: 0123456789"
 
+def suggest_nearby_mental_health_centers(user_message: str)->str:
+    """This function will suggest nearby mental health centers based on the user's location mentioned in their message.
+    Trigger this function when the user asks for help finding mental health centers, therapists, or professional help, 
+    especially when they mention their location or ask about services near them."""
+    
+    return mental_health_services.suggest_nearby_centers(user_message)
+
 tools_list = ToolHelpers.infer_from_function_refs(
         [retrieve_sample_answers_by_question, 
-         recommend_expert]
+         recommend_expert,
+         suggest_nearby_mental_health_centers]
 )
