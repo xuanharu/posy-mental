@@ -506,46 +506,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Tags</label>
-                            <div id="tag-groups">
-                                <div class="mb-3">
-                                    <h6>POST TYPE (Required)</h6>
-                                    <div class="btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-outline-primary m-1">
-                                            <input type="checkbox" name="post_type" value="Advice"> Advice
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
-                                            <input type="checkbox" name="post_type" value="Information"> Information
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
-                                            <input type="checkbox" name="post_type" value="News"> News
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
-                                            <input type="checkbox" name="post_type" value="Review"> Review
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <h6>MENTAL HEALTH</h6>
-                                    <div class="btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-outline-primary m-1">
-                                            <input type="checkbox" name="tags" value="Anxiety"> Anxiety
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
-                                            <input type="checkbox" name="tags" value="Depression"> Depression
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
-                                            <input type="checkbox" name="tags" value="ADHD"> ADHD
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
-                                            <input type="checkbox" name="tags" value="Bipolar Disorder"> Bipolar Disorder
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <button type="submit" class="btn create-post-btn">Publish Post</button>
                             <button type="button" class="btn btn-secondary" id="cancel-post">Cancel</button>
                         </div>
@@ -906,14 +866,6 @@
                 const content = document.getElementById('post-content').value;
                 const imageFile = document.getElementById('post-image').files[0];
 
-                // Get selected post types
-                const selectedPostTypes = Array.from(document.querySelectorAll('input[name="post_type"]:checked'))
-                    .map(checkbox => checkbox.value);
-
-                // Get selected tags
-                const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
-                    .map(checkbox => checkbox.value);
-
                 // Validate required fields
                 if (!title || !content) {
                     alert('Please fill in all required fields');
@@ -931,8 +883,6 @@
                     title,
                     content,
                     imageFile: imageFile ? imageFile.name : null,
-                    postTypes: selectedPostTypes,
-                    tags: selectedTags
                 });
 
                 // Show success message
