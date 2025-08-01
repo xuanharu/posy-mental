@@ -42,6 +42,8 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <!-- SimpleMDE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
     <style>
         .dashboard-container {
@@ -503,6 +505,7 @@
                         <div class="form-group">
                             <label for="post-content">Content</label>
                             <textarea class="form-control" id="post-content" rows="6" placeholder="Write your post content here..." required></textarea>
+                            <!-- SimpleMDE will replace this textarea -->
                         </div>
 
                         <div class="form-group">
@@ -606,6 +609,9 @@
     <script src="js/bootstrap.min.js"></script>
     <!-- Main JS -->
     <script src="js/main.js"></script>
+    <!-- SimpleMDE JS -->
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="post_apis.js"></script>
     <script>
         // Sample patient data - in a real app, this would come from an API
         const samplePatients = [{
@@ -857,45 +863,65 @@
                 document.getElementById('image-preview').innerHTML = '';
             });
 
+            // SimpleMDE instance
+            let simplemde;
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize SimpleMDE for post content
+                simplemde = new SimpleMDE({
+                    element: document.getElementById("post-content"),
+                    spellChecker: false,
+                    status: false,
+                    forceSync: true
+                });
+            });
+
             // Form submission
-            createPostForm.addEventListener('submit', function(e) {
+            createPostForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
                 // Get form values
                 const title = document.getElementById('post-title').value;
-                const content = document.getElementById('post-content').value;
+                const content = simplemde ? simplemde.value() : document.getElementById('post-content').value;
                 const imageFile = document.getElementById('post-image').files[0];
 
+                // Get author user ID from localStorage
+                const author = localStorage.getItem('userId') || '';
+
                 // Validate required fields
-                if (!title || !content) {
+                if (!title || !content || !author) {
                     alert('Please fill in all required fields');
                     return;
                 }
 
-                // Validate at least one post type is selected
-                if (selectedPostTypes.length === 0) {
-                    alert('Please select at least one post type');
-                    return;
+                // Handle image (convert to base64 or use default)
+                let imageUrl = '';
+                if (imageFile) {
+                    const reader = new FileReader();
+                    imageUrl = await new Promise((resolve) => {
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsDataURL(imageFile);
+                    });
+                } else {
+                    imageUrl = 'images/chatting_boy.jpeg';
                 }
 
-                // In a real app, you would send this data to your API
-                console.log('Creating post:', {
-                    title,
-                    content,
-                    imageFile: imageFile ? imageFile.name : null,
-                });
+                // Use new API: submitPost
+                try {
+                    await submitPost({ title, content, authorId: author, imageUrl });
+                    alert('Post submitted for review!');
 
-                // Show success message
-                alert('Post created successfully!');
+                    // Reset form and hide it
+                    createPostForm.reset();
+                    if (simplemde) simplemde.value('');
+                    postForm.classList.remove('active');
+                    toggleButton.textContent = 'Create New Post';
+                    document.getElementById('image-preview').innerHTML = '';
 
-                // Reset form and hide it
-                createPostForm.reset();
-                postForm.classList.remove('active');
-                toggleButton.textContent = 'Create New Post';
-                document.getElementById('image-preview').innerHTML = '';
-
-                // Refresh posts list (in a real app, this would show the new post)
-                loadPostsData();
+                    // Refresh posts list
+                    loadPostsData();
+                } catch (error) {
+                    alert('Failed to submit post: ' + error.message);
+                }
             });
         }
 

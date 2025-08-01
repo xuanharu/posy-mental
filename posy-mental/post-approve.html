@@ -1,0 +1,241 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Approve Posts - Posy Mental Health</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/icofont.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .approve-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 40px 30px;
+        }
+        .approve-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2074d4;
+        }
+        .pending-table {
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .pending-table th, .pending-table td {
+            padding: 16px 12px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        .pending-table th {
+            background: #f0f7ff;
+            color: #2074d4;
+            font-weight: 600;
+        }
+        .pending-table tr {
+            border-bottom: 1px solid #eee;
+        }
+        .pending-table tr:last-child {
+            border-bottom: none;
+        }
+        .snippet {
+            color: #444;
+            font-size: 0.98em;
+            max-width: 350px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .approve-btn, .decline-btn {
+            padding: 7px 18px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            margin-right: 8px;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .approve-btn {
+            background: #28a745;
+            color: #fff;
+        }
+        .approve-btn:hover {
+            background: #218838;
+        }
+        .decline-btn {
+            background: #dc3545;
+            color: #fff;
+        }
+        .decline-btn:hover {
+            background: #b52a37;
+        }
+        .no-pending {
+            text-align: center;
+            color: #888;
+            margin: 40px 0;
+        }
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Area -->
+    <header class="header">
+        <!-- Header Inner -->
+        <div class="header-inner">
+            <div class="container">
+                <div class="inner">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-12">
+                            <!-- Start Logo -->
+                            <div class="logo">
+                                <a href="index.html"><img src="images/logo_cbg.png" alt="Posy"></a>
+                            </div>
+                            <!-- End Logo -->
+                            <!-- Mobile Nav -->
+                            <div class="mobile-nav"></div>
+                            <!-- End Mobile Nav -->
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-12">
+                        </div>
+                        <div class="col-lg-2 col-12">
+                            <div class="get-quote">
+                                <a href="login.html" class="btn">Get Started</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ End Header Inner -->
+    </header>
+    <!-- End Header Area -->
+
+    <!-- Main Section -->
+    <section class="contact-us section">
+        <div class="container">
+            <div class="text-center mb-4" style="display: flex; justify-content: center; gap: 25px;">
+                <a href="admin.html" class="btn btn-outline-primary" style="font-size: 1.2em; padding: 10px 30px; color: white;">Manage Posts</a>
+                <a href="crawled-posts.html" class="btn btn-outline-primary" style="font-size: 1.2em; padding: 10px 30px; color: white;">Crawled Articles</a>
+                <a href="centers.html" class="btn btn-outline-primary" style="font-size: 1.2em; padding: 10px 30px; color: white;">Mental Health Centers</a>
+                <a href="post-approve.html" class="btn btn-primary active" style="font-size: 1.2em; padding: 10px 30px; background-color: white; color: #2074d4;">Review Posts</a>
+            </div>
+            <div class="approve-container">
+                <h2 class="approve-title">Pending Posts for Approval</h2>
+                <div id="pendingPostsSection">
+                    <div class="loading">Loading pending posts...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="post_apis.js"></script>
+    <script>
+        async function loadPendingPosts() {
+            const section = document.getElementById('pendingPostsSection');
+            section.innerHTML = '<div class="loading">Loading pending posts...</div>';
+            try {
+                const pending = await getPendingPosts();
+                if (!pending.length) {
+                    section.innerHTML = '<div class="no-pending">No pending posts for approval.</div>';
+                    return;
+                }
+
+                // Find posts with author as ObjectId (24 hex chars)
+                const idRegex = /^[a-f\d]{24}$/i;
+                const idsToFetch = [];
+                pending.forEach(post => {
+                    if (typeof post.author === "string" && idRegex.test(post.author)) {
+                        idsToFetch.push(post.author);
+                    }
+                });
+
+                // Fetch all author names in parallel
+                if (idsToFetch.length > 0) {
+                    const uniqueIds = [...new Set(idsToFetch)];
+                    const nameResults = await Promise.all(
+                        uniqueIds.map(id =>
+                            getUserById(id)
+                                .then(user => ({ id, name: user.name }))
+                                .catch(() => ({ id, name: "Unknown" }))
+                        )
+                    );
+                    // Map id to name
+                    const idToName = {};
+                    nameResults.forEach(({ id, name }) => {
+                        idToName[id] = name;
+                    });
+                    // Replace author field in posts
+                    pending.forEach(post => {
+                        if (typeof post.author === "string" && idToName[post.author]) {
+                            post.author = idToName[post.author];
+                        }
+                    });
+                }
+
+                let html = '<table class="pending-table"><thead><tr><th>Image</th><th>Title</th><th>Content</th><th>Author</th><th>Actions</th></tr></thead><tbody>';
+                pending.forEach(post => {
+                    html += `<tr>
+                        <td>
+                            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post Image" style="max-width:80px;max-height:60px;border-radius:6px;">` : ''}
+                        </td>
+                        <td>${post.title}</td>
+                        <td class="snippet">${(post.content || '').replace(/<[^>]+>/g, '').replace(/[*_#`]/g, '').slice(0, 80)}...</td>
+                        <td>${post.author || ''}</td>
+                        <td class="actions-cell">
+                            <button class="approve-btn" onclick="approvePost('${post._id}')">Approve</button>
+                            <button class="decline-btn" onclick="declinePost('${post._id}')">Decline</button>
+                        </td>
+                    </tr>`;
+                });
+                html += '</tbody></table>';
+                section.innerHTML = html;
+            } catch (err) {
+                section.innerHTML = '<div class="no-pending">Error loading posts. Please try again.</div>';
+            }
+        }
+
+        async function approvePost(postId) {
+            try {
+                await approvePostById(postId);
+                alert('Post approved!');
+                loadPendingPosts();
+            } catch (err) {
+                alert('Failed to approve post.');
+            }
+        }
+
+        async function declinePost(postId) {
+            if (!confirm('Are you sure you want to decline and delete this post?')) return;
+            try {
+                await declinePostById(postId);
+                alert('Post declined and deleted.');
+                loadPendingPosts();
+            } catch (err) {
+                alert('Failed to delete post.');
+            }
+        }
+
+        // Initial load
+        loadPendingPosts();
+    </script>
+</body>
+</html>

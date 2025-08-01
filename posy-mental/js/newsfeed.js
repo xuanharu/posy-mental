@@ -141,10 +141,51 @@ $(document).ready(function() {
 
             async function loadPosts() {
                 try {
+                    // Fetch all posts, filter out those with 'pending' or 'approval' tag
                     const posts = await getPosts();
-                    // Filter out crawled posts (posts with source URLs) and sort by date
-                    allPosts = posts.filter(post => !post.source)
+                    let filteredPosts = posts
+                        .filter(post => {
+                            const tags = post.tags || [];
+                            return !tags.includes('pending') && !tags.includes('approval') && !post.source;
+                        })
                         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                    // Find posts with author as ObjectId (24 hex chars)
+                    const idRegex = /^[a-f\d]{24}$/i;
+                    const idToIndex = {};
+                    const idsToFetch = [];
+                    filteredPosts.forEach((post, idx) => {
+                        if (typeof post.author === "string" && idRegex.test(post.author)) {
+                            idToIndex[post.author] = idx;
+                            idsToFetch.push(post.author);
+                        }
+                    });
+
+                    // Fetch all author names in parallel
+                    if (idsToFetch.length > 0) {
+                        const uniqueIds = [...new Set(idsToFetch)];
+                        const nameResults = await Promise.all(
+                            uniqueIds.map(id =>
+                                getUserById(id)
+                                    .then(user => ({ id, name: user.name }))
+                                    .catch(() => ({ id, name: "Unknown" }))
+                            )
+                        );
+                        // Map id to name
+                        const idToName = {};
+                        nameResults.forEach(({ id, name }) => {
+                            idToName[id] = name;
+                        });
+                        // Replace author field in posts
+                        filteredPosts.forEach(post => {
+                            if (typeof post.author === "string" && idToName[post.author]) {
+                                post.author = idToName[post.author];
+                            }
+                        });
+                    }
+
+                    allPosts = filteredPosts;
+
                     if (allPosts && allPosts.length > 0) {
                         // Collect all unique tags
                         allPosts.forEach(post => {

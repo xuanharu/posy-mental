@@ -133,3 +133,37 @@ def get_crawled_posts():
         {"source": {"$exists": True}}
     ).sort("createdAt", -1)  # Sort by newest first
     return list(cursor)
+
+@helpers.iterable_handler
+def approve_post(post_id):
+    """
+    Approve a post by removing 'pending' and 'approval' from tags,
+    and updating updatedAt. Keeps other tags.
+    """
+    post = db_mongodb['posts'].find_one({"_id": ObjectId(post_id)})
+    if not post:
+        return 0
+
+    tags = post.get("tags", [])
+    # Remove 'pending' and 'approval' tags, keep others
+    tags = [t for t in tags if t not in ("pending", "approval")]
+    # Optionally, add 'approved' tag if you want to mark it
+    # tags.append("approved")
+
+    # If author is an ID, try to look up the author's name
+    author = post.get("author")
+    author_name = author
+    if ObjectId.is_valid(str(author)):
+        user = db_mongodb['users'].find_one({"_id": ObjectId(author)})
+        if user and "name" in user:
+            author_name = user["name"]
+
+    result = db_mongodb['posts'].update_one(
+        {"_id": ObjectId(post_id)},
+        {"$set": {
+            "tags": tags,
+            "author": author_name,
+            "updatedAt": datetime.now()
+        }}
+    )
+    return result.modified_count

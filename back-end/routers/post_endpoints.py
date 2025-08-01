@@ -6,6 +6,60 @@ from services import post_services, auth_services
 
 router = APIRouter()
 
+# --- NEW API for /api/posts ---
+from fastapi import APIRouter as FastAPIRouter
+
+api_router = FastAPIRouter(prefix="/api/posts")
+
+class PostSubmitRequest(BaseModel):
+    title: str
+    content: str
+    authorId: str
+    imageUrl: str = ""
+
+@api_router.post("/submit")
+def submit_post(data: PostSubmitRequest):
+    # Create a post with status "pending"
+    return post_services.create_post(
+        data.title,
+        data.content,
+        data.imageUrl,  # image_url
+        data.authorId,
+        ["pending"],  # tags
+        None  # source
+    )
+
+@api_router.get("")
+def get_posts_by_status(status: str = None):
+    # If status is provided, filter by tag/status
+    posts = post_services.get_posts()
+    if status:
+        posts = [p for p in posts if "tags" in p and status in p["tags"]]
+    return posts
+
+@api_router.get("/pending")
+def get_pending_posts():
+    posts = post_services.get_posts()
+    return [p for p in posts if "tags" in p and "pending" in p["tags"]]
+
+@api_router.post("/approve/{post_id}")
+def approve_post(post_id: str):
+    modified = post_services.approve_post(post_id)
+    if modified:
+        return {"success": True}
+    else:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+@api_router.get("/user/{user_id}")
+def get_user(user_id: str):
+    from database import db_mongodb
+    from bson.objectid import ObjectId
+    user = db_mongodb['users'].find_one({"_id": ObjectId(user_id)})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    # Only return safe fields
+    return {"_id": str(user["_id"]), "name": user.get("name", ""), "email": user.get("email", "")}
+
 @router.get("/posts")
 def get_posts():
     return post_services.get_posts()

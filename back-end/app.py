@@ -39,6 +39,7 @@ app.include_router(auth_endpoints.router, prefix="/auth", tags=["authentication"
 app.include_router(crawl_endpoint.router, prefix="/crawl", tags=["crawl content from other sources"])
 app.include_router(mental_health_endpoints.router, prefix="/mental-health", tags=["mental health assessment"])
 app.include_router(psychiatrist_endpoints.router, prefix="/psychiatrists", tags=["psychiatrist"])
+app.include_router(post_endpoints.api_router, tags=["api posts"])
 
 # Mount the static files directory
 static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "posy-mental")
