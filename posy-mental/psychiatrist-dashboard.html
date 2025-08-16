@@ -387,6 +387,47 @@
             margin: 5px;
             cursor: pointer;
         }
+        /* Custom styles for SimpleMDE */
+        
+        .CodeMirror {
+            min-height: 300px;
+        }
+        
+        .editor-toolbar {
+            border-radius: 4px 4px 0 0;
+        }
+        /* Tag button styles */
+        
+        .btn-outline-primary {
+            transition: all 0.2s ease;
+            background-color: #fff;
+            color: #2074d4;
+            border: 1px solid #2074d4;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .btn-outline-primary.active,
+        .btn-outline-primary:active {
+            background-color: #2074d4 !important;
+            color: white !important;
+            border-color: #2074d4 !important;
+        }
+        
+        .btn-group-toggle label.active {
+            background-color: #2074d4;
+            color: white;
+            border-color: #2074d4;
+        }
+        
+        .btn-group-toggle label:hover {
+            background-color: #e6f0ff;
+        }
+        
+        .btn-group-toggle label.active:hover {
+            background-color: #1a65c0;
+        }
     </style>
 </head>
 
@@ -482,26 +523,149 @@
 
                 <!-- Post Form (Hidden by Default) -->
                 <div class="post-form" id="post-form">
-                    <form id="create-post-form">
+                    <form id="create-post-form" enctype="multipart/form-data">
+                        <!-- Title Input -->
                         <div class="form-group">
                             <label for="post-title">Title</label>
-                            <input type="text" class="form-control" id="post-title" placeholder="Enter post title" required>
+                            <input type="text" class="form-control" id="post-title" name="title" required>
                         </div>
 
+                        <!-- Author Input -->
                         <div class="form-group">
-                            <label for="post-image">Featured Image</label>
-                            <input type="file" class="form-control" id="post-image" accept="image/*" onchange="previewImage(this)">
+                            <label for="post-author">Author Name</label>
+                            <input type="text" class="form-control" id="post-author" name="author" required>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="form-group">
+                            <label for="post-image">Post Image</label>
+                            <input type="file" class="form-control" id="post-image" name="image" accept="image/*" onchange="previewImage(this)">
                             <div class="image-preview" id="image-preview">
                                 <!-- Image preview will be shown here -->
                             </div>
                         </div>
 
+                        <!-- Content Textarea -->
                         <div class="form-group">
                             <label for="post-content">Content</label>
-                            <textarea class="form-control" id="post-content" rows="6" placeholder="Write your post content here..." required></textarea>
-                            <!-- SimpleMDE will replace this textarea -->
+                            <textarea class="form-control" id="post-content" name="content" rows="6" required></textarea>
                         </div>
 
+                        <!-- Tags Selection -->
+                        <div class="form-group">
+                            <label>Tags</label>
+                            <div id="tagGroups">
+                                <div class="mb-3">
+                                    <h6>POST TYPE (Required)</h6>
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="post_type" value="Advice"> Advice
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="post_type" value="Information"> Information
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="post_type" value="News"> News
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="post_type" value="Review"> Review
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="post_type" value="Tutorial"> Tutorial
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h6>MENTAL HEALTH</h6>
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Addiction"> Addiction
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Anxiety"> Anxiety
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="ADHD"> ADHD
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Asperger's"> Asperger's
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Autism"> Autism
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Bipolar Disorder"> Bipolar Disorder
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Chronic Pain"> Chronic Pain
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Depression"> Depression
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Eating Disorders"> Eating Disorders
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h6>PERSONALITY</h6>
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Passive Aggression"> Passive Aggression
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Personality"> Personality
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Shyness"> Shyness
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h6>PERSONAL GROWTH</h6>
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Goal Setting"> Goal Setting
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Happiness"> Happiness
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Positive Psychology"> Positive Psychology
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Stopping Smoking"> Stopping Smoking
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <h6>RELATIONSHIP</h6>
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Low Sexual Desire"> Low Sexual Desire
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Relationships"> Relationships
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Sex"> Sex
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Family Life"> Family Life
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Child Development"> Child Development
+                                        </label>
+                                        <label class="btn btn-outline-primary m-1">
+                                            <input type="checkbox" name="tags" value="Parenting"> Parenting
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
                         <div class="form-group">
                             <button type="submit" class="btn create-post-btn">Publish Post</button>
                             <button type="button" class="btn btn-secondary" id="cancel-post">Cancel</button>
@@ -640,6 +804,8 @@
             // Set up post form toggle
             setupPostForm();
 
+            // Set up tag buttons
+            setupTagButtons();
         });
 
         // Function to load psychiatrist data
@@ -899,11 +1065,28 @@
             const cancelButton = document.getElementById('cancel-post');
             const createPostForm = document.getElementById('create-post-form');
 
+            // SimpleMDE instance
+            let simplemde;
+
             // Toggle form visibility
             toggleButton.addEventListener('click', function() {
                 postForm.classList.toggle('active');
                 if (postForm.classList.contains('active')) {
                     toggleButton.textContent = 'Hide Form';
+
+                    // Initialize SimpleMDE when form is shown for the first time
+                    if (!simplemde) {
+                        try {
+                            simplemde = new SimpleMDE({
+                                element: document.getElementById("post-content"),
+                                spellChecker: false,
+                                status: false,
+                                forceSync: true
+                            });
+                        } catch (error) {
+                            console.error('Failed to initialize SimpleMDE:', error);
+                        }
+                    }
                 } else {
                     toggleButton.textContent = 'Create New Post';
                 }
@@ -915,17 +1098,17 @@
                 toggleButton.textContent = 'Create New Post';
                 createPostForm.reset();
                 document.getElementById('image-preview').innerHTML = '';
-            });
 
-            // SimpleMDE instance
-            let simplemde;
-            document.addEventListener('DOMContentLoaded', function() {
-                // Initialize SimpleMDE for post content
-                simplemde = new SimpleMDE({
-                    element: document.getElementById("post-content"),
-                    spellChecker: false,
-                    status: false,
-                    forceSync: true
+                // Clear SimpleMDE content
+                if (simplemde) {
+                    simplemde.value('');
+                }
+
+                // Clear all tag selections
+                document.querySelectorAll('.btn-group-toggle label').forEach(label => {
+                    label.classList.remove('active');
+                    const checkbox = label.querySelector('input[type="checkbox"]');
+                    if (checkbox) checkbox.checked = false;
                 });
             });
 
@@ -933,41 +1116,50 @@
             createPostForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
-                // Get form values
-                const title = document.getElementById('post-title').value;
-                const content = simplemde ? simplemde.value() : document.getElementById('post-content').value;
-                const imageFile = document.getElementById('post-image').files[0];
-
-                // Get author user ID from localStorage
-                const author = localStorage.getItem('userId') || '';
-
-                // Validate required fields
-                if (!title || !content || !author) {
-                    alert('Please fill in all required fields');
-                    return;
-                }
-
-                // Handle image (convert to base64 or use default)
-                let imageUrl = '';
-                if (imageFile) {
-                    const reader = new FileReader();
-                    imageUrl = await new Promise((resolve) => {
-                        reader.onload = (e) => resolve(e.target.result);
-                        reader.readAsDataURL(imageFile);
-                    });
-                } else {
-                    imageUrl = 'images/chatting_boy.jpeg';
-                }
-
-                // Use new API: submitPost
                 try {
-                    await submitPost({
-                        title,
-                        content,
-                        authorId: author,
-                        imageUrl
-                    });
-                    alert('Post submitted for review!');
+                    // Get form values directly instead of using FormData
+                    const title = document.getElementById('post-title').value;
+                    const author = document.getElementById('post-author').value;
+                    const content = simplemde ? simplemde.value() : document.getElementById('post-content').value;
+                    const imageFile = document.getElementById('post-image').files[0];
+
+                    // Handle image
+                    let imageUrl = '';
+                    if (imageFile) {
+                        const reader = new FileReader();
+                        imageUrl = await new Promise((resolve) => {
+                            reader.onload = (e) => resolve(e.target.result);
+                            reader.readAsDataURL(imageFile);
+                        });
+                    } else {
+                        // Use default image
+                        imageUrl = 'images/chatting_boy.jpeg';
+                    }
+
+                    // Validate required fields
+                    if (!title || !content || !author) {
+                        alert('Please fill in all required fields');
+                        return;
+                    }
+
+                    // Validate at least one post type is selected
+                    const selectedPostTypes = Array.from(document.querySelectorAll('input[name="post_type"]:checked'))
+                        .map(checkbox => checkbox.value);
+                    if (selectedPostTypes.length === 0) {
+                        alert('Please select at least one post type');
+                        return;
+                    }
+
+                    // Get selected tags and post types
+                    const selectedTags = [
+                        ...Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(checkbox => checkbox.value),
+                        ...selectedPostTypes
+                    ];
+
+                    // Create new post using createPost function
+                    await createPost(title, content, imageUrl, author, selectedTags);
+
+                    alert('Post created successfully!');
 
                     // Reset form and hide it
                     createPostForm.reset();
@@ -976,10 +1168,18 @@
                     toggleButton.textContent = 'Create New Post';
                     document.getElementById('image-preview').innerHTML = '';
 
+                    // Clear all tag selections
+                    document.querySelectorAll('.btn-group-toggle label').forEach(label => {
+                        label.classList.remove('active');
+                        const checkbox = label.querySelector('input[type="checkbox"]');
+                        if (checkbox) checkbox.checked = false;
+                    });
+
                     // Refresh posts list
                     loadPostsData();
                 } catch (error) {
-                    alert('Failed to submit post: ' + error.message);
+                    console.error('Error saving post:', error);
+                    alert('Failed to save post: ' + error.message);
                 }
             });
         }
