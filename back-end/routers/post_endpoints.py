@@ -50,6 +50,14 @@ def approve_post(post_id: str):
     else:
         raise HTTPException(status_code=404, detail="Post not found")
 
+@api_router.delete("/decline/{post_id}")
+def decline_post(post_id: str):
+    deleted = post_services.delete_post(post_id)
+    if deleted:
+        return {"success": True}
+    else:
+        raise HTTPException(status_code=404, detail="Post not found")
+
 @api_router.get("/user/{user_id}")
 def get_user(user_id: str):
     from database import db_mongodb

@@ -16,42 +16,51 @@
         body {
             background: #f8f9fa;
         }
+        
         .approve-container {
             max-width: 900px;
             margin: 40px auto;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             padding: 40px 30px;
         }
+        
         .approve-title {
             text-align: center;
             margin-bottom: 30px;
             color: #2074d4;
         }
+        
         .pending-table {
             width: 100%;
             background: #fff;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
-        .pending-table th, .pending-table td {
+        
+        .pending-table th,
+        .pending-table td {
             padding: 16px 12px;
             text-align: left;
             vertical-align: middle;
         }
+        
         .pending-table th {
             background: #f0f7ff;
             color: #2074d4;
             font-weight: 600;
         }
+        
         .pending-table tr {
             border-bottom: 1px solid #eee;
         }
+        
         .pending-table tr:last-child {
             border-bottom: none;
         }
+        
         .snippet {
             color: #444;
             font-size: 0.98em;
@@ -60,7 +69,9 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .approve-btn, .decline-btn {
+        
+        .approve-btn,
+        .decline-btn {
             padding: 7px 18px;
             border: none;
             border-radius: 5px;
@@ -69,32 +80,143 @@
             transition: background 0.2s;
             display: inline-block;
         }
+        
         .approve-btn {
             background: #28a745;
             color: #fff;
         }
+        
         .approve-btn:hover {
             background: #218838;
         }
+        
         .decline-btn {
             background: #dc3545;
             color: #fff;
         }
+        
         .decline-btn:hover {
             background: #b52a37;
         }
+        
         .no-pending {
             text-align: center;
             color: #888;
             margin: 40px 0;
         }
+        
         .actions-cell {
             display: flex;
             gap: 8px;
             align-items: center;
         }
+        
+        .view-btn {
+            padding: 7px 18px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            margin-right: 8px;
+            transition: background 0.2s;
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+        }
+        
+        .view-btn:hover {
+            background: #0056b3;
+        }
+        /* Modal Styles */
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 2% auto;
+            padding: 30px;
+            border: none;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .modal-header {
+            border-bottom: 2px solid #f0f7ff;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            color: #2074d4;
+            margin: 0;
+            font-size: 1.5em;
+        }
+        
+        .modal-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .modal-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: block;
+        }
+        
+        .modal-content-text {
+            line-height: 1.6;
+            color: #333;
+            font-size: 1.1em;
+            margin: 20px 0;
+        }
+        
+        .modal-actions {
+            border-top: 2px solid #f0f7ff;
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .modal-actions .approve-btn,
+        .modal-actions .decline-btn {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            margin: 0 10px;
+        }
     </style>
 </head>
+
 <body>
     <!-- Header Area -->
     <header class="header">
@@ -145,6 +267,24 @@
             </div>
         </div>
     </section>
+
+    <!-- Post Details Modal -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <div class="modal-meta" id="modalMeta"></div>
+            </div>
+            <div id="modalImageContainer"></div>
+            <div class="modal-content-text" id="modalContent"></div>
+            <div class="modal-actions">
+                <button class="approve-btn" id="modalApproveBtn">Approve Post</button>
+                <button class="decline-btn" id="modalDeclineBtn">Decline Post</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="post_apis.js"></script>
@@ -174,13 +314,22 @@
                     const nameResults = await Promise.all(
                         uniqueIds.map(id =>
                             getUserById(id)
-                                .then(user => ({ id, name: user.name }))
-                                .catch(() => ({ id, name: "Unknown" }))
+                            .then(user => ({
+                                id,
+                                name: user.name
+                            }))
+                            .catch(() => ({
+                                id,
+                                name: "Unknown"
+                            }))
                         )
                     );
                     // Map id to name
                     const idToName = {};
-                    nameResults.forEach(({ id, name }) => {
+                    nameResults.forEach(({
+                        id,
+                        name
+                    }) => {
                         idToName[id] = name;
                     });
                     // Replace author field in posts
@@ -191,9 +340,12 @@
                     });
                 }
 
+                // Store posts data for modal access
+                pendingPostsData = pending;
+
                 let html = '<table class="pending-table"><thead><tr><th>Image</th><th>Title</th><th>Content</th><th>Author</th><th>Actions</th></tr></thead><tbody>';
                 pending.forEach(post => {
-                    html += `<tr>
+                            html += `<tr>
                         <td>
                             ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post Image" style="max-width:80px;max-height:60px;border-radius:6px;">` : ''}
                         </td>
@@ -201,6 +353,7 @@
                         <td class="snippet">${(post.content || '').replace(/<[^>]+>/g, '').replace(/[*_#`]/g, '').slice(0, 80)}...</td>
                         <td>${post.author || ''}</td>
                         <td class="actions-cell">
+                            <button class="view-btn" onclick="viewFullPost('${post._id}')">View Full Post</button>
                             <button class="approve-btn" onclick="approvePost('${post._id}')">Approve</button>
                             <button class="decline-btn" onclick="declinePost('${post._id}')">Decline</button>
                         </td>
@@ -234,8 +387,85 @@
             }
         }
 
+        // Store pending posts for modal access
+        let pendingPostsData = [];
+
+        // Modal functionality
+        const modal = document.getElementById('postModal');
+        const closeBtn = document.getElementsByClassName('close')[0];
+
+        // Close modal when clicking X
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // View full post in modal
+        async function viewFullPost(postId) {
+            try {
+                // Find the post in our stored data
+                const post = pendingPostsData.find(p => p._id === postId);
+                if (!post) {
+                    alert('Post not found');
+                    return;
+                }
+
+                // Populate modal content
+                document.getElementById('modalTitle').textContent = post.title;
+                document.getElementById('modalMeta').textContent = `By: ${post.author || 'Unknown'} | ${post.createdAt ? new Date(post.createdAt).toLocaleDateString() : 'Date unknown'}`;
+                
+                // Handle image
+                const imageContainer = document.getElementById('modalImageContainer');
+                if (post.imageUrl) {
+                    imageContainer.innerHTML = `<img src="${post.imageUrl}" alt="Post Image" class="modal-image">`;
+                } else {
+                    imageContainer.innerHTML = '';
+                }
+
+                // Handle content - preserve formatting but clean up HTML
+                const contentDiv = document.getElementById('modalContent');
+                let content = post.content || 'No content available';
+                
+                // Convert markdown-style formatting to HTML
+                content = content
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n/g, '<br>');
+                
+                contentDiv.innerHTML = `<p>${content}</p>`;
+
+                // Set up modal action buttons
+                const approveBtn = document.getElementById('modalApproveBtn');
+                const declineBtn = document.getElementById('modalDeclineBtn');
+                
+                approveBtn.onclick = function() {
+                    modal.style.display = 'none';
+                    approvePost(postId);
+                };
+                
+                declineBtn.onclick = function() {
+                    modal.style.display = 'none';
+                    declinePost(postId);
+                };
+
+                // Show modal
+                modal.style.display = 'block';
+            } catch (err) {
+                alert('Error loading post details');
+                console.error(err);
+            }
+        }
+
         // Initial load
         loadPendingPosts();
     </script>
 </body>
+
 </html>
