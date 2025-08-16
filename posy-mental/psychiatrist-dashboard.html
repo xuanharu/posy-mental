@@ -398,35 +398,36 @@
         }
         /* Tag button styles */
         
-        .btn-outline-primary {
-            transition: all 0.2s ease;
+        .tag-button {
+            display: inline-block;
+            padding: 8px 10px;
+            margin: 3px;
             background-color: #fff;
             color: #2074d4;
             border: 1px solid #2074d4;
-            padding: 8px 12px;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
         }
         
-        .btn-outline-primary.active,
-        .btn-outline-primary:active {
-            background-color: #2074d4 !important;
-            color: white !important;
-            border-color: #2074d4 !important;
+        .tag-button:hover {
+            background-color: #e6f0ff;
         }
         
-        .btn-group-toggle label.active {
+        .tag-button.active {
             background-color: #2074d4;
             color: white;
             border-color: #2074d4;
         }
         
-        .btn-group-toggle label:hover {
-            background-color: #e6f0ff;
+        .tag-button.active:hover {
+            background-color: #1a65c0;
         }
         
-        .btn-group-toggle label.active:hover {
-            background-color: #1a65c0;
+        .tag-button input[type="checkbox"] {
+            display: none;
         }
         /* Read-only field styling */
         
@@ -570,109 +571,109 @@
                             <div id="tagGroups">
                                 <div class="mb-3">
                                     <h6>POST TYPE (Required)</h6>
-                                    <div class="btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-outline-primary m-1">
+                                    <div class="tag-group">
+                                        <span class="tag-button" data-name="post_type" data-value="Advice">
                                             <input type="checkbox" name="post_type" value="Advice"> Advice
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="post_type" data-value="Information">
                                             <input type="checkbox" name="post_type" value="Information"> Information
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="post_type" data-value="News">
                                             <input type="checkbox" name="post_type" value="News"> News
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="post_type" data-value="Review">
                                             <input type="checkbox" name="post_type" value="Review"> Review
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="post_type" data-value="Tutorial">
                                             <input type="checkbox" name="post_type" value="Tutorial"> Tutorial
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <h6>MENTAL HEALTH</h6>
-                                    <div class="btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-outline-primary m-1">
+                                    <div class="tag-group">
+                                        <span class="tag-button" data-name="tags" data-value="Addiction">
                                             <input type="checkbox" name="tags" value="Addiction"> Addiction
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Anxiety">
                                             <input type="checkbox" name="tags" value="Anxiety"> Anxiety
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="ADHD">
                                             <input type="checkbox" name="tags" value="ADHD"> ADHD
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Asperger's">
                                             <input type="checkbox" name="tags" value="Asperger's"> Asperger's
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Autism">
                                             <input type="checkbox" name="tags" value="Autism"> Autism
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Bipolar Disorder">
                                             <input type="checkbox" name="tags" value="Bipolar Disorder"> Bipolar Disorder
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Chronic Pain">
                                             <input type="checkbox" name="tags" value="Chronic Pain"> Chronic Pain
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Depression">
                                             <input type="checkbox" name="tags" value="Depression"> Depression
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Eating Disorders">
                                             <input type="checkbox" name="tags" value="Eating Disorders"> Eating Disorders
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <h6>PERSONALITY</h6>
-                                    <div class="btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-outline-primary m-1">
+                                    <div class="tag-group">
+                                        <span class="tag-button" data-name="tags" data-value="Passive Aggression">
                                             <input type="checkbox" name="tags" value="Passive Aggression"> Passive Aggression
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Personality">
                                             <input type="checkbox" name="tags" value="Personality"> Personality
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Shyness">
                                             <input type="checkbox" name="tags" value="Shyness"> Shyness
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <h6>PERSONAL GROWTH</h6>
-                                    <div class="btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-outline-primary m-1">
+                                    <div class="tag-group">
+                                        <span class="tag-button" data-name="tags" data-value="Goal Setting">
                                             <input type="checkbox" name="tags" value="Goal Setting"> Goal Setting
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Happiness">
                                             <input type="checkbox" name="tags" value="Happiness"> Happiness
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Positive Psychology">
                                             <input type="checkbox" name="tags" value="Positive Psychology"> Positive Psychology
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Stopping Smoking">
                                             <input type="checkbox" name="tags" value="Stopping Smoking"> Stopping Smoking
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <h6>RELATIONSHIP</h6>
-                                    <div class="btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-outline-primary m-1">
+                                    <div class="tag-group">
+                                        <span class="tag-button" data-name="tags" data-value="Low Sexual Desire">
                                             <input type="checkbox" name="tags" value="Low Sexual Desire"> Low Sexual Desire
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Relationships">
                                             <input type="checkbox" name="tags" value="Relationships"> Relationships
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Sex">
                                             <input type="checkbox" name="tags" value="Sex"> Sex
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Family Life">
                                             <input type="checkbox" name="tags" value="Family Life"> Family Life
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Child Development">
                                             <input type="checkbox" name="tags" value="Child Development"> Child Development
-                                        </label>
-                                        <label class="btn btn-outline-primary m-1">
+                                        </span>
+                                        <span class="tag-button" data-name="tags" data-value="Parenting">
                                             <input type="checkbox" name="tags" value="Parenting"> Parenting
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -1131,9 +1132,9 @@
                 }
 
                 // Clear all tag selections
-                document.querySelectorAll('.btn-group-toggle label').forEach(label => {
-                    label.classList.remove('active');
-                    const checkbox = label.querySelector('input[type="checkbox"]');
+                document.querySelectorAll('.tag-button').forEach(button => {
+                    button.classList.remove('active');
+                    const checkbox = button.querySelector('input[type="checkbox"]');
                     if (checkbox) checkbox.checked = false;
                 });
             });
@@ -1195,9 +1196,9 @@
                     document.getElementById('image-preview').innerHTML = '';
 
                     // Clear all tag selections
-                    document.querySelectorAll('.btn-group-toggle label').forEach(label => {
-                        label.classList.remove('active');
-                        const checkbox = label.querySelector('input[type="checkbox"]');
+                    document.querySelectorAll('.tag-button').forEach(button => {
+                        button.classList.remove('active');
+                        const checkbox = button.querySelector('input[type="checkbox"]');
                         if (checkbox) checkbox.checked = false;
                     });
 
@@ -1212,22 +1213,23 @@
 
         // Set up tag buttons
         function setupTagButtons() {
-            const tagLabels = document.querySelectorAll('.btn-group-toggle label');
+            const tagButtons = document.querySelectorAll('.tag-button');
 
-            tagLabels.forEach(label => {
-                label.addEventListener('click', function(e) {
+            tagButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+
                     const checkbox = this.querySelector('input[type="checkbox"]');
-                    checkbox.checked = !checkbox.checked; // Toggle checkbox state
 
-                    // Toggle active class based on new checkbox state
+                    // Toggle checkbox state
+                    checkbox.checked = !checkbox.checked;
+
+                    // Toggle active class based on checkbox state
                     if (checkbox.checked) {
                         this.classList.add('active');
                     } else {
                         this.classList.remove('active');
                     }
-
-                    // Prevent the default bootstrap toggle behavior
-                    e.preventDefault();
                 });
             });
         }
