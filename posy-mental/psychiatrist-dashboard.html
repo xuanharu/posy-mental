@@ -428,6 +428,19 @@
         .btn-group-toggle label.active:hover {
             background-color: #1a65c0;
         }
+        /* Read-only field styling */
+        
+        .readonly-field {
+            background-color: #f8f9fa !important;
+            color: #6c757d !important;
+            cursor: not-allowed !important;
+        }
+        
+        .readonly-field:focus {
+            background-color: #f8f9fa !important;
+            border-color: #ddd !important;
+            box-shadow: none !important;
+        }
     </style>
 </head>
 
@@ -533,7 +546,7 @@
                         <!-- Author Input -->
                         <div class="form-group">
                             <label for="post-author">Author Name</label>
-                            <input type="text" class="form-control" id="post-author" name="author" required>
+                            <input type="text" class="form-control readonly-field" id="post-author" name="author" readonly required>
                         </div>
 
                         <!-- Image Upload -->
@@ -1073,6 +1086,19 @@
                 postForm.classList.toggle('active');
                 if (postForm.classList.contains('active')) {
                     toggleButton.textContent = 'Hide Form';
+
+                    // Auto-populate author field with psychiatrist's name
+                    const cachedData = localStorage.getItem('psychiatristData');
+                    if (cachedData) {
+                        const psychiatristData = JSON.parse(cachedData);
+                        document.getElementById('post-author').value = psychiatristData.name || 'Doctor';
+                    } else {
+                        // Fallback to getting name from the profile element
+                        const profileNameElement = document.getElementById('profile-name');
+                        if (profileNameElement) {
+                            document.getElementById('post-author').value = profileNameElement.textContent;
+                        }
+                    }
 
                     // Initialize SimpleMDE when form is shown for the first time
                     if (!simplemde) {
