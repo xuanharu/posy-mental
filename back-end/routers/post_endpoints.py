@@ -2,6 +2,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
+import json
 from services import post_services, auth_services
 
 router = APIRouter()
@@ -78,13 +79,45 @@ def get_post(post_id):
 
 @router.post("/create-post")
 def create_post(title, content, image_url, author, tags: Optional[str] = None, source: Optional[str] = None):
-    tag_list = [] if not tags else eval(tags)  # Convert string representation of list to actual list
-    return post_services.create_post(title, content, image_url, author, tag_list, source)
+    # Safely parse tags JSON string
+    tag_list = []
+    if tags:
+        try:
+            tag_list = json.loads(tags)
+            if not isinstance(tag_list, list):
+                raise ValueError("Tags must be a list")
+        except (json.JSONDecodeError, ValueError) as e:
+            raise HTTPException(status_code=422, detail=f"Invalid tags format: {str(e)}")
+    
+    # Validate required parameters
+    if not title or not content or not author:
+        raise HTTPException(status_code=422, detail="Title, content, and author are required")
+    
+    try:
+        return post_services.create_post(title, content, image_url, author, tag_list, source)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to create post: {str(e)}")
 
 @router.put("/update-post/{post_id}")
 def update_post(post_id, title, content, image_url, author, tags: Optional[str] = None):
-    tag_list = [] if not tags else eval(tags)  # Convert string representation of list to actual list
-    return post_services.update_post(post_id, title, content, image_url, author, tag_list)
+    # Safely parse tags JSON string
+    tag_list = []
+    if tags:
+        try:
+            tag_list = json.loads(tags)
+            if not isinstance(tag_list, list):
+                raise ValueError("Tags must be a list")
+        except (json.JSONDecodeError, ValueError) as e:
+            raise HTTPException(status_code=422, detail=f"Invalid tags format: {str(e)}")
+    
+    # Validate required parameters
+    if not title or not content or not author:
+        raise HTTPException(status_code=422, detail="Title, content, and author are required")
+    
+    try:
+        return post_services.update_post(post_id, title, content, image_url, author, tag_list)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update post: {str(e)}")
 
 @router.get("/posts/tag/{tag}")
 def get_posts_by_tag(tag: str):
