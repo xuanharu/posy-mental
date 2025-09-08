@@ -1,5 +1,5 @@
  const BASE_URL = 'http://localhost:8000/post';
-const API_BASE = 'http://localhost:8000/api/posts';
+ const API_BASE = 'http://localhost:8000/api/posts';
 
  // Search posts
  async function searchPosts(searchTerm) {
@@ -58,12 +58,24 @@ const API_BASE = 'http://localhost:8000/api/posts';
              params.append('source', source);
          }
 
+         // Get authentication token
+         const token = localStorage.getItem('token');
+         const headers = {
+             'Content-Type': 'application/x-www-form-urlencoded'
+         };
+
+         if (token) {
+             headers['Authorization'] = `Bearer ${token}`;
+         }
+
          const response = await fetch(`${BASE_URL}/create-post?${params.toString()}`, {
              method: 'POST',
+             headers: headers
          });
 
          if (!response.ok) {
-             throw new Error(`HTTP error! status: ${response.status}`);
+             const errorText = await response.text();
+             throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
          }
          return await response.json();
      } catch (error) {
@@ -83,12 +95,24 @@ const API_BASE = 'http://localhost:8000/api/posts';
              tags: JSON.stringify(tags || [])
          });
 
+         // Get authentication token
+         const token = localStorage.getItem('token');
+         const headers = {
+             'Content-Type': 'application/x-www-form-urlencoded'
+         };
+
+         if (token) {
+             headers['Authorization'] = `Bearer ${token}`;
+         }
+
          const response = await fetch(`${BASE_URL}/update-post/${postId}?${params.toString()}`, {
              method: 'PUT',
+             headers: headers
          });
 
          if (!response.ok) {
-             throw new Error(`HTTP error! status: ${response.status}`);
+             const errorText = await response.text();
+             throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
          }
          return await response.json();
      } catch (error) {
@@ -114,12 +138,22 @@ const API_BASE = 'http://localhost:8000/api/posts';
  // Delete a post
  async function deletePost(postId) {
      try {
+         // Get authentication token
+         const token = localStorage.getItem('token');
+         const headers = {};
+
+         if (token) {
+             headers['Authorization'] = `Bearer ${token}`;
+         }
+
          const response = await fetch(`${BASE_URL}/delete-post/${postId}`, {
              method: 'DELETE',
+             headers: headers
          });
 
          if (!response.ok) {
-             throw new Error(`HTTP error! status: ${response.status}`);
+             const errorText = await response.text();
+             throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
          }
          return await response.json();
      } catch (error) {
@@ -129,72 +163,72 @@ const API_BASE = 'http://localhost:8000/api/posts';
  }
 
  /**
- * New API endpoints for admin/approval/newsfeed logic
- */
+  * New API endpoints for admin/approval/newsfeed logic
+  */
 
-// Submit a new post (status: pending)
-async function submitPost({ title, content, authorId, imageUrl = "" }) {
-    try {
-        const response = await fetch(`${API_BASE}/submit`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, content, authorId, imageUrl })
-        });
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('Error submitting post:', error);
-        throw error;
-    }
-}
+ // Submit a new post (status: pending)
+ async function submitPost({ title, content, authorId, imageUrl = "" }) {
+     try {
+         const response = await fetch(`${API_BASE}/submit`, {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ title, content, authorId, imageUrl })
+         });
+         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+         return await response.json();
+     } catch (error) {
+         console.error('Error submitting post:', error);
+         throw error;
+     }
+ }
 
-// Get all pending posts
-async function getPendingPosts() {
-    try {
-        const response = await fetch(`${API_BASE}/pending`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching pending posts:', error);
-        throw error;
-    }
-}
+ // Get all pending posts
+ async function getPendingPosts() {
+     try {
+         const response = await fetch(`${API_BASE}/pending`);
+         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+         return await response.json();
+     } catch (error) {
+         console.error('Error fetching pending posts:', error);
+         throw error;
+     }
+ }
 
-// Approve a post
-async function approvePostById(postId) {
-    try {
-        const response = await fetch(`${API_BASE}/approve/${postId}`, { method: 'POST' });
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('Error approving post:', error);
-        throw error;
-    }
-}
+ // Approve a post
+ async function approvePostById(postId) {
+     try {
+         const response = await fetch(`${API_BASE}/approve/${postId}`, { method: 'POST' });
+         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+         return await response.json();
+     } catch (error) {
+         console.error('Error approving post:', error);
+         throw error;
+     }
+ }
 
-// Decline (delete) a post
-async function declinePostById(postId) {
-    try {
-        const response = await fetch(`${API_BASE}/decline/${postId}`, { method: 'DELETE' });
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('Error declining post:', error);
-        throw error;
-    }
-}
+ // Decline (delete) a post
+ async function declinePostById(postId) {
+     try {
+         const response = await fetch(`${API_BASE}/decline/${postId}`, { method: 'DELETE' });
+         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+         return await response.json();
+     } catch (error) {
+         console.error('Error declining post:', error);
+         throw error;
+     }
+ }
 
-// Get posts by status (e.g., approved)
-async function getPostsByStatus(status) {
-    try {
-        const response = await fetch(`${API_BASE}?status=${encodeURIComponent(status)}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching posts by status:', error);
-        throw error;
-    }
-}
+ // Get posts by status (e.g., approved)
+ async function getPostsByStatus(status) {
+     try {
+         const response = await fetch(`${API_BASE}?status=${encodeURIComponent(status)}`);
+         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+         return await response.json();
+     } catch (error) {
+         console.error('Error fetching posts by status:', error);
+         throw error;
+     }
+ }
 
  // Get user info by ID
  async function getUserById(userId) {
