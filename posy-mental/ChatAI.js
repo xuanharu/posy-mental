@@ -108,9 +108,12 @@ function setupEventListeners() {
             `;
             messagesContainer.appendChild(userMessageDiv);
 
-            // Check if the message is asking for advice
-            if (isAdviceRequest(message)) {
-                // Show questionnaire
+            // Check if assessment mode is active
+            if (typeof isAssessmentMode !== 'undefined' && isAssessmentMode) {
+                // Start mental health assessment
+                await startMentalHealthAssessment(messagesContainer, message);
+            } else if (isAdviceRequest(message)) {
+                // Show questionnaire (existing functionality)
                 await showAdviceQuestionnaire(messagesContainer);
             } else {
                 // Add loading bubble

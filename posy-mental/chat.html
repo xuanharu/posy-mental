@@ -286,6 +286,9 @@
             <button class="new-chat-btn" id="newChatBtn">
                 <i class="fa fa-plus"></i> New Conversation
             </button>
+            <button class="assessment-mode-btn" id="assessmentModeBtn" onclick="toggleAssessmentMode()">
+                <i class="fa fa-clipboard"></i> Mental Health Assessment
+            </button>
             <div class="chat-list" id="chatList">
                 <!-- Chat history items will be added here -->
             </div>
@@ -419,8 +422,9 @@
     <!-- Main JS -->
     <script src="js/main.js"></script>
 
-    <script src="/posy-mental/userid.js" defer></script>
-    <script src="/posy-mental/ChatAI.js" defer></script>
+    <script src="userid.js" defer></script>
+    <script src="mental-health-assessment.js" defer></script>
+    <script src="ChatAI.js" defer></script>
 </body>
 
 </html>
