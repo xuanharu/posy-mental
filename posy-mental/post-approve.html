@@ -370,7 +370,18 @@
             try {
                 await approvePostById(postId);
                 alert('Post approved!');
+
+                // After approval, refresh pending list
                 loadPendingPosts();
+
+                // Also refresh psychiatrist dashboard if open
+                try {
+                    if (window.opener && !window.opener.closed) {
+                        window.opener.postMessage({ type: 'refreshPosts' }, '*');
+                    }
+                } catch (e) {
+                    console.warn('Unable to notify dashboard to refresh:', e);
+                }
             } catch (err) {
                 alert('Failed to approve post.');
             }

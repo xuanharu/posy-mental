@@ -1183,10 +1183,15 @@
                         ...selectedPostTypes
                     ];
 
-                    // Create new post using createPost function
-                    await createPost(title, content, imageUrl, author, selectedTags);
+                    // Create new post with status pending using submitPost function
+                    await submitPost({
+                        title,
+                        content,
+                        authorId: localStorage.getItem('userId'),
+                        imageUrl
+                    });
 
-                    alert('Post created successfully!');
+                    alert('Post submitted successfully and is pending admin approval!');
 
                     // Reset form and hide it
                     createPostForm.reset();
@@ -1261,6 +1266,13 @@
             // Redirect to login page
             window.location.href = 'login.html';
         }
+
+        // Listen for approval messages from post-approve.html
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'refreshPosts') {
+                loadPostsData();
+            }
+        });
     </script>
 </body>
 
