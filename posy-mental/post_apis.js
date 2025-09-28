@@ -68,7 +68,15 @@
              headers['Authorization'] = `Bearer ${token}`;
          }
 
-         const response = await fetch(`${BASE_URL}/create-post?${params.toString()}`, {
+         const queryParams = new URLSearchParams({
+             author: author,
+             title: title,
+             content: content,
+             image_url: imageUrl,
+             tags: JSON.stringify(tags || [])
+         });
+
+         const response = await fetch(`${BASE_URL}/create-post?${queryParams.toString()}`, {
              method: 'POST',
              headers: headers
          });
