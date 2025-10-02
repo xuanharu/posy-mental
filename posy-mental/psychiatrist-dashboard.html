@@ -1184,12 +1184,14 @@
                     ];
 
                     // Create new post with status pending using submitPost function
-                    await submitPost({
+                    const formData = {
                         title,
                         content,
                         authorId: localStorage.getItem('userId'),
                         imageUrl
-                    });
+                    };
+
+                    await submitPost(formData, false);
 
                     alert('Post submitted successfully and is pending admin approval!');
 

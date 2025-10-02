@@ -175,14 +175,29 @@
   */
 
  // Submit a new post (status: pending)
- async function submitPost({ title, content, authorId, imageUrl = "" }) {
+ async function submitPost(formData, isFormData = false) {
      try {
-         const response = await fetch(`${API_BASE}/submit`, {
-             method: 'POST',
-             headers: { 'Content-Type': 'application/json' },
-             body: JSON.stringify({ title, content, authorId, imageUrl })
-         });
-         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+         let options;
+         if (isFormData) {
+             const token = localStorage.getItem('token');
+             options = {
+                 method: 'POST',
+                 headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+                 body: formData
+             };
+         } else {
+             options = {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify(formData)
+             };
+         }
+
+         const response = await fetch(`${API_BASE}/submit`, options);
+         if (!response.ok) {
+             const errorText = await response.text();
+             throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+         }
          return await response.json();
      } catch (error) {
          console.error('Error submitting post:', error);
