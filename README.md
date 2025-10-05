@@ -228,3 +228,10 @@ uv run python -m http.server 3000
 
 Once both the backend and frontend services are running, you can access the application in your web browser at `http://localhost:3000/posy-mental`.
 >>>>>>> 711988db4779512e29ad30d02dc3d27de2889aff
+
+
+# Performance Testing
+Download locust by the link
+Then use terminal 
+cmd /c "cd back-end & locust -f locustfile.py --host http://localhost:8000"
+http://localhost:8089
