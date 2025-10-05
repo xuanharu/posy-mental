@@ -124,24 +124,27 @@ SYMPTOM_QUESTIONS = {
     ]
 }
 
-def get_questions_for_symptoms(symptoms: List[str]) -> List[Dict]:
+def get_questions_for_symptoms(symptoms: List[str], user_context: Optional[str] = None) -> List[Dict]:
     """
-    Generate relevant questions based on selected symptoms
+    Generate personalized, context-aware questions for each symptom using LLM.
+    The questions should be empathetic, natural, and tailored to the user's described situation.
     """
     questions = []
     for symptom in symptoms:
-        if symptom in SYMPTOM_QUESTIONS:
-            for question in SYMPTOM_QUESTIONS[symptom]:
-                questions.append({
-                    "symptom": symptom,
-                    "question": question["text"],
-                    "options": question["options"]
-                })
-        else:
-            # Generate dynamic questions for symptoms not in template
-            prompt = f"Generate a multiple-choice question to assess the severity of {symptom} in mental health context."
+        try:
+            context_text = f"The user mentioned: '{user_context}'." if user_context else "No specific user context provided."
+            prompt = f"""
+            You are a compassionate mental health expert. Use {symptom} only as a reference to understand the emotional domain,
+            but do not repeat or reuse standard questions. Instead, generate a unique, empathetic, and context-aware multiple-choice question
+            that helps the user reflect on their current emotional state, thoughts, and daily functioning.
+            {context_text}
+            The question should sound natural and human, not clinical, and should include 3–5 answer choices that represent
+            increasing levels of intensity (e.g., “not at all,” “sometimes,” “often,” “almost always”).
+            Return JSON with keys 'question' and 'options'.
+            """
+
             response = run_llm_structure_output(
-                system="You are a mental health assessment expert. Generate a multiple choice question to assess symptom severity.",
+                system="You are a mental health assessment expert. Generate unique, compassionate, and context-aware questions that feel human and empathetic.",
                 user_input=prompt,
                 response_format={
                     "type": "object",
@@ -151,16 +154,25 @@ def get_questions_for_symptoms(symptoms: List[str]) -> List[Dict]:
                     }
                 }
             )
+
             questions.append({
                 "symptom": symptom,
-                "question": response["question"],
-                "options": response["options"]
+                "question": response.get("question", f"How have you been feeling lately regarding {symptom.lower()}?"),
+                "options": response.get("options", ["Not at all", "Sometimes", "Often", "Almost always"])
             })
+
+        except Exception:
+            questions.append({
+                "symptom": symptom,
+                "question": f"How have you been feeling lately regarding {symptom.lower()}?",
+                "options": ["Not at all", "Sometimes", "Often", "Almost always"]
+            })
+
     return questions
 
 def generate_mental_health_advice(symptoms: List[str], answers: Dict[str, str]) -> Dict:
     """
-    Generate personalized mental health advice based on symptoms and answers
+    You are a mental health assessment expert. Generate compassionate and personalized mental health advice based on the user’s symptoms and their answers to assessment questions. Tailor the advice to the user’s specific situation, using an empathetic and conversational tone. For example, if the user says “My wife is stressed because we’re planning to buy a house,” provide guidance like “It’s understandable to feel pressure during major life decisions. You could try planning financial steps together or finding small activities to relax as a couple.” The advice should feel supportive, practical, and relevant to the emotional context shared by the user.
     """
     # Prepare context for LLM
     context = f"Based on the following symptoms and responses:\n"
@@ -174,7 +186,7 @@ def generate_mental_health_advice(symptoms: List[str], answers: Dict[str, str]) 
     prompt = f"{context}\n\nProvide a response with:\n1. assessment: A brief assessment of potential mental health status\n2. advice: Personalized advice and coping strategies\n3. professional_help: Recommended professional help if needed\n4. related_keywords: A list of keywords for related articles\n\nEnsure the response is properly formatted as JSON with these exact field names."
     
     response = run_llm_structure_output(
-        system="You are a mental health advisor. Analyze symptoms and provide personalized advice.",
+        system="You are a mental health assessment expert. Generate compassionate and personalized mental health advice based on the user’s symptoms and their answers to assessment questions. Tailor the advice to the user’s specific situation, using an empathetic and conversational tone. For example, if the user says “My wife is stressed because we’re planning to buy a house,” provide guidance like “It’s understandable to feel pressure during major life decisions. You could try planning financial steps together or finding small activities to relax as a couple.” The advice should feel supportive, practical, and relevant to the emotional context shared by the user.",
         user_input=prompt,
         response_format={
             "type": "object",
