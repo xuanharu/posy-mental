@@ -63,9 +63,11 @@
         
         .snippet {
             color: #444;
-            font-size: 0.98em;
-            max-width: 350px;
-            white-space: nowrap;
+            font-size: 0.95em;
+            max-width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -155,11 +157,12 @@
         
         .close {
             color: #aaa;
-            float: right;
-            font-size: 28px;
+            float: left;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
             line-height: 1;
+            margin-right: 10px;
         }
         
         .close:hover,
@@ -172,6 +175,9 @@
             border-bottom: 2px solid #f0f7ff;
             padding-bottom: 15px;
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .modal-title {
@@ -195,10 +201,28 @@
         }
         
         .modal-content-text {
-            line-height: 1.6;
+            line-height: 1.7;
             color: #333;
-            font-size: 1.1em;
-            margin: 20px 0;
+            font-size: 1.05em;
+            margin: 25px 0;
+        }
+        
+        .modal-content-text p {
+            margin-bottom: 1em;
+        }
+        
+        .modal-content-text h3 {
+            margin-top: 1.2em;
+            color: #2074d4;
+        }
+        
+        .modal-content-text ul {
+            margin: 1em 0;
+            padding-left: 20px;
+        }
+        
+        .modal-content-text li {
+            margin-bottom: 0.5em;
         }
         
         .modal-actions {
@@ -353,7 +377,7 @@
                         <td class="snippet">${(post.content || '').replace(/<[^>]+>/g, '').replace(/[*_#`]/g, '').slice(0, 80)}...</td>
                         <td>${post.author || ''}</td>
                         <td class="actions-cell">
-                            <button class="view-btn" onclick="viewFullPost('${post._id}')">View Full Post</button>
+                            <button class="view-btn" onclick="viewFullPost('${post._id}')">View</button>
                             <button class="approve-btn" onclick="approvePost('${post._id}')">Approve</button>
                             <button class="decline-btn" onclick="declinePost('${post._id}')">Decline</button>
                         </td>
@@ -445,8 +469,13 @@
                 
                 // Convert markdown-style formatting to HTML
                 content = content
+                    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                     .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/^- (.*$)/gim, '<li>$1</li>')
+                    .replace(/(<li>.*<\/li>)/gim, '<ul>$1</ul>')
                     .replace(/\n\n/g, '</p><p>')
                     .replace(/\n/g, '<br>');
                 
